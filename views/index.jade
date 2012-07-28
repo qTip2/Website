@@ -1,5 +1,64 @@
-extends layout
+extends layouts/default
 
 block content
-  h1= title
-  p Welcome to #{title}
+	#contentheader
+		.center
+			#scroller
+				.wrapper
+				.slide
+					| test
+
+			#browsers
+				div
+					img(src='#{IMAGES_DIR}browsers/64-chrome.png', alt='Chrome')
+				| 8+
+				div
+					img(src='#{IMAGES_DIR}browsers/64-firefox.png', alt='Firefox')
+				| 3+
+				div
+					img(src='#{IMAGES_DIR}browsers/64-ie.png', alt='Internet Explorer')
+				| 6+
+				div
+					img(src='#{IMAGES_DIR}browsers/64-opera.png', alt='Opera')
+				| 9+
+				div
+					img(src='#{IMAGES_DIR}browsers/64-safari.png', alt='Safari')
+				| 2+, iOS 4+
+
+	#intro
+		.center
+			p
+				| Introducing&hellip; <b>qTip<sup>2</sup></b>. The second generation of the advanced qTip plugin for the ever popular 
+				a(href='http://jquery.com') jQuery framework.
+			p
+				| Building on 1.0's <b>user friendly</b>, yet 
+				a(href='#{WEB_DIR}/docs') feature rich
+				|  base, qTip<sup>2</sup> provides you with tonnes of features like <b>speech bubble tips</b> and <b>imagemap support</b>,
+				| and best of all... it's 
+				a(href='#{WEB_DIR}/download#license') completely free under the MIT/GPLv2 licenses!
+	#using
+		.center
+			.content
+				| Who's using qTip<sup>2</sup>?
+				ul.right
+					li
+						a.assistly(href='http://assistly.com')
+							img(src='#{IMAGES_DIR}/using/assistly.png', alt='assistly.com', width='59', height='15')
+					li
+						a.irishnews(href='http://irishnews.com')
+							img(src='#{IMAGES_DIR}/using/irishnews.png', alt='irishnews.com', width='109', height='15')
+					li
+						a.moneybookers(href='http://moneybookers.com')
+							img(src='#{IMAGES_DIR}/using/moneybookers.png', alt='moneybookers.com', width='138', height='16')
+					li
+						a.models(href='http://models.com')
+							img(src='#{IMAGES_DIR}/using/models.com.png', alt='models.com', width='94', height='15')
+					li
+						a.asos(href='http://asos.com')
+							img(src='#{IMAGES_DIR}/using/asos.png', alt='asos.com', width='54', height='17')
+					li
+						a.urban(href='http://urbandictionary.com')
+							img(src='#{IMAGES_DIR}/using/urbandictionary.png', alt='urbandictonary.com', width='66', height='21')
+					li
+						a.mozilla(href='http://mozilla.com')
+							img(src='#{IMAGES_DIR}/using/mozilla.png', alt='mozilla.com', width='60', height='17')

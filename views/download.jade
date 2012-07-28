@@ -1,36 +1,37 @@
-#contentheader
-	.center
-		if message
-			.message
-				${message}
-		
-		.message
-			| I'm currently re-vamping to build system to use
-			a(href='https://github.com/cowboy/grunt') grunt
-			| ! In the mean time, please visit the
-			a(href='https://github.com/Craga89/qTip2/tree/master/') GitHub repo
-			| to download the
-			a(href='https://github.com/Craga89/qTip2/tree/master/dist') latest nightlies
-			i (no stable releases just yet!)
-			| .
-	
-	#content
-		.center
-		a(name='github')
-		h2 Experimental code
-		p
-			| qTip2 is actively developed over at the
-			a(href='https://github.com/Craga89/qtip2') GitHub repository
-			| , updated frequently with the latest code developments and bug fixes.
-			p
-			b
-				i Note:
-			| Since the branch is being constantly updated, don't be suprised if you run into some bugs, and
-			a(href='https://github.com/Craga89/qtip2/issues') make sure to report them!
-			br
+extends layouts/default
 
-		a(name='license')
-		h2 License
+block content
+	#contentheader
+		.center
+			-if (locals.message)
+				.message
+					!{message}
+
+			.message
+				| I'm currently re-vamping to build system to use  
+				a(href='https://github.com/cowboy/grunt') grunt
+				| ! In the mean time, please visit the  
+				a(href='https://github.com/Craga89/qTip2/tree/master/') GitHub repo
+				|  to download the 
+				a(href='https://github.com/Craga89/qTip2/tree/master/dist') latest nightlies
+				i  (no stable releases just yet!)
+
+	#content
+		.center 
+			a(name='github')
+			h2 Experimental code
+			p
+				| qTip2 is actively developed over at the  
+				a(href='https://github.com/Craga89/qtip2') GitHub repository
+				| , updated frequently with the latest code developments and bug fixes.
+
+			p
+				| <b><i>Note:</i></b> Since the branch is being constantly updated, don't be suprised if you run into some bugs, and  
+				a(href='https://github.com/Craga89/qtip2/issues') make sure to report them!
+			br
+ 
+			a(name='license')
+			h2 License
 			.column.right
 				h3 GPL License
 				p
@@ -39,7 +40,7 @@
 					| free software licenses, of which the MIT licenses are the standard examples.
 					br
 					small
-					| Source:
+					| Source: 
 					a(href='http://en.wikipedia.org/wiki/GNU_General_Public_License') Wikipedia
 				br
 				h3 The MIT license
@@ -50,15 +51,15 @@
 					| software your developing without worrying about license issues.
 					br
 					small
-					| Source:
+					| Source: 
 					a(href='http://en.wikipedia.org/wiki/MIT_License') Wikipedia
-			
+
 			h3 What you need to know
 			p
-				| qTip2 is dual-licensed under the open source
-				a(href='http://en.wikipedia.org/wiki/MIT_License') MIT
-				| and
-				a(href='http://en.wikipedia.org/wiki/GNU_General_Public_License') GPLv2
+				| qTip2 is dual-licensed under the open source 
+				a(href='http://en.wikipedia.org/wiki/MIT_License') MIT 
+				| and 
+				a(href='http://en.wikipedia.org/wiki/GNU_General_Public_License') GPLv2 
 				| licenses. These licenses must be distributed with all scripts falling under their terms, either in file form, or a link to a copy in the header of the files.
 				| This is already done for you in the scripts headers, so if you're not too familiar with licensing don't worry about it!
 
@@ -66,20 +67,20 @@
 			p
 				| Yep. No strings, no catches, just the code and your right to do anything you want with it... besides... I'd feel guilty selling JavaScript... even when it's
 				em this good.
-				| However if you're feeling generous, consider a
-				a(href='${WEB_DIR}/donate') donation
+				| However if you're feeling generous, consider a 
+				a(href='#{WEB_DIR}/donate') donation
 				| to help the cause!
 
 			h3 Questions?
 			p
-				| If you have any questions regarding the license that aren't answered here or on the license pages, drop me a line at
-				a(href='mailto:craig@craigsworks.com') craig[at]craigsworks.com
+				| If you have any questions regarding the license that aren't answered here or on the license pages, drop me a line at 
+				a(href='mailto:craig@craigsworks.com') craig[at]craigsworks.com 
 				| and we'll talk details.
 			.clear
-			
-			.changelog
+
+			.changelog 
 			a(name='changelog')
 			h2 Changelog
-			| Check-out the
-			a(href='https://github.com/Craga89/qtip2') GitHub repository
+			| Check-out the 
+			a(href='https://github.com/Craga89/qtip2') GitHub repository 
 			| for a full list of changes!

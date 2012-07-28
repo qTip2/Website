@@ -1,9 +1,0 @@
-<?php
-$scripts['jquery'] = COMMON_DIR . '/js/jquery.min.js';
-$scripts['qtip'] = LATEST_DIR . '/jquery.qtip.min.js';
-$scripts['base'] = JS_DIR . '/base.js';
-
-foreach($scripts as $script => $url) {
-	echo '<script type="text/javascript" src="', $url, '"></script>', "\n";
-}
-?>
