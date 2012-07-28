@@ -1,0 +1,166 @@
+<?php $title_for_layout ='Mouse tracking'; ?>
+
+<style type="text/css">
+#drag{
+	position: absolute;
+	left: 20%;
+	top: 30%;
+	width: 250px;
+	padding: 5px 10px;
+
+	background: #fafafa;
+	background: rgba(244,244,244,0.7);
+
+	border: 1px solid #ccc;
+	box-shadow: 0 0 5px rgba(0,0,0,.2);
+
+	text-align: center;
+	font-weight: bold;
+	font-size: 11px;
+
+	cursor: move;
+	z-index: 99999;
+}
+
+#drag h4{ text-align: center; }
+
+#drag select{ cursor: auto; }
+
+.ui-tooltip-wiki{
+	max-width: 440px;
+}
+
+	.ui-tooltip-wiki .ui-tooltip-content{
+		padding: 10px;
+		line-height: 12.5px;
+	}
+
+	.ui-tooltip-wiki h1{
+		margin: 0 0 7px;
+
+		font-size: 1.5em;
+		line-height: 1em;
+	}
+
+	.ui-tooltip-wiki img{ padding: 0 10px 0 0; }
+
+	.ui-tooltip-wiki p{ margin-bottom: 9px; }
+	.ui-tooltip-wiki .note{ margin-bottom: 0; font-style: italic; color: #888; }
+</style>
+
+<div id="demo-viewport">
+	<div id="drag">
+		<h4>Drag me around!</h4>
+		
+		<label for="my">tooltip</label>
+		<select id="my">
+			<option value="top left" selected="selected">top left</option>
+			<option value="top right">top right</option>
+			<option value="top center">top center</option>
+			<option value="bottom left">bottom left</option>
+			<option value="bottom right">bottom right</option>
+			<option value="bottom center">bottom center</option>
+			<option value="left top">left top</option>
+			<option value="left bottom">left bottom</option>
+			<option value="left center">left center</option>
+			<option value="right top">right top</option>
+			<option value="right bottom">right bottom</option>
+			<option value="right center">right center</option>
+			<option value="center">center</option>
+		</select>
+		<br />
+		<label for="at">target</label>
+		<select id="at">
+			<option value="top left">top left</option>
+			<option value="top right">top right</option>
+			<option value="top center">top center</option>
+			<option value="bottom left">bottom left</option>
+			<option value="bottom right"  selected="selected">bottom right</option>
+			<option value="bottom center">bottom center</option>
+			<option value="left top">left top</option>
+			<option value="left bottom">left bottom</option>
+			<option value="left center">left center</option>
+			<option value="right top">right top</option>
+			<option value="right bottom">right bottom</option>
+			<option value="right center">right center</option>
+			<option value="center">center</option>
+		</select>
+		<br />
+
+		<label for="adjust_method">method</label>
+		<select id="adjust_method">
+			<option value="none">none</option>
+			<option value="flip">flip</option>
+			<option value="flip none">flip none</option>
+			<option value="flip shift">flip shift</option>
+
+			<option value="shift">shift</option>
+			<option value="shift none">shift none</option>
+			<option value="shift flip">shift flip</option>
+
+			<option value="none flip">none flip</option>
+			<option value="none shift">none shift</option>
+		</select>
+		<br />
+
+		<label for="adjust_x">adjust.x</label>
+		<select id="adjust_x">
+		<option value="-50">-50</option>
+			<option value="0" selected="selected">0</option>
+			<option value="50">50</option>
+		</select>
+
+		<label for="adjust_y">adjust.y</label>
+		<select id="adjust_y">
+			<option value="-50">-50</option>
+			<option value="0" selected="selected">0</option>
+			<option value="50">50</option>
+		</select>
+	</div>
+</div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.js"></script>
+<script type="text/javascript" class="example">
+$(document).ready(function()
+{
+	$('#drag').qtip({
+		content: {
+			text: 'Loading...',
+			title: 'Wikipedia - Tawny Owl',
+			ajax: {
+				url: '<?=WEB_DIR?>/data/tawnyowl.php'
+			},
+		},
+		position: {
+			at: $('#at').val(),
+			my: $('#my').val(),
+			viewport: $(window),
+			adjust: {
+				method: $('#adjust_method').val(),
+				x: parseInt($('#adjust_x').val(), 10) || 0,
+				y: parseInt($('#adjust_y').val(), 10) || 0
+			}
+		},
+		show: {
+			event: false,
+			ready: true
+		},
+		hide: false,
+		style: 'ui-tooltip-wiki'
+	})
+
+	// Make it draggable using jQuery UI, and update qTip position when dragging stops
+	.draggable({ stop: function() { $(this).qtip('reposition'); } })
+	.mousedown(function(e){ e.stopPropagation(); }) // Stop text selection
+
+	// Change the qtip options upon dropdown change
+	.children('select').bind('change blur keypress', function() {
+		var what = $(this).attr('id').replace(/_/g, '.'),
+
+		val = $(this).val();
+		val = !isNaN(parseInt(val)) ? parseInt(val) : val;
+
+		$(this).parent().qtip('option', 'position.' + what, val);
+	})
+});
+</script>

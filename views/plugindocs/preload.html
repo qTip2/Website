@@ -1,0 +1,42 @@
+<?php $this->renderElement('docs_header'); ?>
+
+	<div id="content">
+	<div class="center">
+		<div id="plugintips" class="section">
+			<h2>Image preload plugin</h2>
+
+			<div id="overview" class="subsection">
+				<a name="overview"></a>
+				<h3>Overview</h3>
+				<p>This simple plugin attempts to fix positioning issues caused by using images in your content without explicitly defined height/width attributes. The plugin pro-actively preloads and attaches said images to the DOM in advance of the tooltip being rendered. It's primarily useful for people who use qTip for things like lightbox functionality (using the <a href="<?=WEB_DIR?>/docs/plugins/modal/">Modal plugin) with large images such as wallpapers.</a></p>
+			</div>
+			<a class="backtop right" href="#">Back to the top</a>
+
+			<div id="installation" class="subsection">
+				<a name="installation"></a>
+				<h3>Installation</h3>
+				<p>Once you've <a href="<?=WEB_DIR?>/download/">downloaded</a> the plugin, installating is simple and only requires you to prepend the plugins JavaScript file after the core qTip file:</p>
+				<?php echo $this->highlightCode('html', <<<CODE
+<!-- jQuery and qTip core libraries -->
+<script type="text/javascript" src="js/jquery.1.4.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.qtip-2.0.min.js"></script>
+<!-- Your extra plugin files -->
+<script type="text/javascript" src="js/jquery.qtip-2.0.preload.min.js"></script>
+CODE
+				);?>
+
+				<h4>Note</h4>
+				<p>If you downloaded the plugin when you first got qTip, and are using the combined file from the ZIP this step isn't required.</p>
+			</div>
+			<a class="backtop right" href="#">Back to the top</a>
+
+			<div id="usage" class="subsection">
+				<a name="usage"></a>
+				<h3>Usage</h3>
+				<p>This particular plugin requires no additional user configuration. In order to utilise it, simply install it as shown above and the rest is magic!</p>
+			</div>
+			<a class="backtop right" href="#">Back to the top</a>
+
+		</div>
+	</div>
+	</div>

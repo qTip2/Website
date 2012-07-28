@@ -1,0 +1,185 @@
+<?php $this->renderElement('tutorials_header'); ?>
+
+	<div id="content">
+	<div class="center">
+
+		<div id="ajax" class="section">
+			<h2>Ajax</h2>
+
+			<p>
+				All functionality on this page requires the AJAX plugin. This comes by default in the pre-compiled scripts, but if you've compiled your own make sure
+				to include it in your PLUGINS variable. More information on this at the <a href="http://github.com/Craga89/qtip">GitHub repository</a>.
+			</p>
+
+			<div id="basics" class="subsection">
+				<a name="basics"></a>
+				<h3>Basics</h3>
+				<p>
+					Let's start off with the basic <a href="<?=WEB_DIR?>/docs/plugins/ajax/#ajax">AJAX object</a>, which is used by qTip for AJAX functionality:
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: 'Loading...', // The text to use whilst the AJAX request is loading
+		ajax: {
+			url: '/path/to/file', // URL to the local file
+			type: 'GET', // POST or GET
+			data: {} // Data to pass along with your request
+		}
+	}
+});
+CODE
+				);?>
+
+				<p>
+					What you see above is the very basic setup for an AJAX call using qTip. The AJAX object itself is simply an embedded version of the same object used
+					in the original <a href="http://api.jquery.com/jQuery.ajax">jQuery.ajax</a> call.
+				</p>
+				
+				<p>
+					qTip automatically takes the response from the request and sets the <a href="<?=WEB_DIR?>/docs/content/#text">content.text</a> using the 
+					<a href="<?=WEB_DIR?>/docs/api/#set">set</a> API call. You can stop this default behaviour by returning <b>false</b> in your success call:
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: 'Loading...', // The text to use whilst the AJAX request is loading
+		ajax: {
+			url: '/path/to/file', // URL to the local file
+			type: 'GET', // POST or GET
+			data: {}, // Data to pass along with your request
+			success: function(data, status) {
+				return false; // Stop it from setting the content
+			}
+		}
+	}
+});
+CODE
+				);?>
+
+				<p class="note">
+					<em>NB</em> Access to the API inside the success or error callbacks is achieved via the 'this' variable e.g. this.set()
+				</p>
+
+				<p class="note">
+					<em>NB</em> If you wish to simply filter the returned content before it gets set as the content, use the <a href="http://api.jquery.com/jQuery.ajax/">dataFilter</a> callback.
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+
+			<div id="html" class="subsection">
+				<a name="html"></a>
+				<h3>HTML</h3>
+				<p>
+					Now that we know how to setup our basic AJAX call, let's look at the different types of data that can be returned, and how to deal with them. First up is the HTML content.
+					This is the simplest of the lot, since the HTML is simply appended to the tooltip contents.
+				</p>
+
+				<p>
+					All you have to do is supply the URL and request type, as well as any data you need to send along with the request, and the returned data automatically replaces the tooltip contents.
+					If an error occurs during the response, the tooltip contents are replaced with a description of the error that occurred.
+				</p>
+
+				<p>If you wish to override either of these default behaviours, simply return <b>false</b> in the callback function like so:</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+success: function(data, status) { return false; },
+error: function(xhr, status, error) { return false; }
+CODE
+				);?>
+
+				<p>
+					
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+
+			<div id="json" class="subsection">
+				<a name="json"></a>
+				<h3>Using JSON</h3>
+				<p>
+					Nowadays the preferred method to return data from an AJAX request is via <a href="http://www.json.org">JSON</a>, or <i>J</i>ava<i>S</i>cript <i>O</i>bject <i>N</i>otation. This is 
+					basically a fancy way of saying a JavaScript object.
+				</p>
+				<p>
+					Many popular server-side languages such as <a href="http://ruby-lang.org">Ruby</a> and <a href="http://php.net">PHP</a> provide ways of encoding their native data structures into JSON syntax.
+					Once you have your JSON being spat out correctly (example below), take a look at how to retrieve and use the JSON using qTip:
+				</p>
+
+				<div class="column columnleft left">
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: 'Loading...', // Loading text...
+		ajax: {
+			url: '/path/to/file', // URL to the JSON script
+			type: 'GET', // POST or GET
+			data: { id: 3 }, // Data to pass along with your request
+			dataType: 'json', // Tell it we're retrieving JSON
+			success: function(data, status) {
+				/* Process the retrieved JSON object
+				 *    Retrieve a specific attribute from our parsed
+				 *    JSON string and set the tooltip content.
+				 */
+				var content = 'My name is ' + data.person.firstName;
+				this.set('content.text', content);
+				
+				// Disable the default behaviour
+				return false;
+			}
+		}
+	}
+});
+CODE
+				);?>
+				</div>
+				
+				<div class="column columnright right">
+				<?php echo $this->highlightCode('javascript', <<<CODE
+/* Our JSON string returned by the server */
+{
+	"person": {
+		"firstName": "Craig",
+		"lastName": "Thompson",
+		"gender": "Male",
+		"dob": "14/09/19??",
+		"country": "United Kingdom"
+	},
+	"job": {
+		"title": "Web Developer",
+		"company": "craigsworks",
+		"since": 2007
+	},
+	"specialities": [
+		"JavaScript", "jQuery", "CSS", 
+		"(X)HTML", "PHP", "MySQL"
+	]
+}
+CODE
+				);?>
+				</div>
+				<div class="clear">&nbsp;</div>
+
+				<p>
+					As you can see, processing the data is very simple. We take the parsed JSON string returned from the server, use its attributes to create the
+					new <a href="<?=WEB_DIR?>/docs/content/#text">content</a> of the tooltip, and call the API's <a href="<?=WEB_DIR?>/docs/api/#set">set</a> method
+					to replace the tooltip contents with it. Easy peasy!
+				</p>
+				
+				<p class="note">
+					<em>NB</em> You <b>must</b> disable the default behaviour when parsing JSON this way, otherwise your content may not display properly!
+				</p>
+				
+				<p class="note">
+					<em>NB</em> Unfortunately, the <a href="http://api.jquery.com/jQuery.ajax">dataFilter</a> callback cannot be used to filter the JSON <b>object</b> like in the <a href="#html">HTML</a> example above, only the unparsed JSON <b>string</b>.
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+	
+		</div>
+	</div>
+	</div>

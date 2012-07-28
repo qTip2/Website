@@ -1,0 +1,312 @@
+<?php $this->renderElement('docs_header'); ?>
+
+	<div id="content">
+	<div class="center">
+		<div id="plugin-ajax" class="section">
+			<h2>AJAX plugin</h2>
+
+			<div id="overview" class="subsection">
+				<a name="overview"></a>
+				<h3>Overview</h3>
+				<p>The AJAX plugin extends your content options allowing you to use jQuery's built-in AJAX functionality to retrieve remote content. This is especially useful in conjunction with the <a href="<?=WEB_DIR;?>/docs/plugins/modal">Modal plugin</a> to create modal dialogues with minimal effort, such as login forms.</p>
+			</div>
+			<a class="backtop right" href="#">Back to the top</a>
+
+			<div id="basics" class="subsection">
+				<a name="basics"></a>
+				<h3>Basics</h3>
+				<p>
+					Let's start off with the basic <a href="<?=WEB_DIR?>/docs/plugins/ajax/#ajax">AJAX object</a>, which is used by qTip for AJAX functionality:
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: 'Loading...', // The text to use whilst the AJAX request is loading
+		ajax: {
+			url: '/path/to/file', // URL to the local file
+			type: 'GET', // POST or GET
+			data: {} // Data to pass along with your request
+		}
+	}
+});
+CODE
+				);?>
+
+				<p>
+					What you see above is the very basic setup for an AJAX call using qTip. The AJAX object itself is simply an embedded version of the same object used
+					in the original <a href="http://api.jquery.com/jQuery.ajax">jQuery.ajax</a> call.
+				</p>
+
+				<p>
+					qTip will automatically take the response from the request and set the <a href="<?=WEB_DIR?>/docs/content/#text">content.text</a> for you if you don't override the default success handler.
+					However, if you intend on using your own <a href="http://api.jquery.com/jQuery.ajax">success callback</a>, you'll need to set it yourself using the
+					<a href="<?=WEB_DIR?>/docs/api/#set">set</a> method</a> i.e.
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: 'Loading...', // The text to use whilst the AJAX request is loading
+		ajax: {
+			url: '/path/to/file', // URL to the local file
+			type: 'GET', // POST or GET
+			data: {}, // Data to pass along with your request
+			success: function(data, status) {
+				// Process the data
+
+				// Set the content manually (required!)
+				this.set('content.text', data);
+			}
+		}
+	}
+});
+CODE
+				);?>
+
+				<p class="note">
+					<em>NB</em> Access to the API inside $.ajax callbacks is achieved via the 'this' variable e.g. this.set(), as opposed to it being passed as an argument like in the API
+					<a href="<?=WEB_DIR?>/docs/events">events</a>.
+				</p>
+
+				<p class="note">
+					<em>NB</em> If you wish to simply filter the returned content before it gets set as the content, use the <a href="http://api.jquery.com/jQuery.ajax/">dataFilter</a> callback.
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+
+			<div id="html" class="subsection">
+				<a name="html"></a>
+				<h3>HTML</h3>
+				<p>
+					Now that we know how to setup our basic AJAX call, let's look at the different types of data that can be returned, and how to deal with them. First up is the HTML content.
+					This is the simplest of the lot, since the HTML is simply appended to the tooltip contents.
+				</p>
+
+				<p>
+					All you have to do is supply the URL and request type, as well as any data you need to send along with the request, and the returned data automatically replaces the tooltip contents.
+					If an error occurs during the response, the tooltip contents are replaced with a description of the error that occurred.
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+
+			<div id="json" class="subsection">
+				<a name="json"></a>
+				<h3>Using JSON</h3>
+				<p>
+					Nowadays the preferred method to return data from an AJAX request is via <a href="http://www.json.org">JSON</a>, or <i>J</i>ava<i>S</i>cript <i>O</i>bject <i>N</i>otation. This is 
+					basically a fancy way of saying a JavaScript object.
+				</p>
+				<p>
+					Many popular server-side languages such as <a href="http://ruby-lang.org">Ruby</a> and <a href="http://php.net">PHP</a> provide ways of encoding their native data structures into JSON syntax.
+					Once you have your JSON being spat out correctly (example below), take a look at how to retrieve and use the JSON using qTip:
+				</p>
+
+				<div class="column columnleft left">
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: 'Loading...', // Loading text...
+		ajax: {
+			url: '/path/to/file', // URL to the JSON script
+			type: 'GET', // POST or GET
+			data: { id: 3 }, // Data to pass along with your request
+			dataType: 'json', // Tell it we're retrieving JSON
+			success: function(data, status) {
+				/* Process the retrieved JSON object
+				 *    Retrieve a specific attribute from our parsed
+				 *    JSON string and set the tooltip content.
+				 */
+				var content = 'My name is ' + data.person.firstName;
+
+				// Now we set the content manually (required!)
+				this.set('content.text', content);
+			}
+		}
+	}
+});
+CODE
+				);?>
+				</div>
+				
+				<div class="column columnright right">
+				<?php echo $this->highlightCode('javascript', <<<CODE
+/* Our JSON string returned by the server */
+{
+	"person": {
+		"firstName": "Craig",
+		"lastName": "Thompson",
+		"gender": "Male",
+		"dob": "14/09/19??",
+		"country": "United Kingdom"
+	},
+	"job": {
+		"title": "Web Developer",
+		"company": "craigsworks",
+		"since": 2007
+	},
+	"specialities": [
+		"JavaScript", "jQuery", "CSS", 
+		"(X)HTML", "PHP", "MySQL"
+	]
+}
+CODE
+				);?>
+				</div>
+				<div class="clear">&nbsp;</div>
+
+				<p>
+					As you can see, processing the data is very simple. We take the parsed JSON string returned from the server, use its attributes to create the
+					new <a href="<?=WEB_DIR?>/docs/content/#text">content</a> of the tooltip, and call the API's <a href="<?=WEB_DIR?>/docs/api/#set">set</a> method
+					to replace the tooltip contents with it. Easy peasy!
+				</p>
+
+				<p class="note">
+					<em>NB</em> Unfortunately, the <a href="http://api.jquery.com/jQuery.ajax">dataFilter</a> callback cannot be used to filter the JSON <b>object</b> like in the <a href="#html">HTML</a> example above, only the unparsed JSON <b>string</b>.
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="reference" class="subsection">
+				<a name="reference"></a>
+				<h3>Options</h3><br />
+				
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="ajax" href="#ajax">#</a>
+
+					<h5 class="values">{ Object}, false</h5>
+					<h3 class="name"> <b>ajax</b><em>:false</em> </h3>
+
+					<div class="collapsable">
+						<h4>Overview</h4>
+						<p class="overview">
+							This option allows you specify a regular <a href="http://api.jquery.com/jQuery.ajax/">jQuery.ajax</a> object. This object is used in the $.ajax method and the retrieved content is used for the tooltips content.
+						</p>
+
+						<div class="examples">
+							<h4>Examples</h4>
+							Let's grab some simple HTML content from a file as our tooltip contents:
+							<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		ajax: {
+			url: 'tooltipContent.html'
+		}
+	}
+});
+CODE
+							);?>
+							We can also use the content.text to specify a loading image whilst we wait for the AJAX request to complete:
+							<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: '<img src="images/loading.gif" alt="Loading..." />',
+		ajax: {
+			url: 'tooltipContent.html'
+		}
+	}
+});
+CODE
+							);?>
+						</div>
+
+						<div class="seealso">
+							<h4>See also</h4>
+							<a href="<?=WEB_DIR;?>/docs/content/#text">content.text</a>
+						</div>
+
+						<h4>Notes</h4>
+						<ul class="notes">
+							<li>Before the AJAX content loads, regular content.text/attr options are used for the tooltip content.</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="once" href="#once">#</a>
+
+					<h5 class="values">true, false</h5>
+					<h3 class="name"> <b>ajax.once</b><em>:true</em> </h3>
+
+					<div class="collapsable">
+						<h4>Overview</h4>
+						<p class="overview">
+							Allows you specify whether or not the AJAX content is retrieved <b>each time the tooltip is shown</b> or just once when rendered.
+						</p>
+
+						<div class="examples">
+							<h4>Examples</h4>
+							Perhaps we want to retrieve some frequently updated details about member each time the tooltip is shown:
+							<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		ajax: {
+			url: 'members.php',
+			data: { id: 4 },
+			once: false // Re-fetch the content each time I'm shown
+		}
+	}
+});
+CODE
+							);?>
+						</div>
+
+						<h4>Notes</h4>
+						<ul class="notes">
+							<li>This option an extension of the regular <a href="http://api.jquery.com/jQuery.ajax/">jQuery.ajax</a> object and <b>is not</b> a core jQuery.ajax option. It will only work with qTip!</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="option optionlast">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="loading" href="#loading">#</a>
+
+					<h5 class="values">true, false</h5>
+					<h3 class="name"> <b>ajax.loading</b><em>:true</em> </h3>
+
+					<div class="collapsable">
+						<h4>Overview</h4>
+						<p class="overview">
+							This option allows you whether or not the tooltip will be shown whilst content is being loaded via AJAX i.e. whether or not it is visible <b>before the content is loaded</b>.
+						</p>
+
+						<div class="examples">
+							<h4>Examples</h4>
+							To hide the tooltip whilst the initial content is loaded, set it to false
+							<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: 'This text won\'t be shown!',
+		ajax: {
+			url: 'mycontent.html',
+			loading: false
+		}
+	}
+});
+CODE
+							);?>
+						</div>
+
+						<div class="seealso">
+							<h4>See also</h4>
+							<a href="<?=WEB_DIR;?>/docs/content/#text">content.text</a>
+						</div>
+
+						<h4>Notes</h4>
+						<ul class="notes">
+							<li>Even though the content.text will not be used, it must be set to something valid i.e. non-blank, so that the qTip will be considered valid and rendered.</li>
+						</ul>
+					</div>
+				</div>
+				<br />
+			</div>
+
+			<a class="backtop right" href="#">Back to the top</a>
+		</div>
+	</div>
+	</div>

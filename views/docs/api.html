@@ -1,0 +1,774 @@
+<?php $this->renderElement('docs_header'); ?>
+
+<div id="content">
+	<div class="center">
+		<div id="api" class="section">
+			<h2>API</h2>
+			
+			<div id="api-introduction" class="subsection">
+				<a name="introduction"></a>
+				<h3>Introduction</h3>
+
+				<p>
+					The API (Application Programming Interface) allows you to interface with your qTip's, updating options on-the-fly, and extending its capabilities via built-in methods.
+					In this section we'll cover the use of the API and it's methods, as well as some details how on how it works on a per-qTip basis.
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="api-access" class="subsection">
+				<a name="access"></a>
+				<h3>Accessing the API</h3>
+				
+				<p>
+					Gaining access to the API itself is very easy, and its done via the tooltip element itself. Let's take a look at a quick example:
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+var api = $('.qtip').qtip('api'); // Access the API of the first tooltip on the page
+CODE
+
+				);?>
+
+				<p class="note">
+					<em>NB:</em> This is where the <a href="<?=WEB_DIR?>/docs/core/#id">id</a> option really shines. If you need access to the API of a specific qTip give it a unique id and
+					reference it via the <b>#ui-tooltip-&lt;id&gt;</b> selector instead!
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+var api = $('#ui-tooltip-foo').qtip('api'); // Access the API of the qTip with an id of 'foo'
+CODE
+
+				);?>
+
+				<p>
+					Now we have a reference to this particular tooltips API, we gain access to several <a href="#methods">methods</a> and <a href="#properties">properties</a> we can use
+					to manipulate the tooltip element, listed below:
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="api-storage" class="subsection">
+				<a name="storage"></a>
+				<h3>API storage</h3>
+				
+				<p>
+					The API for a tooltip is held in two places: the <a href="http://api.jquery.com/data">$.data object</a> of the original target element and the tooltip element itself,
+					under the name <b>qtip</b>. These for example, are functionally equivalent ways of grabbing the API of a qTip:
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+var api = $('.selector').data('qtip'); // Access the API of an element with a qTip applied
+var api = $('.qtip').data('qtip'); // Access the API of the first tooltip on the page
+CODE
+
+				);?>
+
+				<p class="note">
+					<em>NB:</em> The preferred way of gaining access to the API of an element is <a href="#access">detailed above</a>. Please do not use this method.
+				</p>
+
+				<p>
+					Now we know where the API data is stored for a particular tooltip, its possible to use some hackery and allow multiple tooltips per element, though this
+					isn't recommended and could cause problems. But check-out <a href="<?=WEB_DIR?>/tutorials/advanced/#multi">the tutorial</a> if you're feeling edgey!
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="reference" class="subsection">
+				<a name="properties"></a>
+				<h3>API Properties</h3>
+				
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="id" href="#id">#</a>
+					
+					<h5 class="values">&quot;String&quot;</h5>
+					<h3 class="name"> <b>id</b> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Stores the <a href="<?=WEB_DIR?>/docs/core/#id">id option</a> passed when the qTip was created. If none was passed, an integer will be used.
+						</p>
+
+						<div class="examples">
+							<h4>Getter/setter</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip('option', 'id'); // Getter
+$('.selector').qtip('option', 'id', 'newValue'); // Setter
+CODE
+							);?>
+						</div>
+					</div>
+				</div>
+
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="rendered" href="#rendered">#</a>
+
+					<h5 class="values">true, false</h5>
+					<h3 class="name"> <b>rendered</b><em>:false</em> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							A <b>read-only</b> boolean flag which indicates the current state of the qTip i.e. whether or not it's been rendered yet (show event has been triggered at-least once).
+						</p>
+					</div>
+				</div>
+
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="destroyed" href="#destroyed">#</a>
+
+					<h5 class="values">true, false</h5>
+					<h3 class="name"> <b>destroyed</b><em>:false</em> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							A <b>read-only</b> boolean flag which indicates the whether or not the <a href="#destroy">destroy</a> method has been called i.e. whether or not the tooltip has been destroyed.
+						</p>
+					</div>
+				</div>
+
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="elements" href="#elements">#</a>
+
+					<h5 class="values">Object</h5>
+					<h3 class="name"> <b>elements</b><em>:{&hellip;}</em> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							An object containing references to all <b>currently rendered</b> elements of the qTip, including the target, tooltip, wrapper, title and content elements.
+						</p>
+						
+						<div class="examples">
+							<h4>Elements</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+api.elements = {
+	target: $(element), // Element used for the qTip call i.e. $(element).qtip({...})
+	
+	tooltip: $('<div />'), // Main tooltip element that encapsulates:
+		wrapper: $('<div />'), // Wrapper element encapsulates all the below (except the tip)
+			content: $('<div />'), // Content element which your content.text is appended to
+		
+		/* When content.title is set... */
+		titlebar: $('<div />'), // Titlebar which encapsulates:
+			title: $('<div />'), // Title element which your content.title.text is appended to
+			button: $('<div />'), // Button element containing your content.text.button
+		
+		// Tips plugin - element that contains the canvas/vml/polygon tip
+		tip: $('<div />'), 
+		
+		// Modal plugin - Translucent window overlay element
+		overlay: $('<div id="qtip-overlay" />'),
+		
+		// BGIFrame plugin - IFrame element used for IE6 z-index fix
+		bgiframe: $('<div />') 
+}
+CODE
+							);?>
+						</div>
+					</div>
+				</div>
+				
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="timers" href="#timers">#</a>
+
+					<h5 class="values">Object</h5>
+					<h3 class="name"> <b>timers</b><em>:{&hellip;}</em> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							An object containing all currently running timers related to <a href="<?=WEB_DIR?>/docs/show/#delay">show</a> and 
+							<a href="<?=WEB_DIR?>/docs/show/#delay">hide</a> delays.
+						</p>
+						
+						<div class="examples">
+							<h4>Properties</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+api.timers = {
+	show: timerObject, // Contains the object returned by the show setTimeout()
+	hide: timerObject // Contains the object returned by the hide setTimeout()
+}
+CODE
+							);?>
+						</div>
+
+						<h4>Uses</h4>
+						<ul class="notes">
+							<li>Can use clearTimeout to stop any running show/hide delays, preventing tooltip state change</li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="options" href="#options">#</a>
+
+					<h5 class="values">Object</h5>
+					<h3 class="name"> <b>options</b><em>:{&hellip;}</em> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Object containing all options passed upon initialisation, sanitized and merged with the $.fn.qtip.defaults object.
+						</p>
+						
+						<div class="examples">
+							<h4>Properties</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+api.options = {
+	prerender: false,
+	id: false,
+	overwrite: true,
+	metadata: {
+		type: 'class'
+	},
+	content: {
+		text: true,
+		attr: 'title',
+		title: {
+			text: false,
+			button: false
+		}
+	},
+	position: {
+		my: 'top left',
+		at: 'bottom right',
+		target: false,
+		container: false,
+		viewport: false,
+		adjust: {
+			x: 0, y: 0,
+			mouse: true,
+			method: 'flip',
+			resize: true
+		},
+		effect: true
+	},
+	show: {
+		target: false,
+		event: 'mouseenter',
+		effect: true,
+		delay: 90,
+		solo: false,
+		ready: false,
+		modal: {
+			on: false,
+			effect: true,
+			blur: true,
+			keyboard: true
+		}
+	},
+	hide: {
+		target: false,
+		event: 'mouseleave',
+		effect: true,
+		delay: 0,
+		fixed: false,
+		inactive: false,
+		leave: 'window',
+		distance: false
+	},
+	style: {
+		classes: '',
+		widget: false,
+		tip: {
+			corner: true,
+			mimic: false,
+			method: true,
+			width: 9,
+			height: 9,
+			border: 0,
+			offset: 0
+		}
+	},
+	events: {
+		render: null,
+		move: null,
+		show: null,
+		hide: null,
+		toggle: null,
+		focus: null,
+		blur: null
+	}
+};
+CODE
+							);?>
+						</div>
+
+						<h4>Warning</h4>
+						<ul class="notes">
+							<li>See the <a href="<?=WEB_DIR?>/tutorials/advanced/#override">Overriding defaults</a> tutorial.</li>
+							<li><b>Do not use this object to update a qTip's options!</b> Use the api.set() method instead!</li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="option optionlast">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="plugins" href="#plugins">#</a>
+
+					<h5 class="values">Object</h5>
+					<h3 class="name"> <b>plugins</b><em>:{&hellip;}</em> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Object containing references to all currently initialised plugin API's. You shouldn't really need to use this, as it's <b>only for internal storage purposes.</b>
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div id="reference" class="subsection">
+				<a name="methods"></a>
+				<h3>API Methods</h3>
+				
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="get" href="#get">#</a>
+					
+					<h5 class="values">&quot;String&quot;</h5>
+					<h3 class="name"> <b>.get( option )</b> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Gets the current value of the specified option (represented in dot notation).
+						</p>
+
+						<div class="examples">
+							<h4>Example</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip('option', 'content.text'); // Preferred
+$('.selector').qtip('api').get('content.text'); // Direct API method
+CODE
+							);?>
+						</div>
+					</div>
+				</div>
+
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="set" href="#set">#</a>
+					
+					<h5 class="values">&quot;String&quot;, &quot;String&quot; or Object</h5>
+					<h3 class="name"> <b>.set( option, value )</b> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Sets the value of the specified option (represented in dot notation) and updates all of the qTip's relevant properties. An object may also be used to set multiple options at once.
+						</p>
+
+						<div class="examples">
+							<h4>Example</h4>
+							Set an individual option of a qTip:
+							<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip('option', 'content.text', 'new content'); // Preferred
+$('.selector').qtip('api').set('content.text', 'new content'); // Direct API method
+CODE
+							);?>
+							
+							We can also use object notation to set multiple options simultaneously:
+							<?php echo $this->highlightCode('javascript', <<<CODE
+// Preferred
+$('.selector').qtip('option', {
+	'content.title.text': 'New Title',
+	'style.widget': true
+});
+
+// Direct API method
+$('.selector').qtip('api').set({
+	'content.title.text': 'New Title',
+	'style.widget': true
+}); 
+CODE
+							);?>
+						</div>
+					</div>
+				</div>
+
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="toggle" href="#toggle">#</a>
+					
+					<h5 class="values">Boolean, Event</h5>
+					<h3 class="name"> <b>.toggle( [ state, event ] )</b> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Toggles the current visibility of the qTip. If <b>state</b> is passed as true, it will show the qTip, and vice-versa. If no state argument is passed, the
+							current visibility will determine whether it hides or shows.
+						</p>
+						<p class="overview">
+							The <b>event argument</b> is optional, and if passed will be used for things such as mouse positioning, if enabled.
+						</p>
+
+						<div class="examples">
+							<h4>Example</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+// Will "toggle" the visiblitiy of the tooltip i.e. hiding it if current visible, or vise-versa.
+$('.selector').qtip('toggle');
+
+$('.selector').qtip('toggle', true); // Shows the tooltip
+$('.selector').qtip('toggle', false); // Hides the tooltip
+
+// Shows the tooltip and passes on an event object i.e. from within an event handler.
+$('.selector').qtip('toggle', true, event); 
+
+// Direct API call
+$('.selector').qtip('api').toggle(true);
+CODE
+							);?>
+						</div>
+						
+
+						<div class="seealso">
+							<h4>Fires</h4>
+							<a href="<?=WEB_DIR?>/docs/api/events/#show">tooltipshow</a>
+							<a href="<?=WEB_DIR?>/docs/api/events/#hide">tooltiphide</a>
+						</div>
+						<div class="clear">&nbsp;</div>
+					</div>
+				</div>
+
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="show" href="#show">#</a>
+					
+					<h5 class="values">Event</h5>
+					<h3 class="name"> <b>.show( [ event ] )</b> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Shows the qTip. Is a shortcut method to the <a href="#toggle">toggle method</a> above. The <b>event argument</b> is optional, and if passed will be 
+							used for things such as mouse positioning, if enabled.
+						</p>
+
+						<div class="examples">
+							<h4>Example</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+// Show the tooltip
+$('.selector').qtip('show');
+
+// Shows the tooltip and passes on an event object i.e. from within an event handler.
+$('.selector').qtip('show', event);
+
+// Direct API call
+$('.selector').qtip('api').show();
+CODE
+							);?>
+						</div>
+
+						<div class="seealso">
+							<h4>Fires</h4>
+							<a href="<?=WEB_DIR?>/docs/api/events/#show">tooltipshow</a>
+						</div>
+
+						<h4>Notes</h4>
+						<ul class="notes">
+							<li>This method is the functional equivalent to <a href="#toggle">.toggle(true)</a>.</li>
+						</ul>
+						<div class="clear">&nbsp;</div>
+					</div>
+				</div>
+				
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="hide" href="#hide">#</a>
+					
+					<h5 class="values">Event</h5>
+					<h3 class="name"> <b>.hide( [ event ] )</b> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Hides the qTip. Is a shortcut method to the <a href="#toggle">toggle method</a> above. The <b>event argument</b> is optional, and if passed will be 
+							used for things such as mouse positioning, if enabled.
+						</p>
+
+						<div class="examples">
+							<h4>Example</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+// Hide the tooltip
+$('.selector').qtip('hide');
+
+// Hides the tooltip and passes on an event object i.e. from within an event handler.
+$('.selector').qtip('hide', event);
+
+// Direct API call
+$('.selector').qtip('api').hide();
+CODE
+							);?>
+						</div>
+
+						<div class="seealso">
+							<h4>Fires</h4>
+							<a href="<?=WEB_DIR?>/docs/api/events/#hide">tooltiphide</a>
+						</div>
+
+						<h4>Notes</h4>
+						<ul class="notes">
+							<li>This method is the functional equivalent to <a href="#toggle">.toggle(false)</a>.</li>
+						</ul>
+						<div class="clear">&nbsp;</div>
+					</div>
+				</div>
+				
+				
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="disable" href="#disable">#</a>
+					
+					<h5 class="values">Boolean</h5>
+					<h3 class="name"> <b>.disable( [ state ] )</b> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Toggles the current interactive state of the qTip (whether it's disabled or not) i.e. if it responds to user events. If no <b>state argument</b> is passed, the
+							current state of the qTip will determine its new state e.g. if currently disabled, it will be enabled and vise-versa.
+						</p>
+
+						<div class="examples">
+							<h4>Example</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+// These are equivalent to:
+$('.selector').qtip('disable');
+$('.selector').qtip('enable');
+
+// ...these and...
+$('.selector').qtip('disable', true);
+$('.selector').qtip('disable', false);
+
+// ...these. (Direct API calls)
+$('.selector').qtip('api').disable(true); // Disables the tooltip
+$('.selector').qtip('api').disable(false); // Enables the tooltip
+
+// Can also use the direct call to 'toggle'
+$('.selector').qtip('api').disable(); // Toggle functionality
+CODE
+							);?>
+						</div>
+
+						<h4>Notes</h4>
+						<ul class="notes">
+							<li>When disabled, the qtip will no longer respond to <b>any</b> user events.</li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="reposition" href="#reposition">#</a>
+					
+					<h5 class="values">Event</h5>
+					<h3 class="name"> <b>.reposition( [ event ] )</b> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Updates the qTip's position relative to the <a href="<?=WEB_DIR?>/docs/position/#target">position.target</a> element. The <b>event argument</b> is optional, 
+							and if passed will be used for things such as mouse positioning, if enabled.
+						</p>
+
+						<div class="examples">
+							<h4>Example</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+// Preferred method
+$('.selector').qtip('reposition');
+
+// Updates the tooltips position and passes on an event object i.e. from within an event handler.
+$('.selector').qtip('reposition', event);
+
+// Direct API call
+$('.selector').qtip('api').reposition();
+CODE
+							);?>
+						</div>
+
+
+						<div class="seealso">
+							<h4>Fires</h4>
+							<a href="<?=WEB_DIR?>/docs/api/events/#move">tooltipmove</a>
+						</div>
+
+						<h4>Notes</h4>
+						<ul class="notes">
+							<li>
+								If you are using <a href="<?=WEB_DIR?>/docs/position/#adjust.mouse">adjust.mouse</a> functionality and calling this method manually, try to make sure 
+								you pass an event object, otherwise the positioning may momentarily glitch.
+							</li>
+						</ul>
+						<div class="clear">&nbsp;</div>
+					</div>
+				</div>
+				
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="focus" href="#focus">#</a>
+					
+					<h5 class="values">Event</h5>
+					<h3 class="name"> <b>.focus( [ event ] )</b> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Focuses the qTip i.e. moves it above all others in the z-index stack. This is the functional equivalent to focusing a window on your desktop, raising it above all
+							others whilst <i>preserving the stacking order</i>. The <b>event argument</b> is optional, and is passed to the fired events via the 
+							<a href="<?=WEB_DIR?>/docs/events/#originalEvent">event.originalEvent</a> attribute when called.
+						</p>
+
+						<div class="examples">
+							<h4>Example</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+// Preferred method
+$('.selector').qtip('focus');
+
+// Focuses the tooltip and passes on an event object to any bound focus handlers.
+$('.selector').qtip('focus', event);
+
+// Direct API call
+$('.selector').qtip('api').focus();
+CODE
+							);?>
+						</div>
+
+
+						<div class="seealso">
+							<h4>Fires</h4>
+							<a href="<?=WEB_DIR?>/docs/api/events/#focus">tooltipfocus</a>
+							<a href="<?=WEB_DIR?>/docs/api/events/#blur">tooltipblur</a>
+						</div>
+
+						<h4>Toggles</h4>
+						<ul class="notes">
+							<li>
+								This function triggers a <a href="<?=WEB_DIR?>/docs/api/events/#move">tooltipblur</a>  event on all other tooltips on the page when called.
+							</li>
+						</ul>
+						<div class="clear">&nbsp;</div>
+					</div>
+				</div>
+
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="blur" href="#blur">#</a>
+					
+					<h5 class="values">Event</h5>
+					<h3 class="name"> <b>.blur( [ event ] )</b> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Blurs the qTip i.e. removes the focus class and triggers the 'tooltipblur' event. The <b>event argument</b> is optional, and is passed to the fired events via the 
+							<a href="<?=WEB_DIR?>/docs/events/#originalEvent">event.originalEvent</a> attribute when called.
+						</p>
+
+						<div class="examples">
+							<h4>Example</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+// Preferred method
+$('.selector').qtip('blur');
+
+// Blurs the tooltip and passes on an event object to any bound blur handlers.
+$('.selector').qtip('blur', event);
+
+// Direct API call
+$('.selector').qtip('api').blur();
+CODE
+							);?>
+						</div>
+
+
+						<div class="seealso">
+							<h4>Fires</h4>
+							<a href="<?=WEB_DIR?>/docs/api/events/#blur">tooltipblur</a>
+						</div>
+
+						<h4>Toggles</h4>
+						<ul class="notes">
+							<li>
+								This method is triggered on every tooltip on the page when a tooltip is <a href="#focus">focused</a> (except the one being focused).
+							</li>
+						</ul>
+						<div class="clear">&nbsp;</div>
+					</div>
+				</div>
+
+				<div class="option">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="destroy" href="#destroy">#</a>
+					
+					<h3 class="name"> <b>.destroy( )</b> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Completely removes the qTip from the page, including all related event handlers and rendered DOM elements.
+						</p>
+
+						<div class="examples">
+							<h4>Example</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip('destroy'); // Preferred method
+
+$('.selector').qtip('api').destroy(); // Direct API call
+CODE
+							);?>
+						</div>
+
+						<h4>Toggles</h4>
+						<ul class="notes">
+							<li>This method is automatically called when an element with a qTip applied is remove via <a href="http://api.jquery.com/remove">.remove()</a>.</li>
+						</ul>
+						<div class="clear">&nbsp;</div>
+					</div>
+				</div>
+				
+				<div class="option optionlast">
+					<a class="sidetab collapser">&ndash;</a>
+					<a class="sidetab anchor" name="render" href="#render">#</a>
+					
+					<h3 class="name"> <b>.render( )</b> </h3>
+
+					<div class="collapsable">
+						<h4>Description</h4>
+						<p class="overview">
+							Immediately renders the tooltip when called. Useful when no hide/show events have been applied to manually cause tooltip rendering.
+						</p>
+
+						<div class="examples">
+							<h4>Example</h4>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip('render'); // Preferred method
+
+$('.selector').qtip('api').render(); // Direct API call
+CODE
+							);?>
+						</div>
+
+						<h4>Toggles</h4>
+						<ul class="notes">
+							<li>The use-cases for this function are quite edgy, so you shouldn't really need to use this much.</li>
+						</ul>
+						<div class="clear">&nbsp;</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+	</div>

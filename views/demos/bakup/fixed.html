@@ -1,0 +1,37 @@
+<?php $title = 'Fixed tooltips' ?>
+
+<div class="fixed">
+	<h2>Hover over the images to see a fixed tooltip</h2>
+	<h3>As you can see the tooltip can be hovered over normally while on show.</h3>
+	<br />
+
+	<img src="http://www.rspb.org.uk/Images/tawny%20owl_300_tcm9-142525.jpg" alt="" height="200" />
+	<img src="http://www.hww.ca/~Content/32/Images/B_OWL.jpg" alt="" height="200" />
+	<img src="http://www.message-wildlife-art.co.uk/Images/Bird%20Pics/Barn%20Owl%20Large.jpg" alt="" height="200" />
+	<div class="clear">&nbsp;</div>
+</div>
+
+<script class="example" type="text/javascript">
+// Only create tooltips when document is ready
+$(document).ready(function()
+{
+	// Use the each() method to gain access to each of the elements attributes
+	$('#content img').each(function()
+	{
+		$(this).qtip(
+		{
+			content: '<a href="#">Edit</a> | <a href="#">Delete</a>', // Give it some content
+			position: {
+				my: 'top right',
+				at: 'top right'
+			},
+			hide: {
+				fixed: true // Make it fixed so it can be hovered over
+			},
+			style: {
+				classes: 'ui-tooltip-dark' // And style it with the preset dark theme
+			}
+		});
+	});
+});
+</script>

@@ -1,0 +1,101 @@
+<?php $title_for_layout ='Table Sorter'; ?>
+
+
+<div class="tablesorter">
+	<h2>List of Superheroes</h2>
+	<table class="tablesorter" cellspacing="1" cellpadding="0" border="0">
+		<thead>
+			<tr>
+				<th class="header headerSortDown">First Name</th>
+				<th class="header">Last Name</th>
+				<th class="header">Alter Ego</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Tony</td>
+				<td>Stark</td>
+				<td rel="http://caffeine-headache.net/blog3/iron_man.jpg">Iron Man</td>
+			</tr>
+			<tr>
+				<td>Bruce</td>
+				<td>Wayne</td>
+				<td rel="http://people.ucsc.edu/~jkli/Batman-color.jpg">Batman</td>
+			</tr>
+			<tr>
+				<td>Clark</td>
+				<td>Kent</td>
+				<td rel="http://www.cineybso.com/fotos%20noticias/fallece%20christopher%20reeve/superman.jpg">Superman</td>
+			</tr>
+			<tr>
+				<td>Steven</td>
+				<td>Rogers</td>
+				<td rel="http://finickypenguin.files.wordpress.com/2008/11/captain-america.jpg">Captain America</td>
+			</tr>
+			<tr>
+				<td>Peter</td>
+				<td>Parker</td>
+				<td rel="http://threetreesstudios.com/andscifi/wp-content/uploads/2009/06/spiderman28.jpg">Spiderman</td>
+			</tr>
+			<tr>
+				<td>James</td>
+				<td>Howlett</td>
+				<td rel="http://www.babble.com/CS/blogs/famecrawler/2008/07/01-07/wolverine14.JPG">Wolverine</td>
+			</tr>
+			<tr>
+				<td>Gabriel</td>
+				<td>Gray</td>
+				<td rel="http://saintluke.files.wordpress.com/2007/10/sylar.jpg">Sylar</td>
+			</tr>
+			<tr>
+				<td>Scott</td>
+				<td>Summers</td>
+				<td rel="http://www.adherents.com/lit/comics/img/c/Cyclops.jpg">Cyclops</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="pager">
+		<span class="first">First</span>
+		<span class="prev">Prev</span>
+
+		<select class="pagesize" autocomplete="off">
+			<option selected="selected" value="5">5</option>
+			<option value="10">10</option>
+		</select>
+
+		<span class="next">Next</span>
+		<span class="last">Last</span>
+	</div>
+</div>
+
+
+<!-- Make sure to include the tablesorter library and CSS files! -->
+<link type='text/css' rel='stylesheet' href='<?=CSS_DIR?>/tablesorter.css' />
+<script type="text/javascript" src="<?=JS_DIR?>/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="<?=JS_DIR?>/jquery.tablesorter.pager.js"></script>
+<script type="text/javascript" class="example">
+$(document).ready(function()
+{
+	// Create alter ego tooltips
+	$('.tablesorter table td[rel]').each(function(){
+		$(this).qtip({
+			content: '<img src="'+$(this).attr('rel')+'" height="250" />', // Use a blank content
+			position: {
+				at: 'left center',
+				my: 'right center',
+				adjust: { screen: true }
+			},
+			style: {
+				tip: true
+			}
+		});
+	})
+
+	// Apply the tabler sorter to the table
+	.parents('table:first')
+		.tablesorter({widgets: ['zebra']})
+		.tablesorterPager({ size: 5, container: $('.tablesorter .pager') });
+});
+
+</script>

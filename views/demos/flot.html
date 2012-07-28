@@ -1,0 +1,100 @@
+<?php $title_for_layout ='flot chart integration'; ?>
+
+<div id="demo-flot">
+	<h2>sin(&alpha;) cos(&alpha;) tan(&alpha;)</h2>
+	<!-- Make sure to specify the dimensions explicitly! -->
+	<div id="flot" style="width: 720px; height: 400px;"></div>
+</div>
+
+<script type="text/javascript" class="example">
+$(document).ready(function()
+{
+	var i = 0, d1 = [], d2 = [], d3 = [],
+	
+	// Setup the placeholder reference
+	elem = $('#flot');
+
+	// Create our sin/cos/tan data
+	for (i = 0; i < Math.PI * 2; i += 0.25) { d1.push([i, Math.sin(i)]); }
+	for (i = 0; i < Math.PI * 2; i += 0.25) { d2.push([i, Math.cos(i)]); }
+	for (i = 0; i < Math.PI * 2; i += 0.1) { d3.push([i, Math.tan(i)]); }
+
+	// Setup the flot chart using our data
+	$.plot(elem, 
+		[
+			{ label: "sin",  data: d1},
+			{ label: "cos",  data: d2},
+			{ label: "tan",  data: d3}
+		], 
+		{
+			lines: { show: true },
+			points: { show: true },
+			xaxis: {
+				ticks: [0, [Math.PI/2, "\u03c0/2"], [Math.PI, "\u03c0"], [Math.PI * 3/2, "3\u03c0/2"], [Math.PI * 2, "2\u03c0"]]
+			},
+			yaxis: {
+				ticks: 10,
+				min: -2,
+				max: 2
+			},
+			grid: {
+				hoverable: true,
+				backgroundColor: { colors: ["#fff", "#eee"] }
+			}
+		}
+	);
+
+	// Create a tooltip on our chart
+	elem.qtip({
+		prerender: true,
+		content: 'Loading...', // Use a loading message primarily
+		position: {
+			viewport: $(window), // Keep it visible within the window if possible
+			target: 'mouse', // Position it in relation to the mouse
+			adjust: { x: 7 } // ...but adjust it a bit so it doesn't overlap it.
+		},
+		show: false, // We'll show it programatically, so no show event is needed
+		style: {
+			classes: 'ui-tooltip-shadow ui-tooltip-tipsy',
+			tip: false // Remove the default tip.
+		}
+	});
+
+	// Bind the plot hover
+	elem.bind('plothover', function(event, coords, item) {
+		// Grab the API reference
+		var self = $(this),
+			api = $(this).qtip(),
+			previousPoint, content,
+			
+		// Setup a visually pleasing rounding function
+		round = function(x) { return Math.round(x * 1000) / 1000; };
+
+		// If we weren't passed the item object, hide the tooltip and remove cached point data
+		if(!item) {
+			api.cache.point = false;
+			return api.hide(event);
+		}
+
+		// Proceed only if the data point has changed
+		previousPoint = api.cache.point;
+		if(previousPoint !== item.dataIndex)
+		{
+			// Update the cached point data
+			api.cache.point = item.dataIndex;
+
+			// Setup new content
+			content = item.series.label + '(' + round(item.datapoint[0]) + ') = ' + round(item.datapoint[1]);
+
+			// Update the tooltip content
+			api.set('content.text', content);
+
+			// Make sure we don't get problems with animations
+			api.elements.tooltip.stop(1, 1);
+
+			// Show the tooltip, passing the coordinates
+			api.show(coords);
+		}
+	});
+});
+</script>

@@ -1,0 +1,136 @@
+	<div id="content">
+	<div class="center">
+
+		<div id="features" class="section">
+			<h3 class="right">Find out what qTip has to offer</h3>
+			<h2>Features</h2>
+
+			<ul class="features">
+				<li class="active"><a href="#browsers">Cross browser</a></li>
+				<li><a href="#degradable">Degradable</a></li>
+				<li><a href="#tips">Tips</a></li>
+				<li><a href="#position">Easy Positioning</a></li>
+				<li><a href="#styles">Stylish</a></li>
+				<li><a href="#stacking">Stacking</a></li>
+				<li><a href="#effects">Custom Effects</a></li>
+				<li><a href="#ajax">AJAX</a></li>
+				<li><a href="#api">Scripting API</a></li>
+			</ul>
+
+			<ul class="showcase">
+				<li class="browsers active">
+					<h4>All modern browsers supported</h4>
+					qTip supports all the major browsers out there (even Internet Explorer!) including:
+					<div class="list">
+						<div class="browser">
+							<img src="<?=IMAGES_DIR?>/browsers/ie7.png" alt="Internet Explorer" />
+							6.0+
+						</div>
+						<div class="browser">
+							<img src="<?=IMAGES_DIR?>/browsers/firefox.png" alt="Firefox" />
+							2.0+
+						</div>
+						<div class="browser">
+							<img src="<?=IMAGES_DIR?>/browsers/opera.png" alt="Opera" />
+							9.0+
+						</div>
+						<div class="browser">
+							<img src="<?=IMAGES_DIR?>/browsers/safari.png" alt="Safari" />
+							3.0+
+						</div>
+						<div class="browser">
+							<img src="<?=IMAGES_DIR?>/browsers/chrome.png" alt="Google Chrome" />
+							1.0+
+						</div>
+						<div class="browser">
+							<img src="<?=IMAGES_DIR?>/browsers/konqueror-kde4.png" alt="Konqueror" />
+							3.5+
+						</div>
+
+						<div class="clear">&nbsp;</div>
+					</div>
+					<p class="note">
+						<b>Note:</b> We're constantly resolving browser-dependant issues so if you find a bug, <a href="https://bugs.launchpad.net/qtip">report it!</a>
+					</p>
+				</li>
+
+				<li class="degradable">
+					<h4>JavaScript disabled? No problem!</h4>
+					<p>All of qTip's HTML is generated <b>on-the-fly</b> so those without JavaScript enabled see no ugly leftovers, making qTip completely degradable!</p>
+					<div class="example"><img src="<?=IMAGES_DIR?>/features/degradable.jpg" alt="" /></div>
+				</li>
+
+				<li class="tips">
+					<h4>Speech-bubble effects</h4>
+					<div class="cartoon"></div>
+				</li>
+
+				<li class="position">
+					<h4>Forget your x and y's</h4>
+					<p>
+						Throw out your rulers boys and girls, because positioning tooltips in qTip is as easy as picking two corners thanks to <a href="http://jqueryui.com">jQuery UI's Position utility</a>. Pick one on the tooltip and one of the target element, and bam! Done.
+						<?php echo $this->highlightCode('javascript', <<<CODE
+corner: { target: 'top center', tooltip: 'bottom center' }
+CODE
+						);?>
+
+						Corners are the <b>new</b> x and y's! And there's <b>13 of them</b> all together:
+					</p>
+					<div class="corners">
+						<img src="<?=IMAGES_DIR?>/features/corners.jpg" alt="" />
+					</div>
+					<p class="note"><b>Note:</b> The corner values used for positioning are also used for the tips plugin corner attribute!</p>
+				</li>
+
+				<li class="styles">
+					<h4>Stylish to the max</h4>
+					qTip comes <b>pre-packed</b> with <i>7</i> elegant tooltip styles for use in your applications!</b>
+					<div class="example"><img src="<?=IMAGES_DIR?>/features/styles.jpg" alt="" /></div>
+				</li>
+
+				<li class="stacking">
+					<h4>Keep the focus</h4>
+					<p>When you've got a lot of tooltips on a page, especially ones which appear pretty close together, you can run into problems with overlapping. <b>Not a problem with qTip!</b> Tooltips automatically focus when hovered over, and even <b>preserve their stacking order</b> on the page.</p>
+					<div class="example">
+						<span>One tooltip</span>
+						<span>Two tooltips</span>
+						<span>Three tooltips</span>
+						<span>Four tooltips</span>
+						<span>And five!</span>
+					</div>
+					<p><b>Hover over the tooltips above</b> for a demonstration. Notice how the stacking order is preserved.</p>
+				</li>
+
+				<li class="effects">
+					<h4>
+						<span class="right">Click the tooltips!</span>
+						Create some funky effects
+					</h4>
+					By default, qTip comes with only a single <b>fade</b> effect for showing/hiding your tooltips. But support for <b>custom effect functions</b> means that you've got an unlimited amount of effects at your fingertips!
+					<div class="examples custom"></div>
+					<p class="note"><b>Note:</b> Some of the custom effects here use the <a href="http://ui.jquery.com">jQuery UI</a> library, but it is <b>not</b> required if you wish to make your own animations!</p>
+				</li>
+
+				<li class="ajax">
+					<h4>Dynamic content at your fingertips</h4>
+					Thanks to jQuery's AJAX support, content can be <b>loaded dynamically</b> even <b>after the page is loaded</b>! Infact, the tooltip below loads new content everytime its clicked... try it and see.
+					<div class="example"></div>
+					<div class="clear">&nbsp;</div>
+					<p class="note"><b>Note:</b> Content is hosted locally but is taken from the almighty <a href="http://wiki.wikipedia.org">Wikipedia</a>.</p>
+					<div class="clear">&nbsp;</div>
+				</li>
+
+				<li class="api">
+					<h4>Unleash your inner developer</h4>
+					<img class="apilogo right" src="<?=IMAGES_DIR?>/logo_api.png" alt="" />
+					<p>qTip comes with a fully fledged scripting <a href="<?=WEB_DIR?>/docs/api/">API</a> allowing you to <b>easily extend</b> the libraries functionality through a variety of optional <a href="<?=WEB_DIR?>/docs/api/#callbacks">callback methods</a> and library <a href="<?=WEB_DIR?>/docs/api/#status">attributes</a>.</p>
+					<p>It's even possible to write your own <b>qTip plugins</b> (plugins for a plugin you say!?) using this API, so developers... <b>get coding!</b></p>
+					<p>For full details on the Scripting API checkout <a href="<?=WEB_DIR?>/docs/api/">the documentation!</a></p>
+				</li>
+			</ul>
+
+			<div class="clear">&nbsp;</div>
+		</div>
+
+	</div>
+	</div>

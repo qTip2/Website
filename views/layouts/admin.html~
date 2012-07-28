@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Macmillan Academy - Administration - <?=$title_for_layout?></title>
+<!--Stylesheets-->
+<link rel="stylesheet" type="text/css" href="css/master.css"  />
+<?=$stylesheets_for_layout?>
+<!--Meta-->
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="Middlesbrough's latest Academy, Macmillan Academy has recently been put in the top 100 secondary schools in the UK." />
+<meta name="keywords" content="Middlesbrough, Macmillan, Academy, College, Sixth Form, School, OFSTED, Education" />
+<meta name="author" content="Craig Thompson" />
+</head>
+<body>
+
+<div id="master">
+
+   <?php $this->renderElement('header'); ?>
+   
+   <div class="clear">&nbsp;</div>
+   <div class="portal box boxtab">
+      <ul class="boxtabs">
+         <li><a class="current right">Admin</a></li>
+         <li><a class="left" href="./?url=technician">Technician</a></li>
+         <li><a class="left" href="./?url=user">User</a></li>
+         <li class="title">Choose interface:</li>
+      </ul>
+      
+      <div class="admin body">
+         <h2>
+            <span class="who"><?=$_SESSION['username'];?></span>
+            <?=$this->prepareTitle("Admin Panel");?>
+         </h2>
+         
+         <div class="sidebar links column">
+            <div class="colbox configuration links">
+               <h3><a>-</a> <img class="icon" src="images/configure.png"/> Configuration</h3>
+               <a href="./?url=admin/config/core">Core</a>
+               <a href="./?url=admin/config/databases">Databases</a>
+               <a href="./?url=admin/config/paths">Paths</a>
+               <a class="last" href="./?url=admin/config/routes">Web Routes</a>
+            </div>
+         
+            <div class="colbox management links">
+               <h3><a>-</a> <img class="icon" src="images/manage.png"/> Manage</h3>
+               <a href="./?url=admin/manage/users">Users</a>
+               <a href="./?url=admin/manage/bookings">Bookings</a>
+               <a href="./?url=admin/manage/faults">Faults</a>
+               <a href="./?url=admin/manage/technicians">Technicians</a>
+               <a class="last" href="./?url=admin/manage/reports">Reports</a>
+            </div>
+            
+            <div class="colbox reports links">
+               <h3><a>-</a> <img class="icon" src="images/reports.png"/> Reports</h3>
+               <a href="./?url=admin/reports/weekly">Weekly</a>
+               <a href="./?url=admin/reports/monthly">Monthly</a>
+               <a href="./?url=admin/reports/bookings">Per Department</a>
+               <a href="./?url=admin/reports/faults">Per Room</a>
+               <a href="./?url=admin/reports/user">Per User</a>
+               <a class="last" href="./?url=admin/reports/users">Reports</a>
+            </div>
+         </div>
+         
+         <div class="manage column">
+            <?=$content_for_layout?>
+         </div>
+      </div>
+      
+      <div class="clear">&nbsp;</div>
+      
+      <?php $this->renderElement('footer'); ?>
+   </div>
+</div>
+
+<!--Scripts-->
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<?=$scripts_for_layout?>
+</body>
+</html>

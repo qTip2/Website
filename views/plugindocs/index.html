@@ -1,0 +1,51 @@
+<?php $this->renderElement('docs_header'); ?>
+
+	<div id="content">
+	<div class="center">
+		<div id="plugins" class="section">
+			<h2>Plugins</h2>
+
+			<div id="overview" class="subsection">
+				<a name="overview"></a>
+				<h3>Overview</h3>
+				<p>
+					qTip includes many optional components which extend it's functionality in various forms, such as speech bubble <a href="tips/">tips</a>
+					and <a href="modal/">modal</a> backdrops. You can choose which features are included in your package on the <a href="<?=WEBDIR?>/download/">download page</a>.
+				</p>
+
+			</div>
+			<a class="backtop right" href="#">Back to the top</a>
+
+			<div id="build" class="subsection">
+				<a name="build"></a>
+				<h3>Custom build</h3>
+				<p>
+					If you're a bit more tech savvy and/or want control voer exactly what plugins are included in your qTip build, you can custom build our own qTip script using
+					the <a href="http://github.com/craga89/qtip">GitHub repo</a> and <a href="http://ant.apache.org">Apache Ant</a> or *nix <a href="http://linux.about.com/library/cmd/blcmdl1_make.htm">make</a>.
+				</p>
+
+				<p>
+					First off, you'll need to get acquainted with GitHub using their <a href="http://help.github.com">Help Guide</a>. Once you've installed Git it's time to clone the qTip 
+					repository located <a href="http://github.com/craga89/qtip">here</a>. You can do this by running this on the command line:
+				</p>
+				
+				<?php $this->highlightCode('sh', "git clone git://github.com/Craga89/qTip.git"); ?>
+				
+				<p>
+					This will copy all the 	files from the GitHub repository to the current folder you ran the command in. Once you have the files, you'll need to decide what plugins
+					you wish to include in your qTip build. Here's a quick list of the ones included by default:
+				</p>
+
+				<?php $this->highlightCode('sh', 'PLUGINS="src/ajax.js src/tips.js src/imagemap.js src/modal.js src/bgiframe.js"'); ?>
+
+				<p>
+					
+				</p>
+
+				
+			</div>
+			<a class="backtop right" href="#">Back to the top</a>
+
+		</div>
+	</div>
+	</div>

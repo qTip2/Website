@@ -1,0 +1,193 @@
+<?php $this->renderElement('tutorials_header'); ?>
+
+	<div id="content">
+	<div class="center">
+		
+		<div id="basics" class="section">
+			<h2>Basics</h2>
+
+			<div id="shorthand" class="subsection">
+				<a name="shorthand"></a>
+				<h3>Shorthand options</h3>
+				<p>
+					Several of the main options have shorthand notation for declaring their values. Most notable of these are the main option objects. If any of the main options e.g.
+					show, position, are declared as non-objects, they map to a specific sub-option within it when parsed. An example:
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: 'Short hand notation'
+});
+$('.selector').qtip({
+	content: {
+		text: 'Long hand notation' // Notice that content.text is long-hand for simply declaring content as a string
+	}
+});
+CODE
+				);?>
+				<div class="clear">&nbsp;</div>
+
+				<p>Here's a list of all available short hands:</p>
+				
+				<?php echo $this->highlightCode('javascript', <<<CODE
+metadata: 'string' -> metadata: { type: 'string' }
+content: 'string' -> content: { text: 'string' }
+position: 'string' -> position: { my: 'string', at: 'string' } // This one is special - it maps to two options (my & at)
+show: 'string' -> show: { event: 'string' }
+show: $('.selector') -> show: { target: $('.selector') }
+hide: 'string' -> hide: { event: 'string' }
+hide: $('.selector') -> hide: { target: $('.selector') }
+style: 'string' -> style: { classes: 'string' }
+
+/* Plugin-specific */
+style: { tip: 'string or boolean' } -> style: { tip: { corner: 'string or boolean' } }
+show: { modal: boolean } -> show: { modal: { on: boolean } }
+CODE
+				);?>
+
+				<p class="note">
+					<em>NB</em> Shorthand notation is only of help when <i>you don't need to specify any other options for the object <b>except for the sub-option(s) it maps to</b></i>!
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="shared" class="subsection">
+				<a name="shared"></a>
+				<h3>Shared Options</h3>
+				<p>
+					Sometimes when using qTip you may find that you're creating multiple different qTips, but a lot of the options used for them are the same. If this is the
+					case, you can dramatically reduce duplicate code by using a common, <i>shared</i> option object. For example:
+				</p>
+
+				<div class="column left">
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: 'An example tooltip',
+	position: {
+		my: 'top left', 
+		at: 'bottom right'
+	},
+	show: 'click',
+	hide: 'click',
+	style: {
+		tip: true,
+		classes: 'ui-tooltip-red'
+	}
+});
+CODE
+				);?>
+				</div>
+				<div class="column right">
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: 'Another example tooltip',
+	position: {
+		my: 'top left', 
+		at: 'bottom right'
+	},
+	show: 'click'
+	hide: 'click',
+	style: { 
+		tip: true,
+		classes: 'ui-tooltip-dark'
+	}
+});
+CODE
+				);?>
+				</div>
+				<div class="clear">&nbsp;</div>
+				
+				<p>
+					These two tooltips, although containing different content and styles, share most of the same options. That's quite a lot of code duplication&hellip; 
+					so what can we do about this? Enter <a href="http://api.jquery.com/jQuery.extend">jQuery.extend</a>!
+				</p>
+
+				<p>Before we dive into jQuery.extend, it's more useful to look at an example of it in use first. Here's how we can simplify the code above:</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+// A shared object containing all the values you want shared between your tooltips
+var shared = {
+	position: {
+		my: 'top left', 
+		at: 'bottom right',
+	},
+	show: 'click',
+	hide: 'click',
+	style {
+		tip: true
+	}
+});
+
+// Setup our first tooltip, adding some other options
+$('.selector').qtip( $.extend({}, shared, { 
+	content: 'An example tooltip',
+	style: {
+		classes: 'ui-tooltip-red'
+	}
+}));
+
+// Setup our second tooltip, again adding some new options
+$('.selector2').qtip( $.extend({}, shared, { 
+	content: 'Another example tooltip',
+	style: {
+		classes: 'ui-tooltip-dark'
+	}
+}));
+CODE
+				);?>
+	
+				<p>If you take a good look at the code, you'll notice this statement:</p>
+				<?php echo $this->highlightCode('javascript', "$.extend({}, shared, { ... })"); ?>
+				<p>
+					This statement is essentially saying: <i>Take an empty object, add all the properties of the shared object, and then these options too</i>. Note that the order is important,
+					as options are overridden in one object, if they are also present in the object immediately proceeding it e.g. to it's right.
+				</p>
+
+				<p class="note">
+					<em>NB</em> Make sure to take a good look through the <a href="http://api.jquery.com/jQuery.extend">jQuery.extend</a> documentation over at the jQuery site for more information on this.
+				</p>
+ 
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="effects" class="subsection">
+				<a name="effects"></a>
+				<h3>Custom effects</h3>
+				<p>
+					qTip used to come packed with 3 default effects: <i>fade</i>, <i>slide</i> and <i>grow</i>. Slide and grow have been removed in 2.x in favour of user-defined effects. Let's take
+					a look at their equivalents using custom effect callbacks:
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+// Slide up/down effects
+effect: function() { $(this).slideDown(100); } // Show
+effect: function() { $(this).slideUp(100); } // Hide
+
+// Grow effects
+effect: function() { $(this).show(100); } // Show
+effect: function() { $(this).hide(100); } // Hide
+CODE
+				);?>
+
+				<p>
+					As you might guess, you're not limited to just the usual hide/show methods either. You can utilise the <a href="http://api.jquery.com/animate">.animate</a> method to create some
+					pretty groovy effects:
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+// Shrink to the left and fade out
+effect: function() { $(this).animate({ width: 0, opacity: 0 }, { duration: 100 }); }
+
+// Can even use jQuery UI's custom effects
+effect: function() { $(this).show('slide', null, 100); }
+effect: function() { $(this).hide('bounce', null, 100); }
+CODE
+				);?>
+
+				<p>The possibilities are pretty much endless, so go forth young padawan!</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+		</div>
+
+	</div>
+	</div>

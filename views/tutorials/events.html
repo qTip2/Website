@@ -1,0 +1,279 @@
+<?php $this->renderElement('tutorials_header'); ?>
+
+	<div id="content">
+	<div class="center">
+
+		<div id="events" class="section">
+			<h2>Events</h2>
+
+			<div id="callbacks" class="subsection">
+				<a name="callbacks"></a>
+				<h3>Multiple callbacks</h3>
+				<p>
+					Sometimes in life you just need to do two things at once. So why the hell shouldn't your plugins do the same? Well qTip has your back, no doubts there! Unlike the 1.x releases qTip now supports
+					multiple callbacks for your events, so you can have lots of things triggered from a single tooltip event. Let's dive in and look at an example:
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: 'Multiple callbacks... mmm...',
+	events: {
+		show: function(event, api) { $('.selector').addClass('show'); },
+		render: function(event, api) {
+			// Grab the tooltip element from the API
+			var tooltip = api.elements.tooltip
+		
+			// ...and here's the extra event binds
+			tooltip.bind('tooltipshow', function(event, api) {
+				$('.selector').removeClass('active');
+			})
+		}
+	}
+});
+CODE
+				);?>
+
+				<p>
+					You'll notice that we're actually using two event callbacks, show and render. Show option sets the first callback, and the render option lets us assign
+					multiple other callbacks using a regular <a href="http://api.jquery.com/bind">bind</a> method, once we know the tooltip has rendered.
+				</p>
+
+				<p>
+					You can also bind callbacks outside the qTip call, again using a regular <a href="http://api.jquery.com/bind">bind</a>. Though take note that this <i>only works 
+					if <a href="<?=WEB_DIR?>/docs/core/#prerender">pre-rendering</a> is enabled</i>, as you can only bind events to elements that you know&hellip; actually exist when it's bound. 
+					Here's the example:
+				</p>
+				
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	prerender: true,
+	content: 'Multiple callbacks... mmm...',
+	events: {
+		show: function(event, api) { $('.selector').addClass('show'); }
+	},
+	style: 'ui-tooltip-multibind' // Let's assign a unique class so we can select the tooltips easily
+});
+
+// And here's our extra non-qTip-call bind, using our assigned class as a selector
+$('.ui-tooltip-multibind').bind('tooltipshow', function() {
+	$('.selector').removeClass('active');
+});
+CODE
+				);?>
+
+				<p class="note">
+					<em>NB</em> Once again, notice the use of <a href="<?=WEB_DIR?>/tutorials/#shorthand">shorthand notation</a>.
+				</p>
+
+				<p class="note">
+					<em>NB</em> I advise using the first method, since <i>pre-rendering tooltips can slow down page times dramatically</i> , especially if you have lots of them being created.
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="stop" class="subsection">
+				<a name="stop"></a>
+				<h3>Stopping events</h3>
+				<p>
+					Stopping the event before it occurs&hellip; possible? Sure! Just like regular events assigned using <a href="http://api.jquery.com/bind">bind</a> or <a href="http://api.jquery.com/delegate">delegate</a>,
+					using the <a href="http://api.jquery.com/event.preventDefault/">preventDefault</a> method will cause the event to be stopped e.g. not proceed or bubble. This is similar
+					to the old 1.x <a href="http://craigsworks.com/projects/qtip_new/docs/1.0/api/#attributes">before callbacks</a>. Example:
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: 'Multiple callbacks... mmm...',
+	events: {
+		show: function(event, api) {
+			// Only show the tooltip is say... an element is also visible
+			if($('.selector').is(':hidden')) {
+				// IE might throw an error calling preventDefault(), so use a try/catch block.
+				try { event.preventDefault(); } catch(e) {}
+			}
+		}
+	}
+});
+CODE
+				);?>
+
+				<p>
+					This can be used for a variety of special cases such as the next up: <a href="#rightclick">detecting right-clicks</a>·
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="rightclick" class="subsection">
+				<a name="rightclick"></a>
+				<h3>Right-clicks</h3>
+				<p>
+					Now that we know how to stop events, we can pull off some pretty nice implementations. Like what you ask? Oh I don't know... maybe our own frickin context menu? Yeah&hellip;
+					I know&hellip; pretty awesome. Let's dive right in:
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: $('#contextMenu'), // Use a pre-formatted element for the content
+	position: {
+		target: 'mouse', // Position it where the click was...
+		adjust: { mouse: false } // ...but don't follow the mouse
+	},
+	show: 'mousedown', // Can't use click event for this, sorry!
+	events: {
+		show: function(event, api) {
+			/*
+			 * event.originalEvent contains the event that caused the callback to be fired.
+			 * event.originalEvent.button tells us which button was clicked e.g. 1= left, 2 = right;
+			 */
+			if(event.originalEvent.button !== 2) {
+				// IE might throw an error calling preventDefault(), so use a try/catch block.
+				try { event.preventDefault(); } catch(e) {}
+			}
+		}
+	}
+})
+// Little snippet that stops the regular right-click menu from appearing
+.bind('contextmenu', function(){ return false; });
+CODE
+				);?>
+
+				<p>
+					Now you've seen qTip isn't just limited to creating regular old tooltips, but can be used in some pretty interesting ways. The worlds your oyster&hellip; so go out and play! 
+					But make sure to <a href="/projects/forums/">write about it</a> when you make something cool, and <a class="openWhere">tell us where</a>.
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="live" class="subsection">
+				<a name="live"></a>
+				<h3>.live() &amp; .delegate()</h3>
+				<p>
+					There are plenty of tooltip scripts out there that support jQuery's new to 1.4 <a href="http://api.jquery.com/live/">.live()</a> and <a href="http://api.jquery.com/delegate/">.delegate()</a>&hellip; so why
+					should qTip be any exception? Well thankfully for you it isn't!
+				</p>
+				
+				<p>
+					To understand how to use these special event delegation techniques, it's best to simply dive into a code example and explain exactly what's happening!
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+// We'll encapsulate our .qtip() call in your .live() handler method
+$('.selector').live('mouseover', function(event) {
+	// Bind the qTip within the event handler
+	$(this).qtip({
+		overwrite: false, // Make sure the tooltip won't be overridden once created
+		content: 'I get bound to all my selector elements, past, present and future!',
+		show: {
+			event: event.type, // Use the same show event as the one that triggered the event handler
+			ready: true // Show the tooltip as soon as it's bound, vital so it shows up the first time you hover!
+		}
+	}, event); // Pass through our original event to qTip
+})
+
+// Store our title attribute in 'oldtitle' attribute instead
+.each(function(i) {
+	$.attr(this, 'oldtitle', $.attr(this, 'title'));
+	this.removeAttribute('title');
+});
+CODE
+				);?>
+
+				<p>
+					Ok so let's break down the code in it's constituent parts. First, the live event handler:
+				</p>
+				<?php echo $this->highlightCode('javascript', "$('.selector').live('mouseover', function(event) { });");?>
+
+				<p>
+					This part tells jQuery to run the defined function on all elements matched by the <span class="hl-string">.selector</span> string, past present and future! This allows us
+					to easily add qTips to certain elements on a page, even when updating the DOM and adding new elements.
+				</p>
+
+				<p class="note">
+					<em>NB</em> You can substitute the <a href="http://api.jquery.com/live/">.live()</a> method for a more specific, efficient <a href="http://api.jquery.com/delegate/">.delegate()</a> method, as described
+					on the jQuery docs.
+				</p>
+
+				<p>
+					Now we have the qTip method being called via our <a href="http://api.jquery.com/live/">.live()</a> handler, let's take a look at our qTip options required for this to work:
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$(this).qtip({
+	overwrite: false, // Make sure the tooltip won't be overridden once created
+	content: 'I get bound to all my selector elements, past, present and future!',
+	show: {
+		event: event.type, // Use the same show event as the one that triggered the event handler
+		ready: true // Show the tooltip as soon as it's bound, vital so it shows up the first time you hover!
+	}
+}, event); // Pass through our live event to qTip
+CODE
+				);?>
+
+				<p>
+					To make sure our tooltips aren't re-created when the DOM is updated, we make sure our <a href="<?=WEB_DIR?>/docs/core/#overwrite">overwrite</a> option is set to <b>false</b>. This is 
+					especially vital when using the <a href="<?=WEB_DIR?>/docs/plugins/ajax">$.ajax</a> functionality.
+				</p>
+				<?php echo $this->highlightCode('javascript', "overwrite: false,");?>
+
+				<p>
+					Next we setup our <a href="<?=WEB_DIR?>/docs/show/#event">show.event</a> to use the same event type as the original .live() handler. This isn't required, but it's shorter than writing out
+					our 'mouseover' string twice, and it minifies better!
+				</p>
+				<?php echo $this->highlightCode('javascript', "event: event.type,");?>
+
+				<p>
+					Then we set the <a href="<?=WEB_DIR?>/docs/show/#ready">show.ready</a> option to true, which causes the qTip to render <b>and</b> show as soon as the .qtip() method is called. This is vital
+					as otherwise the qTip will only show up on subsequent event triggers, not the initial one.
+				</p>
+				<?php echo $this->highlightCode('javascript', "ready: true");?>
+
+				<p class="note">
+					<em>NB</em> <a href="<?=WEB_DIR?>/docs/show/#ready">show.ready</a> obeys your <a href="<?=WEB_DIR?>/docs/show/#delay">show.delay</a> option, so if you have it set to 1000, the tooltip will show
+					exactly 1 second after the page is loaded!
+				</p>
+
+				<p>
+					Then... we pass through our live method's event object to qTip. Since qTip is being bound within another event handler, the library cannot automatically process the event handler that triggered it.
+					For this reason we must pass it manually for several positioning features to work as expected.
+				</p>
+				<?php echo $this->highlightCode('javascript', "}, event);");?>
+
+				<p>
+					Finally, we have this little snippet that's specifically needed for <b>IE only</b>. Since their event implementation is non-standard, removing the title attribute on hover doesn't prevent the regular
+					browser tooltip from appearing, so we need to remove it prior to this. Basically, we just store the title where qTip usually would and it automatically picks it up when needed.
+				</p>
+				<?php echo $this->highlightCode('javascript', <<<CODE
+// Store our title attribute in 'oldtitle' attribute instead
+.each(function(i) {
+	$.attr(this, 'oldtitle', $.attr(this, 'title'));
+	this.removeAttribute('title');
+});
+CODE
+				);?>
+
+				<p>
+					And that's it! Just for completion's sake, I've included another example below that utilises the alternative (and recommended) <b>1.4.2</b> <a href="http://api.jquery.com/delegate/">.delegate()</a> method.
+				</p>
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+// First selector is the parent element, selector two is the elements which the qtips should be bound to
+$('.selector').delegate('.selector2', 'mouseover', function(event) {
+	$(this).qtip({
+		overwrite: false,
+		content: 'I get bound to all my selector elements, past, present and future!',
+		show: {
+			event: event.type,
+			ready: true
+		}
+	});
+}, event);
+CODE
+				);?>
+
+				<p class="note">
+					<em>NB</em> The <a href="http://api.jquery.com/delegate/">.delegate()</a> method is available in jQuery 1.4.2 and above <b>only</b>
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+		</div>
+	</div>
+	</div>

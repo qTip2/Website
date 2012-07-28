@@ -1,0 +1,79 @@
+<?php $title_for_layout = 'One tooltip, multiple targets' ?>
+
+<div class="box">
+	<h2>Spotted Owl</h2>
+	<div class="clear">&nbsp;</div>
+	<img class="right" src="<?=IMAGES_DIR?>demos/spottedowl.jpg" alt="" title="Spotted Owl" width="180" height="274" />
+
+	<p>
+		The <b>Spotted Owl</b>, <i>Strix occidentalis</i>, is a species of <a href="http://en.wikipedia.org/wiki/True_owl" target="_blank" title="True owl">true owl</a>. It is a resident species of forests
+		in western <a href="http://en.wikipedia.org/wiki/North_America" target="_blank" title="North America">North America</a>, where it nests in tree holes, old
+		<a href="http://en.wikipedia.org/wiki/Bird_of_prey" target="_blank" title="Bird of prey">bird of prey</a> nests, or rock crevices. Nests can be between 13 and 66 yards (12 to 60 meters) high and
+		usually contain two eggs (though some will contain as many as four). It is a strictly nocturnal <a href="http://en.wikipedia.org/wiki/Owl" target="_blank" title="Owl">owl</a>, which feeds on small
+		mammals and birds, which has only been discovered recently.
+	</p>
+
+	<p>
+		This owl has a length of 43&nbsp;cm (17&nbsp;inches), a wingspan of 114&nbsp;cm (45 <a href="http://en.wikipedia.org/wiki/Inch" target="_blank" title="Inch">inches</a>),
+		and a weight of around 600<a href="http://en.wikipedia.org/wiki/Gram" target="_blank" title="Gram">g</a> (21<a href="http://en.wikipedia.org/wiki/Ounce" target="_blank" title="Ounce">ounces</a>). Its
+		<a href="http://en.wikipedia.org/wiki/Egg_%28biology%29" target="_blank" title="Egg (biology)">eggs</a> are a little over 2&nbsp;inches (50 millimeters) long, and are white and smooth with a slightly
+		grainy texture. The female sits on the eggs and cares for the young, while the male provides food for them. Juvenile Spotted Owls have an average survival rate of 11%, with an average birth rate of
+		.58 owls per pair.
+	</p>
+
+	<p>
+		The Spotted Owl is similar in appearance to the <a href="http://en.wikipedia.org/wiki/Barred_Owl" target="_blank" title="Barred Owl">Barred Owl</a> but has cross-shaped markings on the underparts,
+		whereas the Barred Owl is alternately barred on the breast and streaked on the belly. Barred Owls are larger and grayer than Spotted Owls. In recent years the California and Northern subspecies of
+		Spotted Owl have been displaced by Barred Owls, which are more aggressive, have a broader diet and occur in more varied habitats.
+	</p>
+
+	<p>
+		<b>Source:</b> <a href="http://en.wikipedia.orghttp://en.wikipedia.org/wiki/Spotted_Owl" target="_blank">Wikipedia</a>
+	</p>
+
+	<div class="clear">&nbsp;</div>
+</div>
+
+<script class="example" type="text/javascript">
+/*
+ * This demo will create a single tooltip instance that is shared between multiple targets,
+ * which will use the 'title' attribute of each element as the content.
+ */
+$(document).ready(function()
+{
+	// Select all elements that are to share the same tooltip
+	var elems = $('a[title]')
+
+	// Store our title attribute and remove it so we don't get browser tooltips showing up
+	.each(function(i) {
+		$.attr(this, 'tooltip', $.attr(this, 'title'));
+	})
+	.removeAttr('title');
+
+	// Create the tooltip on a dummy div since we're sharing it between targets
+	$('<div />').qtip(
+	{
+		content: ' ', // Can use any content here :)
+		position: {
+			target: 'event', // Use the triggering element as the positioning target
+			effect: false	// Disable default 'slide' positioning animation
+		},
+		show: {
+			target: elems
+		},
+		hide: {
+			target: elems
+		},
+		events: {
+			show: function(event, api) {
+				// Update the content of the tooltip on each show
+				var target = $(event.originalEvent.target);
+
+				if(target.length) {
+					api.set('content.text', target.attr('tooltip'));
+				}
+			}
+		}
+	});
+});
+</script>

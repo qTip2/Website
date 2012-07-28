@@ -1,0 +1,91 @@
+<?php $this->renderElement('olddocs_header'); ?>
+
+	<div id="content">
+	<div class="center">
+		<div id="gettingstarted" class="section">
+			<h2>Getting Started</h2>
+			<div id="requirements" class="subsection">
+				<a name="requirements"></a>
+				<h3><a href="#">Back to the top</a>Requirements</h3>
+				<p>There are a few requirements you need to meet before you can utilise qTip as a tooltip renderer, the most obvious of which is the inclusion of the jQuery library. You can grab the latest version <a href="http://jquery.com">here</a></p>
+				<p>We recommend version <a href="http://code.google.com/p/jqueryjs/downloads/detail?name=jquery-1.3.2.min.js">1.4</a> due to its significant speed increases in several areas, but qTip supports the use of <b>jQuery version 1.2.6 and above</b> for all you who have decided not to upgrade.</p>
+			</div>
+
+			<div id="downloading" class="subsection">
+				<a name="downloading"></a>
+				<h3><a href="#">Back to the top</a>Downloading qTip</h3>
+				<p>It is recommended you download the latest version of qTip to ensure you have the latest bug fixes and features available to date. You can do this by visiting our <a href="/projects/qtip/download/">download page</a> which features the latest library version under the "Latest version" section.</p>
+				<p>The library itself comes in two forms: the uncompressed documented source code, which is useful for development purposes, and also as a minified version, which is compressed and highly recommended for production environments. Both versions of the library are available on the <a href="/projects/qtip/download/">download page</a> as mentioned above.</p>
+			</div>
+
+			<div id="installation" class="subsection">
+				<a name="installation"></a>
+				<h3><a href="#">Back to the top</a>Installation</h3>
+				<p>Installing qTip is relatively straight forward. Simply include the both the jQuery and qTip library files e.g. <i>jquery-qtip-1.0.0.min.js</i> using script html element(s), like so:
+				<?php echo $this->highlightCode('html', <<<CODE
+<script type="text/javascript" src="/projects/qtip/js/jquery.1.3.2.min.js"></script>
+<script type="text/javascript" src="/projects/qtip/js/jquery.qtip-1.0.0.min.js"></script>
+CODE
+				);?>
+				Notice the jQuery library is included <b>before</b> qTip. This is absolutely essential for correct functioning of the library and its accompanying methods.</p>
+
+				<p>It is <b>highly recommended</b> that all JavaScript includes like the one above be <b>placed after all your content</b> at the footer of the page, just before the end <i></body></i> tag. This ensures that <i>all content is loaded before manipulation of the DOM occurs</i>.</p>
+			</div>
+
+			<div id="structure" class="subsection">
+				<a name="structure"></a>
+				<h3><a href="#">Back to the top</a>HTML structure</h3>
+				<p>Once created, all tooltips have a common HTML structure in this form:</p>
+				<?php echo $this->highlightCode('html', <<<CODE
+<div class="qtip qtip-stylename">
+	<div class="qtip-tip" rel="cornerValue"></div>
+	<div class="qtip-wrapper">
+		<div class="qtip-borderTop"></div> // Only present when using rounded corners
+		<div class="qtip-contentWrapper">
+			<div class="qtip-title"> // All CSS styles...
+				<div class="qtip-button"></div> // ...are usually applied...
+			</div>
+			<div class="qtip-content"></div> // ...to these three elements!
+		</div>
+		<div class="qtip-borderBottom"></div> // Only present when using rounded corners
+	</div>
+CODE
+				);?>
+				<p>When styling a tooltip all extra CSS styles should be <b>applied to the content and title elements</b> unless your specifically styling other elements!</p>
+			</div>
+
+			<div id="create" class="subsection">
+				<a name="create"></a>
+				<h3><a href="#">Back to the top</a>Creating a tooltip</h3>
+				<p>Creating a tooltip with qTip is very simple. Build a list of elements you want to apply a tooltip to, using <a href="http://docs.jquery.com/Selectors">jQuery's selectors</a> like so:</p>
+				<?php echo $this->highlightCode('javascript', "$('ul:last li.active')"); ?>
+				<p>The above code for example will generate an array of all li elements with class "active", which are children of the last ul element on the page. Once you've got your element array, you simply call the <b>qtip()</b> method on it, along with an option object to specify the tooltips traits, like this:</p>
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('ul:last li.active').qtip({
+	content: 'This is an active list element',
+	show: 'mouseover',
+	hide: 'mouseout'
+})
+
+CODE
+				); ?>
+				<p>This will create tooltips containing <i>content</i> which will appear when any of the list items are moused over, and hides when the mouse is no longer over the element.</p>
+				<p>And that's it! Check-out the <a href="/projects/qtip/docs/tutorials">Tutorials</a> for detailed summaries of how to create more complex tooltips.</p>
+				</p>
+			</div>
+
+			<div id="replace" class="subsection">
+				<a name="replace"></a>
+				<h3><a href="#">Back to the top</a>Replacing title tooltips</h3>
+				<p>Replacing the regular old title tooltips of your document is a peice of cake. Simply call the qtip() method with no content option and it uses the title attribute of the target element by default! Like so:</p>
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('a[title]').qtip({
+	style: { name: 'cream', tip: true }
+})
+CODE
+				); ?>
+				<p>This will replace all the regular browser tooltips with swishy new qTip tooltips. Obviously you can customize the options array as much as you like, just <b>make sure to exclude the content attribute or set it to false!</b></p>
+			</div>
+		</div>
+	</div>
+	</div>

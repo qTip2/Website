@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>qTip2 - Demo Source - <?=$title_for_layout?></title>
+<!--Stylesheets-->
+<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="<?=WEB_DIR?>/favicon.ico" />
+<link rel="stylesheet" type="text/css" href="<?=CSS_DIR?>/master.css" />
+<link rel="stylesheet" type="text/css" href="<?=LATEST_DIR?>/jquery.qtip.min.css" />
+<link rel="stylesheet" type="text/css" href="<?=CSS_DIR?>/source.css" />
+<link rel="stylesheet" type="text/css" href="<?=CSS_DIR?>/highlight.css" />
+<!-- Metadata-->
+<?php $this->renderElement('metadata') ?>
+<!--Google Analytics-->
+<?php $this->renderElement('analytics'); ?>
+</head>
+<body class="source">
+
+<a class="viewtype right" href="#">View as plain text</a>
+<h2 class="js">JavaScript</h2>
+
+<?php if(isset($jsIncludes)) echo $jsIncludes; ?>
+<div class="source js">
+   <?=$js?>
+
+</div>
+
+
+<?php if(isset($html)){ ?>
+<a class="viewtype right" href="#">View as plain text</a>
+<h2 class="html nomargin">HTML</h2>
+<div class="source html">
+   <?=$html?>
+
+</div>
+<? } ?>
+
+
+<?php if(isset($css) || isset($cssIncludes)){ ?>
+<a class="viewtype right" href="#">View as plain text</a>
+<h2 class="css">CSS</h2>
+
+<?php if(isset($cssIncludes)) echo $cssIncludes; ?>
+<div class="source css">
+   <?=$css?>
+
+</div>
+<? } ?>
+
+<?php $this->renderElement('javascript'); ?>
+<script type="text/javascript" src="<?=JS_DIR?>/highlight/jquery.copy.js"></script>
+<script type="text/javascript" src="<?=JS_DIR?>/source.js"></script>
+</body>
+</html>

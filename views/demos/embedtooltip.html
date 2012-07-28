@@ -1,0 +1,59 @@
+<?php $title_for_layout ='Embedding tooltips' ?>
+
+<div class="embedtooltip">
+   <h2>They even update their positions automatically!</h2>
+   <h3>Try resizing you're browser...</h3>
+</div>
+
+<script class="example" type="text/javascript">
+// Create the tooltips on document load so we know the DOM is ready
+$(document).ready(function()
+{
+   var i, styles, tooltipCount, content;
+
+   // Setup a styles array and tooltip count variable
+   tooltipCount = 0;
+   styles = [ 'dark', 'cream', 'green', 'red', 'light', 'blue' ];
+
+   // Define the tooltip creator method
+   function createTooltip()
+   {
+      // Setup the content string
+      content = '';
+      for(i = 0; i < tooltipCount; i++)
+         content += (i > -1) ? ' tooltip\'s ' : 'tooltip ';
+
+      // If tooltip count is greater than 7, exit
+      if(++tooltipCount == styles.length + 1) return;
+
+      // Initialize the tooltip on the previous tooltip
+      this.elements.tooltip.qtip(
+      {
+         content: 'I\'m a'+content+' tooltip!', // Concat. the generated content string
+         position: {
+            corner: {
+               tooltip: 'topMiddle',
+               target: 'bottomMiddle'
+            },
+            adjust: {
+               resize: true,
+               scroll: true
+            }
+         },
+         show: { ready: true }, // Show the tooltips when they're ready
+         hide: false, // Don't hide them
+         style: {
+            name: styles[ tooltipCount - 1 ],
+            width: { max: 700 }, // Set a high max width so the text doesn't wrap
+            tip: true // Give them tips with auto corner detection
+         },
+
+         // Refer back to this function onRender
+         api: { onRender: createTooltip  }
+      });
+   }
+
+   // Create first tooltip targetting the first h2 in the #content element
+   createTooltip.call({ elements: { tooltip: $('#content h3:first') } });
+})
+</script>

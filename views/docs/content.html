@@ -1,0 +1,248 @@
+<?=$docs_header?>
+
+	<div id="content">
+	<div class="center">
+		<div id="reference" class="section">
+			<h2>Content</h2>
+
+			<div class="option">
+				<a class="sidetab collapser">&ndash;</a>
+				<a class="sidetab anchor" name="text" href="#text">#</a>
+
+				<h5 class="values">function(), jQuery([ ]), &quot;String&quot;, true</h5>
+				<h3 class="name"> <b>text</b><em>:true</em> </h3>
+
+				<div class="collapsable">
+					<h4>Overview</h4>
+					<p class="overview">
+						Text/HTML which will appear inside the tooltip initially. If set to <i>true</i> the title attribute of the target will be used, if available. Can also specify
+						an anonymous function that returns the content, and whose scope is the target element.
+					</p>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						This will create a default tooltip with the content 'My tooltip content'
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: 'My tooltip content'
+	}
+});
+CODE
+						);?>
+
+						We can also use another jQuery element as the tooltip content:
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: $('.selector2') // Add .clone() if you don't want the matched elements to be removed, but simply copied
+	}
+});
+CODE
+						);?>
+
+						We can also use a custom function to retrieve special attributes from the target element:
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: function(api) {
+			// Retrieve content from custom attribute of the $('.selector') elements.
+			return $(this).attr('qtip-content');
+		}
+	}
+});
+CODE
+						);?>
+					</div>
+
+					<div class="seealso">
+						<h4>See also</h4>
+						<a href="#title.text">content.title.text</a>
+					</div>
+
+					<h4>Notes</h4>
+					<ul class="notes">
+						<li>
+							Custom functions that return no valid content <b>will still cause the tooltip to be created</b>! Replace these with an <a href="http://api.jquery.com/each/">each()</a> loop 
+							if this is not the desired behaviour.
+						</li>
+						<li>If no valid content can be detected in both this and the below <a href="#attr">content.attr</a> option, no tooltip will be rendered.</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="option">
+				<a class="sidetab collapser">&ndash;</a>
+				<a class="sidetab anchor" name="attr" href="#attr">#</a>
+
+				<h5 class="values">&quot;String&quot;</h5>
+				<h3 class="name"> <b>attr</b><em>:'title'</em> </h3>
+
+				<div class="collapsable">
+					<h4>Overview</h4>
+					<p class="overview">
+						Attribute of the target element to use for content if none is provided with the above <a href="#text">content.text</a> option, or no valid content can be found.
+					</p>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						Let's create qTip's on all images whose content is provided by the elements ALT attribute
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('img[alt]').qtip({
+	content: {
+		attr: 'alt'
+	}
+});
+CODE
+						);?>
+						<p>This is useful for image galleries and other image-oriented sites that need to provide nice visual cues of their context.</p>
+					</div>
+
+					<div class="seealso">
+						<h4>See also</h4>
+						<a href="#text">content.text</a>
+					</div>
+
+					<h4>Notes</h4>
+					<ul class="notes">
+						<li>If no valid content is found within the elements attribute, and <a href="#text">content.text</a> is not defined, no tooltip will be rendered.</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="option">
+				<a class="sidetab collapser">&ndash;</a>
+				<a class="sidetab anchor" name="title.text" href="#title.text">#</a>
+
+				<h5 class="values">function(), jQuery([ ]), &quot;String&quot;, false</h5>
+				<h3 class="name"> <b>title.text</b><em>:false</em> </h3>
+
+				<div class="collapsable">
+					<h4>Overview</h4>
+					<p class="overview">
+						Text/HTML which will appear inside the title element of the content. If set to false, no title will be created. An anonymous function can also be used to return
+						the title text, whose scope is the target element.
+					</p>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						Create an "About me" tooltip with a title to indicate what the contents are about:
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: 'I really like owls!',
+		title: {
+			text: 'About me'
+		}
+	}
+});
+CODE
+						);?>
+
+						We can also use another jQuery element as the tooltip title:
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		title: {
+			text: $('.selector2') // Add .clone() if you don't want the matched elements to be removed, but simply copied
+		}
+	}
+});
+CODE
+						);?>
+
+						We can also use a custom function to return the title text:
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: 'Custom title text functions... hoorah!',
+		title: {
+			text: function(api) {
+				// Retrieve content from ALT attribute of the $('.selector') element
+				return $(this).attr('alt');
+			}
+		}
+	}
+});
+CODE
+						);?>
+					</div>
+
+					<div class="seealso">
+						<h4>See also</h4>
+						<a href="text">content.text</a>
+					</div>
+
+					<h4>Notes</h4>
+					<ul class="notes">
+						<li>
+							Custom functions that return no valid content <b>will still cause the tooltip to be created</b>! Replace these with an <a href="http://api.jquery.com/each/">each()</a> loop 
+							if this is not the desired behaviour.
+						</li>
+						<li>If no valid content is provided, the title will not be created.</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="option">
+				<a class="sidetab collapser">&ndash;</a>
+				<a class="sidetab anchor" name="title.button" href="#title.button">#</a>
+
+				<h5 class="values">jQuery([ ]), &quot;String&quot;, true</h5>
+				<h3 class="name"> <b>title.button</b><em>:false</em> </h3>
+
+				<div class="collapsable">
+					<h4>Overview</h4>
+					<p class="overview">
+						Text/HTML which will appear inside the title's button element (e.g. close link) located to the right of the title content. The button will close the tooltip when clicked.
+					</p>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						Create another "About me" tooltip which opens on click and only hides when the title button is clicked
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		text: 'I really like owls!',
+		title: {
+			text: 'About me',
+			button: 'Close'
+		}
+	},
+	hide: {
+		event: false
+	}
+});
+CODE
+						);?>
+						
+						<p>You can also specify this as <b>true</b>, which creates a default pre-formatted button</p>
+					</div>
+
+					<h4>Notes</h4>
+					<ul class="notes">
+						<li>Button only appears if a title is present e.g. <a href="#title.text">title.text</a> is defined and valid.</li>
+						<li>If no valid content is provided, the button will not be created.</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="option optionlast">
+				<a class="sidetab collapser">&ndash;</a>
+				<a class="sidetab anchor" name="tip" href="#tip">#</a>
+
+				<h5 class="values">Object</h5>
+				<h3 class="name"> <b>ajax</b><em>:Object</em> </h3>
+
+				<div class="collapsable">
+					<h4>Overview</h4>
+					<p class="overview">
+						Defines the tooltip's <a href="<?=WEB_DIR?>/docs/plugins/ajax/">AJAX</a> content properties. See the
+						<a href="<?=WEB_DIR?>/docs/plugins/ajax/">plugin documentation</a> for more information.
+					</p>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	</div>

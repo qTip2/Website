@@ -1,0 +1,80 @@
+<?php if($action == 'thanks') { ?>
+   <div id="contentheader">
+   <div class="thanks center">
+      <img class="left" src="<?=WEB_DIR?>/images/thanks.png" alt="" />
+      <p><b>Thanks A LOT for donating!</b> Your money will go towards hosting expenses and the like to keep development active for as long as possible!</p>
+      <p>Make sure to check-out the <a href="<?=WEB_DIR?>/forum/">user forums</a> and <a href="<?=WEB_DIR?>/forum/forum/2/announcements">announcements</a> for release updates and support!</p>
+      <img class="signiture" src="<?=WEB_DIR?>/images/signiture.png" alt="C. Thompson" />
+      <div class="clear">&nbsp;</div>
+   </div>
+   </div>
+<?php } else { ?>
+   <div id="contentheader">
+   <div class="center donate">
+      <h2><span class="right">Support qTip's development</span>Make a donation</h2>
+
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+         <input type="hidden" name="cmd" value="_donations">
+         <input type="hidden" name="business" value="craig@craigsworks.com">
+         <input type="hidden" name="item_name" value="qTip - The jQuery tooltip plugin">
+         <input type="hidden" name="no_shipping" value="0">
+         <input type="hidden" name="no_note" value="1">
+         <input type="hidden" name="currency_code" value="USD">
+         <input type="hidden" name="tax" value="0">
+         <input type="hidden" name="bn" value="PP-DonationsBF">
+
+         <div class="name">
+            Your Name: <input type="text" name="first_name" maxlength="25" id="donate_name" value="Anonymous" rel="true" />
+         </div>
+
+         <div class="bubble left">
+            <h4>Choose a currency</h4>
+            <a class="type active" rel="USD">
+               <span>$</span>
+               <small>USD</small>
+            </a>
+            <a class="type" rel="GBP">
+               <span>&pound;</span>
+               <small>GBP</small>
+            </a>
+            <a class="type" rel="EUR">
+               <span>&euro;</span>
+               <small>EUR</small>
+            </a>
+         </div>
+
+         <img class="owl left" src="<?=WEB_DIR?>/images/donate_owl.png" alt="" />
+
+         <div class="bubble">
+            <div class="custom">
+               <h4>Enter an amount</h4>
+               <div class="amount">
+                  <span>$</span>
+                  <input type="text" name="amount" id="donate_amount" value="1" maxlength="7" />
+               </div>
+               <h5><b>Note:</b> PayPal take a 3.4% commision on all donations. Please bare this in mind when donating.</h5>
+            </div>
+            <div class="clear">&nbsp;</div>
+         </div>
+
+         <button class="submit" type="submit">Send my donation via <b>PayPal</b></button>
+
+         <p class="note">
+            <b>Note:</b> The conversions above were correct at the time of creation but may vary from current exchange rates.<br />
+            <b>Note:</b> Upon submission, you will be redirected to the PayPal website to login.
+            <b>Note:</b> If you prefer to send money in a currency not listed, alternative currency options are available once at the PayPal site (see above).
+         </p>
+
+      </form>
+
+      <div class="clear">&nbsp;</div>
+   </div>
+   </div>
+
+   <div id="content">
+   <div class="center">
+      <h2>Contributers</h2>
+      Dennis Theisen, Jens Nauber, Adam Kovari, Wakasm Concepts, Caesar Aldela, Zeitbyte LLC, Victor Zamanillo, Thinking Grove Inc., The Humphress Group, John Hann, Stookstudio, Kenneth Jamieson, Liam McMullen, Eric Melton
+   </div>
+   </div>
+<?php } ?>

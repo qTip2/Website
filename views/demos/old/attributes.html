@@ -1,0 +1,30 @@
+<?php $title = 'Element attributes' ?>
+
+<div id="content" class="default">
+<div class="center">
+   <h2>jQuery JavaScript Library</h2>
+   <img class="left" src="http://upload.wikimedia.org/wikipedia/en/2/2f/Jquerylogo.png" alt="" />
+   <p>jQuery is a lightweight JavaScript library that emphasizes interaction between JavaScript and HTML. It was released January 2006 at BarCamp <a href="http://en.wikipedia.org/wiki/New_York_City" tooltip="New York City">NYC</a> by John Resig. Dual licensed under the MIT License and the GNU General Public License, jQuery is free, open source software.</p>
+
+   <p>Both <a href="http://en.wikipedia.org/wiki/Microsoft" tooltip="Owned by Bill Gates">Microsoft</a> and Nokia have announced plans to bundle jQuery on their platforms, Microsoft adopting it initially within Visual Studio[2] and use within Microsoft's ASP.NET AJAX framework and ASP.NET MVC Framework whilst Nokia will integrate it into their Web Run-Time platform.</p>
+   
+   <p>Just like CSS separates "display" characteristics from the HTML structure, <a href="http://jquery.com" tooltip="We recommend version 1.3 and above">jQuery</a> separates the "behavior" characteristics from the HTML structure. For example, instead of directly specifying the on-click event handler in the specification of a button element, a jQuery driven page would first identify the button element, and then modify its on-click event handler. This separation of behavior from structure is also referred to as the principle of Unobtrusive JavaScript.</p>
+   <br />
+   <p><b>Source:</b> Wikipedia</p>
+</div>
+</div>
+
+<script class="example" type="text/javascript">
+// Create the tooltips only on document load
+$(document).ready(function() 
+{
+   // Notice the use of the each() method to acquire access to each elements attributes
+   $('#content a[tooltip]').each(function()
+   {
+      $(this).qtip({
+         content: $(this).attr('tooltip'), // Use the tooltip attribute of the element for the content
+         style: 'dark' // Give it a crea mstyle to make it stand out
+      });
+   });
+});
+</script>

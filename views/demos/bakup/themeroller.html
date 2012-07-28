@@ -1,0 +1,66 @@
+<?php $title = 'ThemeRoller integration'; ?>
+
+<script class="example" type="text/javascript">
+$(document).ready(function()
+{
+	$(document.body).qtip({
+		id: 'themeroller',
+		content: {
+			text: $('<div />'), // Use an empty div as content so we can attach the ThemeSwitcher easily
+			title: {
+				text: 'ThemeRoller integration', // Even the titlebar...
+				button: true // ...and buttons get styled by ThemeRoller!
+			}
+		},
+		position: {
+			target: $(window),
+			my: 'center',
+			at: 'center',
+			adjust: { y: -150 }
+		},
+		show: {
+			ready: true,
+			event: false
+		},
+		hide: false,
+		style: {
+			classes: 'ui-tooltip-shadow', // Optional shadow...
+			tip: 'top center', // Tips work nicely with the styles too
+			
+			/*
+			 * The important part: style.widget property
+			 
+			 * This tells qTip to apply the ui-widget classes to
+			 * the main, titlebar and content elements of the qTip.
+			 * Otherwise they won't be applied and ThemeRoller styles
+			 * won't effect this particular tooltip.
+			 */
+			widget: true
+		},
+		events: {
+			render: function(event, api) {
+				// Use our blank div to hold the ThemeSwitcher
+				$('div', api.elements.content).themeswitcher({
+					width: 260,
+					height: 300,
+					buttonHeight: 25,
+					initialText: 'Choose a theme for the tooltip',
+					onSelect: function() {
+						/*
+						 * Changing style.widget causes an update to the tip colour
+						 * so we simply set it to true when each style is selected
+						 * to trigger an update and re-colour it!
+						 
+						 * I used a timeout so the style has time to load before the
+						 * tip colour is detected and redrawn.
+						 */
+						setTimeout(function() {
+							api.set('style.widget', true);
+						}, 1000);
+					}
+				});
+			}
+		}
+	})
+});
+</script>

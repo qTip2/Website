@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+  Options +FollowSymlinks  
+  RewriteEngine On
+  
+  # Missing files redirect to home page
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^(.*)$ ../index.php?url=$1&dir=content/ [QSA]
+  
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule (.*)* ../index.php
+</IfModule>
+
+<ifmodule mod_php4.c>
+php_value zlib.output_compression 16386
+</ifmodule>

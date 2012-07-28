@@ -1,0 +1,112 @@
+	<div id="contentheader">
+	<div class="center donate">
+		<h2><span class="right">Support qTip2's development</span>Make a donation</h2>
+
+		<form id="donateform" method="POST">
+			<!-- PayPal -->
+			<div id="paypal">
+				<input type="hidden" name="cmd" value="_donations" />
+				<input type="hidden" name="business" value="craig@craigsworks.com" />
+				<input type="hidden" name="item_name" value="qTip2 - Pretty powerful tooltips" />
+				<input type="hidden" name="no_shipping" value="0" />
+				<input type="hidden" name="no_note" value="1" />
+				<input type="hidden" name="currency_code" value="USD" />
+				<input type="hidden" name="tax" value="0" />
+				<input type="hidden" name="bn" value="PP-DonationsBF" />
+			</div>
+
+			<!-- Moneybookers -->
+			<div id="moneybookers">
+				<input type="hidden" name="pay_to_email" value="craig@craigsworks.com" />
+				<input type="hidden" name="status_url" value="C<?=$_SERVER['SCRIPT_URI'];?>/thanks" />
+				<input type="hidden" name="return_url" value="<?=$_SERVER['SCRIPT_URI'];?>/thanks" />
+				<input type="hidden" name="return_url_text" value="Complete the donation!" />
+				<input type="hidden" name="language" value="EN" />
+				<input type="hidden" name="recipient_description" value="qTip2 - Pretty powerful tooltips" />
+				<input type="hidden" name="dynamic_descriptor" value="qTip2 - Pretty powerful tooltips" />
+				<input type="hidden" name="detail1_description" value="qTip2 donation" />
+				<input type="hidden" name="detail2_description" value="Author" />
+				<input type="hidden" name="detail2_text" value="Craig Michael Thompson" />
+				<input type="hidden" name="amount2_description" value="Donation:" />
+				<input type="hidden" name="payment_methods" value="WLT,NGP,IDL,PWY,PWY5,PWY6,PWY7,PWY14,PWY15,PWY37,PWY17,PWY18,PWY19,PWY20,PWY21,PWY22,PWY26,PWY25,PWY28,PWY32,PWY33,PWY36,ACC,VSA,MSC,VSD,VSE,AMX,DIN,JCB,MAE,LSR,SLO,GCB,SFT,DID,GIR,ENT,EBT,SO2,NPY,PLI,DNK,CSI,PSP,EPY,BWI" />
+				<input type="hidden" name="confirmation_note" value="Thanks for the donation and feel free to visit the support forums at any time!" />
+				<input type="hidden" name="logo_url" value="<?=IMAGES_DIR?>/logo-horizontal.png" />
+			</div>
+
+			<div class="name">
+				Your Name: <input type="text" name="firstname" maxlength="25" id="donate_name" value="Anonymous" rel="true" />
+			</div>
+
+			<div class="bubble left">
+				<h4>Choose a currency</h4>
+				<a class="type active" rel="USD">
+					<span>$</span>
+					<small>USD</small>
+				</a>
+				<a class="type" rel="GBP">
+					<span>&pound;</span>
+					<small>GBP</small>
+				</a>
+				<a class="type" rel="EUR">
+					<span>&euro;</span>
+					<small>EUR</small>
+				</a>
+			</div>
+
+			<img class="owl left" src="<?=IMAGES_DIR?>/donate_owl.png" alt="" width="210" height="120" />
+
+			<div class="bubble">
+				<div class="custom">
+					<h4>Enter an amount</h4>
+					<div class="amount">
+						<span style="margin-top: 7px;">$</span>
+						<input type="text" name="amount" id="donate_amount" value="1" maxlength="7" />
+					</div>
+					<h5><b>Note:</b> PayPal take a 3.4% commision on all donations. Please bear this in mind when donating.</h5>
+				</div>
+				<div class="clear">&nbsp;</div>
+			</div>
+
+			<button name="external" value="paypal" class="submit" type="submit">Send my donation via <b>PayPal</b></button>
+			<button name="external" value="moneybookers" class="submit" type="submit">Send my donation via <b>MoneyBookers</b></button>
+
+			<div style="margin: 15px 0 15px; text-align: center;">
+				<!--Flattr-->
+				<a href="http://flattr.com/thing/706279/qTip2-Pretty-Powerful-Tooltips" target="_blank" title="Donate using Flattr">
+					<img src="http://api.flattr.com/button/flattr-badge-large.png" class="noq" alt="Flattr this" border="0" />
+				</a>
+
+				<!--YouTipIt-->
+				<a href="http://utip.it/craig" target="_blank" title="Tip me using YouTipIt">
+					<img src="http://static-youtipit.s3-website-eu-west-1.amazonaws.com/Youtipitwhite52.png" />
+				</a>
+			</div>
+
+			<p class="note" style="text-align: center;">
+				<b>Note:</b> All donations are made to <a href="mailto:craig@craigsworks.com">craig@craigsworks.com</a> in the above services.</br >
+				<b>Note:</b> Upon submission, you will be redirected to the PayPal/Moneybookers website to login/register and verify your donation.<br />
+				<b>Note:</b> If you prefer to send money in a currency not listed, alternative currency options are available once at the external site (see above).
+			</p>
+		</form>
+
+		<div class="clear">&nbsp;</div>
+	</div>
+	</div>
+
+	<div id="content">
+	<div class="center" style="text-align: justify;">
+		<h5 class="right" style="margin-top: 16px">Random tag cloud</h5>
+		<h2>Contributers</h2>
+		<?php 
+			shuffle($names);
+			foreach($names as $name) { 
+				$color = rand(50, 100);
+				$color = sprintf('rgb(%1$d,%1$d,%1$d)', $color);
+				$size = rand(100, 170) / 100;
+				$height = $size - 0.15;
+				
+				echo sprintf("\n\t\t%s%s%s", '<span style="color: '.$color.'; font-size: '.$size.'em; line-height: '.$height.'em;">', $name, '</span>');
+			} 
+		?>
+	</div>
+	</div>

@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>qTip - The jQuery tooltip plugin - <?=$title_for_layout?></title>
+<!--Stylesheets-->
+<?=$stylesheets_for_layout?>
+<!-- Metadata-->
+<?php $this->renderElement('metadata') ?>
+<!--JavaScript-->
+<script type="text/javascript" src="<?=WEB_DIR?>/packages/jquery-<?=$js_jquery?>.min.js"></script>
+<script type="text/javascript" src="<?=WEB_DIR?>/packages/<?=$js_qtip?>/jquery.qtip-<?=$js_qtip?><?=$js_min?>.js"></script>
+<?php if($js_debug) {?><script type="text/javascript" src="<?=WEB_DIR?>/packages/debug/jquery.qtip.debug.js"></script><?php } ?>
+<?=$scripts_for_layout?>
+</head>
+<body>
+<div id="master">
+<?php $this->renderElement('header'); ?>
+
+<?=$content_for_layout?>
+
+<?php $this->renderElement('footer'); ?>
+</div>
+<!--Google Analytics-->
+<script type="text/javascript">
+document.write(unescape("%3Cscript src='http://www.google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-5228245-5");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</body>
+</html>

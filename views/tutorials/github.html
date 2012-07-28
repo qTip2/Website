@@ -1,0 +1,122 @@
+<?php echo $this->renderElement('tutorials_header'); ?>
+
+	<div id="content">
+	<div class="center">
+		<div id="github" class="section">
+			<h2>GitHub</h2>
+
+			<div id="github-intro" class="subsection">
+				<a name="intro"></a>
+				<h3>Introduction</h3>
+				<p>
+					GitHub is a web-based hosting service for projects that use the Git revision control system, like qTip. The repository contains the very latest (and often experimental) code, and allows you
+					to customise exactly what features are included in your qTip library.
+				</p>
+			</div>
+			<a class="backtop right" href="#">Back to the top</a>
+
+			<div id="github-requirements" class="subsection">
+				<a name="requirements"></a>
+				<h3>Requirements</h3>
+
+				<p>In order to build qTip, you need to have GNU make 3.8 or later, Node.js 0.2 or later, and git 1.7 or later. (Earlier versions might work OK, but are not tested.)</p>
+
+				<p>
+					Windows users have two options:
+					<ul>
+						<li>
+							Install <a href="https://code.google.com/p/msysgit/">msysgit</a> (Full installer for official Git), <a href="http://gnuwin32.sourceforge.net/packages/make.htm">GNU make for Windows</a>, 
+							and a <a href="http://node-js.prcn.co.cc/">binary version of Node.js</a>. Make sure all three packages are installed to the same location (by default, this is C:\Program Files\Git).
+						</li>
+						<li>
+							Install <a href="http://cygwin.com/">Cygwin</a> (make sure you install the git, make, and which packages), then either follow the 
+							<a href="https://github.com/ry/node/wiki/Building-node.js-on-Cygwin-%28Windows%29">Node.js build instructions</a> or install the <a href="http://node-js.prcn.co.cc/">binary version of Node.js</a>.
+						</li>
+					</ul>
+				</p>
+				
+				<p>
+					Linux/BSD users should use their appropriate package managers to install make, git, and node, or build from source if you swing that way. Easy-peasy.
+				</p>
+
+				<p>
+					Mac OS users should install Xcode (comes on your Mac OS install DVD, or downloadable from <a href="http://developer.apple.com/technologies/xcode.html">Apple's Xcode site</a>) and 
+					<a href="http://mxcl.github.com/homebrew/">Homebrew</a>. Once Homebrew is installed, run brew install git to install git, and brew install node to install Node.js.
+				</p>
+			</div>
+			<a class="backtop right" href="#">Back to the top</a>
+
+			<div id="github-clone" class="subsection">
+				<a name="clone"></a>
+				<h3>Cloning the repository</h3>
+				<p>
+					Before we can start building our custom qtip script, we have to first clone, or download the qTip repository. You can do this by running this command:
+				</p>
+				<?php echo $this->highlightCode('php', 'git clone git@github.com:Craga89/qTip2.git'); ?>
+
+				<p>
+					This will clone all the latest repository files from the server onto your computer in the current working directory. If for some reason you can't or don't want git
+					installed on your system, you can also download a "tarball" of the files here:
+				</p>
+				<?php echo $this->highlightCode('javascript', '// http://github.com/Craga89/qtip2/tarball/master'); ?>
+
+				<p>
+					This is an archive file, much like a ZIP file, containing all the repository files in a single download package
+				</p>
+
+				<p class="note">
+					<em>NB</em> When cloning with git a new directory named <b>qTip</b> will be created in the current directory, which stores the repository files
+				</p>
+			</div>
+			<a class="backtop right" href="#">Back to the top</a>
+
+			<div id="github-build" class="subsection">
+				<a name="build"></a>
+				<h3>How to build qTip</h3>
+
+				<p>In the main directory of the repository type the following to build qTip and its accompanying CSS:</p>
+				<?php echo $this->highlightCode('python', 'make all'); ?>
+
+				<p>You can also create each individual component using these commands:</p>
+				<?php echo $this->highlightCode('python', <<<CODE
+make qtip    # Build non-minified qTip source (requires nothing but make!)
+make css     # Build CSS files
+make min     # Build minified qTip JS and CSS (smallest filesize!)
+CODE
+				);?>
+
+				<p>To build and test the source code against JSLint type this:</p>
+				<?php echo $this->highlightCode('python', 'make lint'); ?>
+
+				<p>Finally, you can remove all the built files using the command:</p>
+				<?php echo $this->highlightCode('python', 'make clean'); ?>
+			</div>
+			<a class="backtop right" href="#">Back to the top</a>
+			
+			<div id="github-plugins" class="subsection">
+				<a name="plugins"></a>
+				<h3>Choosing plugins</h3>
+				<p>
+					Thanks to qTips modular design, it's possible to remove features you don't need/want from the library without re-factoring the code. If you want more control over what plugins are 
+					included, you can do so by adding some extra parameters to your <a href="#build">build commands</a> above.
+				</p>
+
+				<p>To define which plugins are included in your build, simply define the PLUGINS parameter, like so:</p>
+				<?php echo $this->highlightCode('python', 'make PLUGINS="tips" all'); ?>
+
+				<p>
+					You can specify multiple plugins by separating them with a space:
+				</p>
+				<?php echo $this->highlightCode('python', 'make PLUGINS="tips model ajax" all'); ?>
+
+				<p>
+					By default all plugins are included in the build, so the regular <b>make all</b> command is actually equivalent to:
+				</p>
+				<?php echo $this->highlightCode('python', 'make PLUGINS="ajax tips imagemap svg modal bgiframe" all'); ?>
+
+			</div>
+			<a class="backtop right" href="#">Back to the top</a>
+
+		</div>
+	</div>
+	</div>

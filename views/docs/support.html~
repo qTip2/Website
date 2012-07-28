@@ -1,0 +1,50 @@
+   <div id="content">
+   <div class="center">
+
+      <div id="support" class="section">
+         <a name="support"></a>
+         <h2>Support</h2>
+         <div id="faq" class="subsection">
+            <a name="faq"></a>
+            <h3><a href="#">Back to the top</a>FAQ - Frequently asked questions</h3>
+            <h4>I'm getting some freakishly odd tooltips being output! (pre-beta3)</h4>
+            <p>This could be a problem with previously declared ".content" class names. Try adding this CSS into your stylesheet and see if it makes a difference:</p>
+            <pre><code class="css">body div.qtip div.content{
+   padding: 0;
+   margin: 0;
+   height: auto; min-height: auto;
+   width: auto; min-width: auto;
+}</code></pre>
+            <p>This basically makes sure that all padding, margin, widths and heights are set to thier defaults within the qTip's content!</p>
+
+            <h4>Are you available for hire?</h4>
+            <p>I'm a freelancer by trade so I'm almost always available for work. You can checkout <a href="/">my portfolio</a> to get a taste of my work, and you can contact me directly at <a href="mailto:craig@craigsworks.com">craig@craigsworks.com</a>.</p>
+
+            <h4>What do donations go towards?</h4>
+            <p>Donations are used to keep the hosting company happy with regular payments and help to keep me on my feet while I develop this much loved library [citation needed]! So <b>donations are always welcome</b> and if you really enjoy using qTip, please consider donating. You know you want to deep down! For more information on donations checkout the <a href="/projects/qtip/donate">donations page</a>.</p>
+
+            <h4>Are you SURE it's free?</h4>
+            <p>Absolutely! qTip is free and will always be free, unless of course I become homeless and have to live out of a box... then we'll see. But until then, don't worry your pretty little head. </p>
+            <p>qTip is licensed under the MIT license, so you can do whatever you want with it... <b>as long as you include a copy of the license!</b> <a href="/projects/qtip/download/#license">Check out the licensing page</a> for more details on qTip's license.</p>
+
+            <h4>Who else works on qTip?</h4>
+            <p>I'm currently the only developer working on qTip. If your interested in helping out, <a href="mailto:craig@craigsworks.com">contact me</a> and we can talk about how you can get involved.</p>
+
+            <h4>How did you decide to layout the plugin?</h4>
+            <p>After looking over several popular jQuery plugins I noticed a similarity in their code layout, and after some looking around I found a great, very informative <a href="http://www.learningjquery.com/2007/10/a-plugin-development-pattern">plugin development article</a> written by Mike Alsup over at <a href="http://www.learningjquery.com">learningjquery.com</a>. I suggest anyone looking into developing a plugin reads up on it as its a great base framework for plugin development under jQuery.</p>
+
+            <h4>Is qTip related to Simpletip?</h4>
+            <p>qTip is the successor to my previous, <i>supposedly</i> copyright infringed Simpletip2 project, an extension of the original <a href="/projects/simpletip/">Simpletip library</a>. qTip is built from scratch to ensure no copyright issues, so bares nothing in relation to Simpletip other than the fact it's also a tooltip library!</p>
+
+            <h4>Do you still support Simpletip?</h4>
+            <p>Simpletip is now discontinued but I will continue to support people having issues with the script. If you need support check-out the <a href="http://groups.google.com/group/jquery-simpletip/">Simpletip discussion board</a>. <b>I recommend everyone using it upgrades to qTip</b> as this is where all active development will be!</p>
+         </div>
+         <div id="contact" class="subsection">
+            <a name="contact"></a>
+            <h3><a href="#">Back to the top</a>Contact us</h3>
+            <p>For any support related topics about using qTip or possible bugs, <a href="/projects/qtip/forum/">check-out our forums</a> to get assistance.</p>
+            <p>For any non-support related issues, you can contact me at <a href="mailto:craig@craigsworks.com">craig[at]craigsworks.com</a>.
+         </div>
+      </div>
+   </div>
+   </div>

@@ -1,0 +1,241 @@
+<?=$docs_header?>
+
+	<div id="content">
+	<div class="center">
+		<div id="reference" class="section">
+			<h2>Core options</h2>
+
+			<div class="option">
+				<a class="sidetab collapser">&ndash;</a>
+				<a class="sidetab anchor" name="id" href="#id">#</a>
+
+				<h5 class="values">&quot;String&quot;, false</h5>
+				<h3 class="name"> <b>id</b><em>:false</em> </h3>
+
+				<div class="collapsable">
+					<h4>Overview</h4>
+					<p class="overview">
+						A unique string that determines the value of the qTip's &quot;id&quot; attribute that can be used to easily identify this qTip in the document.The attribute is prepended with 'ui-tooltip-'.
+					</p>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						This tooltip will be assigned an &quot;id&quot; value of &quot;ui-tooltip-myTooltip&quot;
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	id: 'myTooltip',
+	content: {
+		text: 'My ID is #ui-tooltip-myTooltip'
+	}
+});
+CODE
+						);?>
+
+						It can then be easily found in the document via simple jQuery selectors like so:
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('#ui-tooltip-myTooltip');
+CODE
+						);?>
+					</div>
+
+					<h4>Notes</h4>
+					<ul class="notes">
+						<li>By default, this is a unique positive integer.</li>
+						<li>Value must be unique and contain no special characters.</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="option">
+				<a class="sidetab collapser">&ndash;</a>
+				<a class="sidetab anchor" name="prerender" href="#prerender">#</a>
+
+				<h5 class="values">true, false</h5>
+				<h3 class="name"> <b>prerender</b><em>:false</em> </h3>
+
+
+				<div class="collapsable">
+					<h4>Overview</h4>
+					<p class="overview">
+						By default, tooltips are rendered on thier first show event, rather than on page load. Setting this to true will cause tooltips to be created on page load.
+					</p>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						Create a simple tooltip and create it on page load
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	prerender: true,
+	content: {
+		text: 'My simple tooltip'
+	}
+});
+CODE
+						);?>
+					</div>
+
+					<div class="seealso">
+						<h4>See also</h4>
+						<a href="<?=WEB_DIR?>/docs/show/#ready">show.ready</a>
+					</div>
+
+					<h4>Notes</h4>
+					<ul class="notes">
+						<li>Setting this to true can cause dramatic increases in page load times.</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="option">
+				<a class="sidetab collapser">&ndash;</a>
+				<a class="sidetab anchor" name="overwrite" href="#overwrite">#</a>
+
+				<h5 class="values">true, false</h5>
+				<h3 class="name"> <b>overwrite</b><em>:true</em> </h3>
+
+				<div class="collapsable">
+					<h4>Overview</h4>
+					<p class="overview">
+						Determines if, then the .qtip() method is called on an element with a qTip already present, the new one overrides (i.e. destroys) the old one. By default this is true.
+					</p>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						Create a tooltip that will not overridde (destroy) the previous qTip, but fail silently:
+						<?php echo $this->highlightCode('javascript', <<<CODE
+/* First tooltip, grabs its content from the title attribute */
+$('.selector').qtip();
+
+/*
+ * Second qTip   - this won't do anything, as we've 
+ * instructed it not to overwrite any prior qTip elements.
+ */
+$('.selector').qtip({
+	overwrite: false,
+	content: {
+		text: 'You won\'t see me... boo!'
+	}
+});
+CODE
+						);?>
+					</div>
+
+					<h4>Notes</h4>
+					<ul class="notes">
+						<li>This option is set to false when using the <a href="<?=WEB_DIR?>/tutorials/events/#live">live</a> event delegation option</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="option">
+				<a class="sidetab collapser">&ndash;</a>
+				<a class="sidetab anchor" name="suppress" href="#suppress">#</a>
+
+				<h5 class="values">true, false</h5>
+				<h3 class="name"> <b>suppress</b><em>:true</em> </h3>
+
+				<div class="collapsable">
+					<h4>Overview</h4>
+					<p class="overview">
+						Determines whether or not the default browser tooltips are suppressed for the selectors elements when the qTip is created. The suppression is
+						accomplished by renaming the 'title' attribute of the elements(s) to 'oldtitle'.
+					</p>
+					<p>
+						The jQuery .attr() method is overloaded to allow you to grab the title without modifying your current code, by returning 'oldtitle' when requesting the 'title' attribute
+						on elements with qTips present and suppression enabled.
+					</p>
+					<p>
+						The jQuery .clone() method is also overloaded to return cloned elements, with qTips present, with their regular title attributes intact. If however, you clone the element(s) passing
+						true as the first parameter (thereby cloning not only the element but also any data on it), the 'oldtitle' attribute will remain, and will not be returned to its original 'title' attribute.
+					</p>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						Create a qTip that is shown on click, but doesn't suppress the regular browser tooltip, allowing it to be used as an indicator:
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	suppress: false,
+	content: {
+		text: 'You must have known to click me from the browser tooltip...!?'
+	},
+	show: {
+		event: 'click'
+	}
+})
+.attr('title', 'Click me to show a qTip!'); // Apply a title attribute to the elements
+CODE
+						);?>
+					</div>
+
+					<h4>Notes</h4>
+					<ul class="notes">
+						<li>This option is most useful when creating tooltips that don't trigger on mouseover/out</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="option optionlast">
+				<a class="sidetab collapser">&ndash;</a>
+				<a class="sidetab anchor" name="metadata" href="#metadata">#</a>
+
+				<h5 class="values">[ Object ]</h5>
+				<h3 class="name"> <b>metadata</b><em>:{ type: 'class' }</em> </h3>
+
+				<div class="collapsable">
+					<h4>Overview</h4>
+					<p class="overview">
+						If you happen to use the <a href="http://plugins.jquery.com/project/metadata">jQuery Metadata plugin</a> on your web page, you can utilise it to supply options for your tooltips on a <b>per-element basis</b>. This option object determines the metadata plugins options when called by qTip.
+					</p>
+
+					<div class="examples">
+						<h4>Examples</h4>
+						Let's setup some elements with custom metadata attached via a custom tag:
+						<?php echo $this->highlightCode('html', <<<CODE
+<div qtipOpts="{ style: { classes: 'ui-tooltip-blue' } }"><b>Hover me</b> to see a blue tooltip</div>
+<div qtipOpts="{ show: { event: 'click' } }"><b>Click me</b> to show a regular tooltip</div>
+CODE
+						);?>
+
+						Now let's attach some tooltips and search for options within the qtipOpts attribute:
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('div[qtipOpts]').qtip({
+	metadata: {
+		type: 'attr',
+		name: 'qtipOpts'
+	},
+	content: 'I might look different from all the other tooltips generated by the same .qtip() call...'
+});
+CODE
+						);?>
+						
+						You can also utilise the new HTML5 data-* attributes in a similar way by setting up your data like so:
+						<?php echo $this->highlightCode('html', <<<CODE
+// Elements with data-qtipopts defined as a valid options object will automatically have it merged into the .qtip() calls options.
+<div data-qtipopts="{ style: { classes: 'ui-tooltip-green' } }"><b>Hover me</b> to see a green tooltip</div>
+CODE
+						);?>
+
+						...and then specifying 'html5' as you metadata type, along with the data attributes name (the bit after the hyphen):
+						<?php echo $this->highlightCode('javascript', <<<CODE
+$('div[qtipOpts]').qtip({
+	metadata: {
+		type: 'html5', // Use HTML5 data-* attributes
+		name: 'qtipopts' // Grab the metadata from the data-qtipOpts HTML5 attribute
+	},
+	content: 'I\'m using HTML5 to set my style... so so trendy.'
+});
+CODE
+						);?>
+					</div>
+
+					<h4>Notes</h4>
+					<ul class="notes">
+						<li><b>HTML5 data:</b> Make sure not to use <i>data-qtip</i> are your storage location, as it will interfere with qTip as of jQuery 1.4.3! See <a href="http://api.jquery.com/data/">here</a> for why.</li>
+						<li>For more information on other metadata options, checkout the <a href="http://docs.jquery.com/Plugins/Metadata/metadata#options">Metadata Documentation</a>.</li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	</div>

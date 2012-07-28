@@ -1,0 +1,178 @@
+<?=$docs_header?>
+
+	<div id="content">
+	<div class="center">
+		<div id="gettingstarted" class="section">
+			<h2>Getting Started</h2>
+			<div id="requirements" class="subsection">
+				<a name="requirements"></a>
+				<h3>Requirements</h3>
+
+				<p>
+					Before downloading and installing qTip<sup>2</sup>, you'll need to make sure you have the <a href="http://jquery.com">jQuery JavaScript Library</a> (<b>1.4.1 or higher!</b>) installed. 
+					<i>I recommend using 1.4.4 and above</i> because of mountain of speed improvements!
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="browsers" class="subsection">
+				<a name="upgrading"></a>
+				<h3>Browser support</h3>
+
+				<div> <img src="<?=IMAGES_DIR?>browsers/64-chrome.png" alt="Chrome" /> 8+ </div>
+				<div> <img src="<?=IMAGES_DIR?>browsers/64-firefox.png" alt="Firefox" /> 3+ </div>
+				<div> <img src="<?=IMAGES_DIR?>browsers/64-ie.png" alt="Internet Explorer" /> 6+ </div>
+				<div> <img src="<?=IMAGES_DIR?>browsers/64-opera.png" alt="Opera" /> 9+ </div>
+				<div> <img src="<?=IMAGES_DIR?>browsers/64-safari.png" alt="Safari" /> 2+, iOS 4+ </div>
+				<p class="clear">&nbsp;</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="upgrading" class="subsection">
+				<a name="upgrading"></a>
+				<h3>Upgrading from 1.0</h3>
+
+				<p>
+					If you're using the old 1.0RC3 and wish to upgrade, make sure to check-out the <a href="<?=WEB_DIR?>/converter/">converter</a> to transform your code in preparation for the upgrade.
+					It will supply you with the new configuration code as well as any additional code or CSS styles that you'll need.
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="downloading" class="subsection">
+				<a name="downloading"></a>
+				<h3>Downloading</h3>
+
+				<p>
+					To download the latest version of qTip<sup>2</sup>, visit our <a href="<?=WEB_DIR?>/download/">download page</a> and choose the features you'd like to implement on your site. 
+					There are several options here, including speech bubble tips and several other addons, and also <i>minifed and packed versions</i> for production sites.
+				</p>
+
+				<p>For production environments I recommend you use the minified or packed versions of the library files. For development the non-minified version is best to allow easy debugging.</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="installation" class="subsection">
+				<a name="installation"></a>
+				<h3>Installation</h3>
+
+				<p>Now you have the jQuery library and qTip<sup>2</sup> files, it's time to include them within your HTML.</p>
+
+				<p>I <b>highly recommend</b> that all JavaScript includes be placed just before the end <i>&lt;/body&gt;</i> tag as this ensures the DOM is loaded before manipulation of it occurs. This is not a requirement, simply an insiders tip!</p>
+
+				<?php echo $this->highlightCode('html', <<<CODE
+<html>
+<head>
+<title>My site</title>
+<!-- css file -->
+<link type="text/css" rel="stylesheet" href="/path/to/jquery.qtip-2.0.0.css" />
+</head>
+<body>
+<!-- content here -->
+<script type="text/javascript" src="/path/to/jquery.1.4.2.min.js"></script>
+
+<!-- Notice we only include the minified script here. You can include the non-minified version, just don't include both! -->
+<script type="text/javascript" src="/path/to/jquery.qtip-2.0.0.min.js"></script>
+</body>
+</html>
+CODE
+				);?>
+
+				<p class="note">
+					<em>NB</em> Make sure to include either the non-minified <i>or</i> the un-minified script, <b>not both!</b>
+				</p>
+				<p class="note">
+					<em>NB</em> Notice <i>the jQuery library is included <b>before</b> qTip<sup>2</sup></i>. This is absolutely essential for correct functioning of the plugin!
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="create" class="subsection">
+				<a name="create"></a>
+				<h3>Create a qTip</h3>
+
+				<p>Replacing the regular old title tooltips of your browser is simple. Just call the qtip() method on all link elements with no content option (it will use the title attribute of the target by default).</p>
+
+				<?php echo $this->highlightCode('javascript', "$('a[title]').qtip()");?>
+
+				<p>You can also define an alternative attribute which the tooltip will grab its content from, for example the alt attribute used for images:
+
+				<?php echo $this->highlightCode('javascript', <<<CODE
+$('.selector').qtip({
+	content: {
+		attr: 'alt'
+	}
+})
+CODE
+				);?>
+
+				<p class="note">The code above must ofcourse be encapsulated in a &lt;script&gt; /> tag, as it's simply&hellip; well JavaScript!</p>
+
+				<p class="note">
+					This code <b>must go below the &lt;script&gt; tag which includes the qTip2 file</b>! Whether that be in your &lt;head&gt; section or just before the end &lt;/body&gt; tag.
+				</p>
+
+				<p>
+					You can obviously customize the other options as much as you like, which are documented in detail in the <a href="<?=WEB_DIR;?>/docs/core/">options reference</a>. 
+					Also make sure to check-out the <a href="<?=WEB_DIR?>/tutorials/">Tutorials</a> section for detailed instructions on how to create more complex qTips.
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+
+			<div id="faq" class="subsection">
+				<a name="faq"></a>
+				<h3>Frequently asked questions</h3>
+
+				<h4>Why have rounded corners been removed in qTip<sup>2</sup>?</h4>
+				<p>
+					qTip 1.0 releases allowed you to apply cross-browser border-radius to your tooltips, however this came at the price of performance, especially in IE. In order
+					to make this feature work reliably, several IE specific hacks had to be used which increased the library codebase significantly (almost 10kb!). 
+				</p>
+				<p>
+					qTip<sup>2</sup> has been re-factored significantly to provide not only a smaller code base, but a faster, more modular operation. Because of this, I made the decision to remove the 
+					rounded corners feature from the library in favour of the standard CSS border-radius property. This also falls in line with the move from style objects to standard CSS
+					stylesheets (see below).
+				</p>
+
+				<h4>Why do I require a stylesheet to use qTip<sup>2</sup>?</h4>
+				<p>
+					In the qTip 1.0 releases you defined your styles using the styles object. However, this not only unnecessarily increases the complexity of the library, but flies against
+					the concept of <a href="http://www.chromaticsites.com/blog/13-reasons-why-css-is-superior-to-tables-in-website-design/#reason7">separating content from visual information</a>.
+					Therefore qTip<sup>2</sup> utilises a separate stylesheet to contain all tooltip styles, which allows you to easily add new styles without additional JavaScript code, as well as easily editing
+					pre-existing styles.
+				</p>
+
+				<h4>Do you offer paid support for qTip?</h4>
+				<p>
+					I don't offer any paid support packages, but if you're in need of quite a detailed qTip setup I'm glad to accept paid work to setup it up for you. 
+					Just <a href="mailto:craig@craigsworks.com">drop me a line</a> and we can talk business!
+				</p>
+
+				<h4>What do donations go towards?</h4>
+				<p>
+					Donations are used to keep the hosting company happy with regular payments and help to keep me on my feet through University while I develop this much loved library! 
+					So <b><a href="<?=WEB_DIR?>/donate/">donations</a> are always welcome</b> and if you really enjoy using qTip<sup>2</sup>, please consider it. You know you want to deep down! 
+					For more information on donations checkout the <a href="<?=WEB_DIR?>/donate">donations page</a>.
+				</p>
+
+				<h4>Are you SURE it's free?</h4>
+				<p>
+					Absolutely! qTip is free and will always be free, unless of course I become homeless and have to live out of a box... then we'll see. But until then, 
+					don't worry too much! qTip is dual licensed under the MIT/GPL licenses. <a href="<?=WEB_DIR?>/download/#license">Check out the licensing page</a> for 
+					more details on qTip's licensing model.
+				</p>
+
+				<h4>By "you must include the license files" you mean...?</h4>
+				<p>&hellip;you must distribute the qTip files along with the agreed licenses (MIT and GPL), be it a simple link to the license or even a small comment within the file!</p>
+
+				<h4>Do you still support qTip 1.0 releases?</h4>
+				<p>
+					qTip 1.0 releases are now discontinued but I will continue to support people having issues with the script. If you need support check-out the 
+					<a href="<?=WEB_DIR?>/projects/forums/forum-qtip-1-x">qTip support forum</a>. <b>I recommend everyone using it upgrades to qTip<sup>2</sup></b> 
+					as this is where all active development will be!
+				</p>
+			</div>
+			<a href="#" class="backtop right">Back to the top</a>
+		</div>
+	</div>
+	</div>

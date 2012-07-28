@@ -1,0 +1,61 @@
+<div id="contentheader" class="preview">
+<div class="center">
+   <img class="screenshot left" src="/projects/qtip/images/preview.jpg" alt="Owl image courtesy of K.-M. Hansche" />
+
+   <div class="column left">
+      <h2>Introducing qTip.</h2>
+      <p>qTip is an advanced tooltip plugin for the ever popular <a href="http://jquery.com">jQuery JavaScript framework</a>.</p>
+
+      <p>Built from the ground up to be <b>user friendly</b>, yet <a href="/projects/qtip/features">feature rich</a>, qTip provides you with tonnes of features like <b>rounded corners</b> and <b>speech bubble tips</b>, and best of all... it's <a href="/projects/qtip/download#license">completely free under the MIT license!</a></p>
+
+   </div>
+
+   <div class="clear">&nbsp;</div>
+</div>
+</div>
+
+<div id="content">
+<div class="center">
+
+   <div id="links" class="column right">
+      <a class="download link" href="/projects/qtip/download">
+         <img class="right" src="/projects/qtip/images/download_circle.png" alt="" />
+         <span class="title">Download qTip <?=$js_qtip?></span>
+      </a>
+
+      <a class="demos link" href="/projects/qtip/demos">
+         <img class="right" src="/projects/qtip/images/demos.png" alt="" />
+         <span class="title">View live demonstrations!</span>
+      </a>
+
+      <a class="support link" href="/projects/qtip/forum/">
+         <img class="right" src="/projects/qtip/images/support.png" alt="" />
+         <span class="title">Need support? Visit the forum!</span>
+      </a>
+
+      <a class="donations link" href="/projects/qtip/donate">
+         <span class="border">
+            <span class="title">Feeling generous?</span>
+            Hosting, <i>hosting</i>, <b>hosting</b>! Unfortunately it doesn't come free... so if you're feeling generous, please donate some money to help cover the costs of hosting and development. <b>Every little goes a long way!</b>
+         </span>
+         <img class="right" src="/projects/qtip/images/owl_small.png" alt="" />
+      </a>
+
+      <div class="clear">&nbsp;</div>
+   </div>
+
+   <div class="news">
+      <div class="block">
+         <a class="right twitter" href="http://twitter.com/craigsworks">
+            <img src="/projects/qtip/images/twitter.png" alt="Follow qTip on Twitter!" />
+         </a>
+         <h2>
+            Latest News <a class="feed" href="/projects/qtip/forum/feed/rss/forum/2/" title="Subscribe to the Recent News feed"><img src="/projects/qtip/images/feed-icon-14x14.png" alt="Feed" /></a>
+         </h2>
+         <?=$news?>
+      </div>
+   </div>
+
+   <div class="clear">&nbsp;</div>
+</div>
+   </div>

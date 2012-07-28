@@ -1,0 +1,156 @@
+<?php $title_for_layout = 'Alert/Confirm/Prompt enhancement'; ?>
+
+<style type="text/css">
+/* Add some nice box-shadow-ness to the dialogues */
+.ui-tooltip-dialogue{
+	max-width: 420px;
+	min-width: 210px;
+
+	-moz-box-shadow: 0 0 10px 1px rgba(0,0,0,.5);
+	-webkit-box-shadow: 0 0 10px 1px rgba(0,0,0,.5);
+	box-shadow: 0 0 10px 1px rgba(0,0,0,.5);
+}
+
+.ui-tooltip-dialogue .ui-tooltip-content{
+	padding: 10px;
+}
+
+.ui-tooltip-dialogue button{
+	float: left;
+	width: 47%;
+	margin-right: 10px;
+	padding: 3px 0;
+
+	text-align: center;
+	font-size: 10.5px;
+}
+
+.ui-tooltip-dialogue button + button{
+	float: right;
+	margin-right: 0;
+}
+
+.ui-tooltip-dialogue input{
+	width: 95%;
+	padding: 3px 0 3px 5px;
+	margin-bottom: 7px;
+
+	font-size: 10.5px;
+}
+
+.ui-tooltip-dialogue button.full{
+	float: none;
+	width: 100%;
+}
+</style>
+
+<div id="demo-dialogues">
+	<button id="alert" class="nice">Click me for an alert!</button>
+	<button id="prompt" class="nice">Click me for a prompt dialogue</button>
+	<button id="confirm" class="nice">Click me for a confirm dialogue</button>
+</div>
+
+<script class="example" type="text/javascript">
+$(document).ready(function()
+{
+	/*
+	 * Common dialogue() function that creates our dialogue qTip.
+	 * We'll use this method to create both our prompt and confirm dialogues
+	 * as they share very similar styles, but with varying content and titles.
+	 */
+	function dialogue(content, title) {
+		/* 
+		 * Since the dialogue isn't really a tooltip as such, we'll use a dummy
+		 * out-of-DOM element as our target instead of an actual element like document.body
+		 */
+		$('<div />').qtip(
+		{
+			content: {
+				text: content,
+				title: title
+			},
+			position: {
+				my: 'center', at: 'center', // Center it...
+				target: $(window) // ... in the window
+			},
+			show: {
+				ready: true, // Show it straight away
+				modal: {
+					on: true, // Make it modal (darken the rest of the page)...
+					blur: false // ... but don't close the tooltip when clicked
+				}
+			},
+			hide: false, // We'll hide it maunally so disable hide events
+			style: 'ui-tooltip-light ui-tooltip-rounded ui-tooltip-dialogue', // Add a few styles
+			events: {
+				// Hide the tooltip when any buttons in the dialogue are clicked
+				render: function(event, api) {
+					$('button', api.elements.content).click(api.hide);
+				},
+				// Destroy the tooltip once it's hidden as we no longer need it!
+				hide: function(event, api) { api.destroy(); }
+			}
+		});
+	}
+
+	// Our Alert method
+	function Alert(message)
+	{
+		// Content will consist of the message and an ok button
+		var message = $('<p />', { text: message }),
+			ok = $('<button />', { text: 'Ok', 'class': 'full' });
+	
+		dialogue( message.add(ok), 'Alert!' );
+	}
+
+	// Our Prompt method
+	function Prompt(question, initial, callback)
+	{
+		// Content will consist of a question elem and input, with ok/cancel buttons
+		var message = $('<p />', { text: question }),
+			input = $('<input />', { val: initial }),
+			ok = $('<button />', { 
+				text: 'Ok',
+				click: function() { callback( input.val() ); }
+			}),
+			cancel = $('<button />', {
+				text: 'Cancel',
+				click: function() { callback(null); }
+			});
+
+		dialogue( message.add(input).add(ok).add(cancel), 'Attention!' );
+	}
+	
+	// Our Confirm method
+	function Confirm(question, callback)
+	{
+		// Content will consist of the question and ok/cancel buttons
+		var message = $('<p />', { text: question }),
+			ok = $('<button />', { 
+				text: 'Ok',
+				click: function() { callback(true); }
+			}),
+			cancel = $('<button />', { 
+				text: 'Cancel',
+				click: function() { callback(false); }
+			});
+
+		dialogue( message.add(ok).add(cancel), 'Do you agree?' );
+	}
+
+	// Setup the buttons to call our new Alert/Prompt/Confirm methods
+	$('#alert').click(function() {
+		Alert('Custom alert() functions are cool.');
+	});
+	$('#prompt').click(function() {
+		Prompt('How would you describe qTip2?', 'Awesome!', function(response) {
+			// do something with response
+		});
+	});
+	$('#confirm').click(function() {
+		Confirm('Click Ok if you love qTip2', function(yes) {
+			// do something with yes
+		});
+	});
+});
+</script>

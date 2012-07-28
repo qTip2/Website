@@ -1,0 +1,149 @@
+	<div id="contentheader">
+	<div class="center">
+
+		<h2 class="main">Code converter</h2>
+
+		<div class="column left">
+			<h2 class="version"><small>v</small>1</h2>
+			<div id="from" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+				<ul class="ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header">
+					<li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#from-code">Options object</a></li>
+					<li class="ui-state-default ui-corner-top"><a href="#from-styles">Global styles</a></li>
+					<li class="tab-right ui-state-default ui-corner-top"><a href="#from-options">Settings</a></li>
+				</ul>
+
+				<div id="from-code" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+					<div class="help ui-state-default ui-corner-all" title="Help!">
+						<span class="ui-icon ui-icon-help"></span>
+						<div>
+							<p>Enter your old qTip 1.0 configuration object here i.e. the object in between the .qtip() function:</p>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+{
+	content: 'Hello! Tooltips...',
+	position: {
+		corner: {
+			tooltip: 'topRight'
+		}
+	},
+	style: {
+		name: 'blue'
+	}
+}
+CODE
+							);?>
+						</div>
+					</div>
+
+					<h3>Your options object</h3>
+					<textarea class="hl-main">
+{
+	content: {
+		text: 'Sample config object',
+		url: 'content.html',
+		data: { id: 1 }
+	},
+	position: {
+		corner: 'top left',
+		adjust: {
+			screen: true
+		}
+	},
+	hide: {
+		effect: {
+			type: 'slide',
+			length: 5
+		}
+	},
+	style: {
+		name: 'dark',
+		fontSize: '.9em',
+		border: {
+			width: 5,
+			radius: 4,
+			color: 'red'
+		},
+		title: { background: 'black' }
+	}
+}
+					</textarea>
+				</div>
+
+				<div id="from-styles" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+					<div class="help ui-state-default ui-corner-all" title="Help!">
+						<span class="ui-icon ui-icon-help"></span>
+						<div>
+							<p>Enter your old $.fn.qtip.styles objects here e.g.</p>
+							<?php echo $this->highlightCode('javascript', <<<CODE
+$.fn.qtip.styles.myStyle = {
+	name: 'blue',
+	fontSize: '1.4em',
+	backgroundColor: 'white'
+};
+
+$.fn.qtip.styles.style2 = {
+	name: 'light',
+	fontFamily: 'serif'
+};
+CODE
+							);?>
+						</div>
+					</div>
+
+					<h3>Global style objects</h3>
+					<textarea class="hl-main"></textarea>
+				</div>
+
+				<div id="from-options" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+					<h3>Converter settings</h3>
+					
+					<ul class="options">
+						<li id="from-options-css" class="selectable">
+							<h4>Use ID for CSS</h4>
+							If the options include an <a href="<?=WEB_DIR?>/docs/core/#id">id</a>, use it to reference the qTip in the CSS stylesheet.
+						</li>
+
+						<li id="from-options-api" class="selectable">
+							<h4>Use ID for additional code</h4>
+							If the options include an <a href="<?=WEB_DIR?>/docs/core/#id">id</a>, use it to reference the qTip in additional code e.g. API binds
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="column right">
+			<h2 class="version"><small>v</small>2</h2>
+
+			<div id="loading" class="loading hidden"> <img src="<?=IMAGES_DIR?>/loading.gif" alt="Loading..." width="31" height="31" /> </div>
+			<div id="loading-over" class="ui-corner-all"></div>
+
+			<div id="to" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+				<ul class="ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header">
+					<li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#to-code">Options object</a></li>
+					<li class="ui-state-default ui-corner-top"><a href="#to-bind">Extra code</a></li>
+					<li class="ui-state-default ui-corner-top"><a href="#to-css">CSS</a></li>
+					<li class="tab-right ui-state-default ui-corner-top"><a href="#to-errors">Messages (1)</a></li>
+				</ul>
+
+				<div id="to-code" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+					<h3>New options object</h3>
+					<textarea class="hl-main" autocomplete="off" readonly="readonly"></textarea>
+				</div>
+				<div id="to-bind" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+					<h3>Extra code</h3>
+					<textarea class="hl-main" autocomplete="off" readonly="readonly"></textarea>
+				</div>
+				<div id="to-css" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+					<h3>Stylesheet</h3>
+					<textarea class="hl-main" autocomplete="off" readonly="readonly"></textarea>
+				</div>
+				<div id="to-errors" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+					<h3>Messages</h3>
+					<ul class="options"></ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="clear">&nbsp;</div>
+	</div>
+	</div>

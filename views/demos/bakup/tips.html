@@ -1,0 +1,72 @@
+<?php $title = 'Speech bubble tips' ?>
+
+<div id="demo-tips">
+	<div class="structure">&nbsp;</div>
+</div>
+
+<script class="example" type="text/javascript">
+// Define our positioning and style arrays
+var my = [
+		'bottom left', 'bottom right', 'bottom center',
+		'top left', 'top right', 'top center',
+		'left center', 'left top', 'left bottom',
+		'right center', 'right top', 'right bottom', 'center'
+	],
+	at = [
+		'top left', 'top right', 'top center',
+		'bottom left', 'bottom right', 'bottom center',
+		'right center', 'right top', 'right bottom',
+		'left center', 'left top', 'left bottom', 'center'
+	],
+	styles = [
+		'cream', 'red', 'blue', 'dark', 'light', 'green', 'jtools', 'plain', 'youtube', 'cluetip', 'tipsy', 'green'
+	],
+	tip = {
+		youtube: { border: 1, offset: 5 },
+		tipsy: { offset: 5, border: 0 },
+		jtools: { border: 2 },
+		cluetip: { border: 0 },
+		plain: { border: 1 }
+	};
+
+// Create the tooltips only on document load
+$(document).ready(function()
+{
+	// Loop through the my array
+	for(var i = 0; i < my.length; i++)
+	{
+		$('.structure')
+			/*
+			 * Lets delete the qTip data from our target element so we can apply multiple tooltips.
+			 * Since the data is also sotred on the tooltip element itself this isn't a problem!
+			 */
+			.removeData('qtip') 
+			.qtip({
+				content: {
+					text: 'At it\'s ' + at[i], 
+					title: {
+						text: 'My ' + my[i],
+						button: true
+					}
+				},
+				position: {
+					my: at[i], // Use the corner...
+					at: my[i] // ...and opposite corner
+				},
+				show: {
+					event: false, // Don't specify a show event...
+					ready: true // ... but show the tooltip when ready
+				},
+				hide: false, // Don't specify a hide event either!
+				style: {
+					classes: 'ui-tooltip-shadow ui-tooltip-' + styles[i],
+					tip: $.extend(true, {
+						corner: true, // Give it a speech bubble tip with automatic corner detection
+						border: 5 // Give our tips a border
+					}, tip[ styles[i] ])
+				}
+			});
+	}
+});
+</script>
+
