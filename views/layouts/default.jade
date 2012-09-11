@@ -1,34 +1,34 @@
 !!! 5
 html
-head
-	title qTip2 - Pretty powerful tooltips #{locals.title ? ' - ' + title.join(' - ') : ''}
-	
-	// Stylesheets
-	link(rel='shortcut icon', type='image/vnd.microsoft.icon', href='#{WEB_DIR}/favicon.ico')
-	link(rel='stylesheet', type='text/css', href='#{CSS_DIR}/master.css')
-	link(rel='stylesheet', type='text/css', href='#{QTIP_CSS}')
-	block stylesheets
-		link(rel='stylesheet', type='text/css', href='#{CSS_DIR}/#{page}.css')
+	head
+		title qTip2 - Pretty powerful tooltips #{locals.title ? ' - ' + title.join(' - ') : ''}
 
-	// Metadata
-	include ../includes/metadata
+		// Metadata
+		include ../includes/metadata
 
-	// Google Analytics
-	include ../includes/analytics
+		// Stylesheets
+		link(rel='shortcut icon', type='image/vnd.microsoft.icon', href='#{url("/favicon.ico")}')
+		link(rel='stylesheet', type='text/css', href='#{cdn("master.css")}')
+		link(rel='stylesheet', type='text/css', href='#{qtip("nightly", "css")}')
+		block stylesheets
+			link(rel='stylesheet', type='text/css', href='#{cdn(page+".css")}')
 
-body
-	include ../includes/noscript
-	
-	#master
-		include ../includes/header
+		// Google Analytics
+		include ../includes/analytics
 
-		block content
-		
-		include ../includes/footer
+	body
+		include ../includes/noscript
 
-	// Javascript
-	script(type='text/javascript', src='#{COMMON_DIR}/js/jquery.min.js')
-	script(type='text/javascript', src='#{QTIP_JS}')
-	script(type='text/javascript', src='#{JS_DIR}/base.js')
-	block scripts
-		script(type='text/javascript', src='#{JS_DIR}/#{page}.js')
+		#master
+			include ../includes/header
+
+			block content
+
+			include ../includes/footer
+
+		// Javascript
+		script(type='text/javascript', src='#{cdn("jquery")}')
+		script(type='text/javascript', src='#{qtip("nightly", "js")}')
+		script(type='text/javascript', src='#{cdn("base.js")}')
+		block scripts
+			script(type='text/javascript', src='#{cdn(page+".js")}')

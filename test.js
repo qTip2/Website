@@ -2,40 +2,12 @@ var Q = require('q'),
 	fs = require('fs'),
 	path = require('path'),
 	util = require('util'),
-	zipstream = require('zipstream'),
-	express = require('express'),
-	app = express.createServer();
-
-// Configure the server
-app.configure(function() {
-	app.use(express.methodOverride());
-	app.use(express.bodyParser());
-	app.use(app.router);
-
-	// Use Jade as renderer
-	app.set('view engine', 'jade');
-});
-
-// Setup global route
-app.get('/', function (req, res) {
-	// Write out response headers
-	res.writeHead(200, {
-		'Content-Type': 'application/zip',
-		'Content-Description': 'Filter Transfer',
-		'Content-Disposition': 'attachment; filename="jquery.qtip.zip"'
-	});
-
-	// Construct our zip file
-	constructZip(res, ['js/1.js', 'js/2.js', 'js/3.js', 'js/4.js', 'js/5.js'], 'nightly');
-});
-
-// Listen on port 80... HTTP!!!11
-app.listen(80, '109.123.70.57');
+	zipstream = require('zipstream');
 
 /*
  * Dynamic zip constructor / caching
  */
-function constructZip(res, files, version) {
+function build(res, files, version) {
 	var zip, result, cachePath, cacheExists, cache;
 
 	// Create new zip stream
@@ -73,3 +45,5 @@ function constructZip(res, files, version) {
 		console.log('Finished zipping!');
 	});
 }
+
+exports.build = build
