@@ -4,31 +4,40 @@ var Registry = require('../registry')
 	, path = require('path')
 	, build = require('../build').build
 	, shout = require('../shout').shout
-	, showdown = require('showdown')
 	, nsh = require('node-syntaxhighlighter')
 	, highlight = require('highlight').Highlight
-	, markdown = new showdown.converter();
+	, marked = require("marked");
 
-/*
- * Home page
- */
-exports.new = function(req, res) {
-	res.render('new', {
-		title: [],
-		page: 'new',
-		ip: req.ip,
-		hostip: '109.123.70.57',
-		nightly: Registry.build.nightly
-	});
-}
+// Setup markdown formatting 
+marked.setOptions({
+	gfm: true,
+	pedantic: false,
+	sanitize: false,
+	// callback for code highlighter
+	highlight: function(code, lang) {
+		return code;
+	}
+});
+
+// Load the FAQ into memory as parsed markdown
+var faq = marked( fs.readFileSync( paths.wiki+'/FAQ.md' ).toString() );
+faq = faq.replace(/<h2>/g, '<div class="section"><h2>').replace(/<\/p>/g, '</p></div>')
+		.replace(/qTip\s*(<sup>)?2\s*(<\/sup>)?/gi, '<strong>qTip<sup>2</sup>&nbsp;</strong>');
 
 /*
  * Home page
  */
 exports.index = function(req, res) {
+	// Load the contributers file
+	var donators = fs.readFileSync( paths.donators ).toString().split("\n");
+
 	res.render('index', {
-		title: [],
-		page: 'home'
+		page: 'new',
+		ip: req.ip,
+		hostip: '109.123.70.57',
+		build: Registry.build,
+		faq: faq,
+		donators: donators
 	});
 }
 
@@ -108,16 +117,11 @@ exports.demoData = function(req, res) {
 	var page = req.params.type,
 		body = req.body,
 		ratings = {
-			'0111161':9.3,
-			'0120689':8.4,
-			'1375666':8.8,
-			'0071562':9.1,
-			'0375679':7.9,
-			'0468569':9.0,
-			'0110912':9.0,
-			'0137523':8.9,
-			'1119646':7.8,
-			'0167260':8.9
+			'0111161':9.3, '0120689':8.4,
+			'1375666':8.8, '0071562':9.1,
+			'0375679':7.9, '0468569':9.0,
+			'0110912':9.0, '0137523':8.9,
+			'1119646':7.8, '0167260':8.9
 		},
 		params = {},
 		state;

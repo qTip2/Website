@@ -19,18 +19,24 @@ var app = express();
 
 // Production
 app.configure(function(){
+	// Common config
 	app.set('port', process.env.PORT || 80);
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
 	app.set('view options', {
 		layout: 'layouts/default'
 	});
+
+	// Setup blog vhost
+	app.use(express.vhost(
+		'blog.qtip2.com', require('./node-blog/app').app
+	));
+
 	//app.use(gzip.gzip())
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
-	app.use(app.router);
 	app.use(express.static(path.join(__dirname, 'public')));
 });
 
@@ -122,7 +128,7 @@ app.post('/_git', git.hook);
 // Update our repos and upon completion, start the server
 git.update().fin(function() {
 	// Setup the server
-	http.createServer(app).listen(app.get('port'), function(){
+	app.listen(app.get('port'), function() {
 		console.log("Express server listening on port " + app.get('port'));
 	});
 });
