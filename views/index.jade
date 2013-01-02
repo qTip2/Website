@@ -10,8 +10,9 @@ html
 		link(rel='shortcut icon', type='image/vnd.microsoft.icon', href='#{url("/favicon.ico")}')
 		link(rel="stylesheet", type='text/css', href="#{url('/stylesheets/reset.css')}")
 		link(rel="stylesheet", type='text/css', href="#{url('/stylesheets/new.css')}")
+		link(rel="stylesheet", type='text/css', href="#{url('/stylesheets/hightlight2.css')}")
 		link(rel='stylesheet', type='text/css', href='#{qtip("nightly", "css")}')
-		link(rel='stylesheet', type='text/css', href='http://fonts.googleapis.com/css?family=Average+Sans|Montserrat|Open+Sans:400,300,600,700&subset=latin,latin-ext')
+		link(rel='stylesheet', type='text/css', href='http://fonts.googleapis.com/css?family=Average+Sans|Montserrat|Open+Sans:400,300,600,700|Droid+Sans+Mono&subset=latin,latin-ext')
 		block stylesheets
 
 		// Google Analytics
@@ -237,7 +238,12 @@ html
 						p
 							mixin logo()
 							| also supports corner positioning on <i>&lt;map&gt;</i>, <i>&lt;area&gt;</i> and
-							| most <i>&lt;svg&gt;</i> elements
+							| most <i>&lt;svg&gt;</i> elements via the
+							b optional 
+							a(href="#plugins-imagemap") Image map 
+							| and 
+							a(href="#plugins-svg") SVG 
+							| plugins
 
 						.examples
 							#positioning-imgmap
@@ -476,11 +482,13 @@ html
 											| #{build.stable.version}
 											i Stable
 								
-								li.nightly.version(title="Not suitable for production environments")
+								li.nightly.version(title="Not suitable for production environments", title=build.nightly.commitmsg)
 									input(id="download-nightly", name="version", type="radio", value="nightly")
-									label(for="download-nightly") Nightly
+									label(for="download-nightly")
 										span
-											i #{build.nightly.version}
+											| Nightly 
+											small (#{moment(build.nightly.commitdate).fromNow()})
+											i "#{build.nightly.commitmsg.substr(0, 50)+'...'}"
 									
 							h4 Choose included <i>styles</i>
 							ul
@@ -594,10 +602,41 @@ html
 							| get started with 
 							mixin logo()
 
+					#installation.section
+						h2 Installation
+						p
+							| Once you've 
+							a(href="#download") downloaded the 
+								mixin logo() 
+								| files
+							| , you'll need to then include them within the HTML of your page/template.
+						p 
+							| I highly recommend that the 
+							mixin logo()
+							| script be placed just before the end </body> tag, <i>not inside the &lt;head&gt;</i>, as it is a additional UI-centric
+							| script you don't need blocking your page rendering.
+
+						:html
+							<html>
+							<head>
+							<title>My site</title>
+							<!-- css file -->
+							<link type="text/css" rel="stylesheet" href="/path/to/jquery.qtip-2.0.0.css" />
+							</head>
+							<body>
+							<!-- content here -->
+							<script type="text/javascript" src="/path/to/jquery.1.4.2.min.js"></script>
+							<!-- Notice we only include the minified script here. You can include the non-minified version, just don't include both! -->
+							<script type="text/javascript" src="/path/to/jquery.qtip-2.0.0.min.js"></script>
+							</body>
+							</html>
+						
+						p.note <b>Note:</b> Make sure to include either the non-minified or the un-minified script, not both! 
+						p.note <b>Note:</b> Notice the jQuery library is included before qTip2. This is absolutely essential for correct functioning of the plugin!
+
 					#guides.section
 						h2 Guides
 						ul
-							li: a(href="https://github.com/Craga89/qTip2/wiki/getting-started"): span: span Getting started
 							li: a(href="https://github.com/Craga89/qTip2/wiki/content-guide"): span: span Content types
 
 					#api.section
@@ -625,22 +664,22 @@ html
 					#plugins.section
 						h2 Plugins
 						ul
-							li
+							li#plugins-ajax
 								a(href="https://github.com/Craga89/qTip2/wiki/AJAX")
 									span: span AJAX
-							li
+							li#plugins-modal
 								a(href="https://github.com/Craga89/qTip2/wiki/Modal")
 									span: span Modal
-							li
+							li#plugins-viewport
 								a(href="https://github.com/Craga89/qTip2/wiki/Viewport")
 									span: span Viewport positioning
-							li
+							li#plugins-imagemap
 								a(href="https://github.com/Craga89/qTip2/wiki/Image-map")
 									span: span Imagemap support
-							li
+							li#plugins-svg
 								a(href="https://github.com/Craga89/qTip2/wiki/SVG")
 									span: span SVG support
-							li
+							li#plugins-ie6
 								a(href="https://github.com/Craga89/qTip2/wiki/IE6")
 									span: span IE6 compatibility
 
@@ -723,9 +762,9 @@ html
 								a(href="http://flattr.com/thing/706279/qTip2-Pretty-Powerful-Tooltips", target="_blank", title="Donate using Flattr")
 									img(src="http://api.flattr.com/button/flattr-badge-large.png", class="noq", alt="Flattr this", border="0")
 
-							p <b>Note:</b> All donations are made to <a href="mailto:craig@craigsworks.com">mailto:craig@craigsworks.com</a> in the above services.
-							p <b>Note:</b> Upon submission, you will be redirected to the chosen services website to login/register and verify your donation.
-							p <b>Note:</b> If you prefer to send money in a different currency, alternative options are available once at the external site (see above).
+							p.note <b>Note:</b> All donations are made to <a href="mailto:craig@craigsworks.com">mailto:craig@craigsworks.com</a> in the above services.
+							p.note <b>Note:</b> Upon submission, you will be redirected to the chosen services website to login/register and verify your donation.
+							p.note <b>Note:</b> If you prefer to send money in a different currency, alternative options are available once at the external site (see above).
 
 						#donators.section
 							h2 Donators <i>Random tag cloud</i>

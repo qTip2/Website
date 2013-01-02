@@ -10,6 +10,7 @@ var Registry = require('./registry')
 	, http = require('http')
 	, path = require('path')
 	, date = require('date').date
+	, moment = require('moment')
 	, nsh = require('node-syntaxhighlighter')
 	, highlight = require('highlight').Highlight
 	, markdown = require('markdown').markdown;
@@ -26,6 +27,7 @@ app.configure(function(){
 	app.set('view options', {
 		layout: 'layouts/default'
 	});
+	require('./jadefilters') // Load custom filters
 
 	// Setup blog vhost
 	app.use(express.vhost(
@@ -91,9 +93,10 @@ app.locals({
 	},
 
 	// Helpers
-	date: function() {
+	date: function(date) {
 		return date.apply(date, arguments);
 	},
+	moment: moment,
 	markdown: function(str) {
 		return markdown.toHTML(str);
 	},
