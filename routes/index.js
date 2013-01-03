@@ -19,25 +19,17 @@ marked.setOptions({
 	}
 });
 
-// Load the FAQ into memory as parsed markdown
-var faq = marked( fs.readFileSync( paths.wiki+'/FAQ.md' ).toString() );
-faq = faq.replace(/<h2>/g, '<div class="section"><h2>').replace(/<\/p>/g, '</p></div>')
-		.replace(/qTip\s*(<sup>)?2\s*(<\/sup>)?/gi, '<strong>qTip<sup>2</sup>&nbsp;</strong>');
-
 /*
  * Home page
  */
 exports.index = function(req, res) {
-	// Load the contributers file
-	var donators = fs.readFileSync( paths.donators ).toString().split("\n");
-
 	res.render('index', {
 		page: 'new',
 		ip: req.ip,
 		hostip: '109.123.70.57',
 		build: Registry.build,
-		faq: faq,
-		donators: donators
+		markdown: Registry.markdown,
+		donators: Registry.donate.contributors.split("\n")
 	});
 }
 

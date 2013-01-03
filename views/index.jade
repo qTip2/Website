@@ -10,10 +10,14 @@ html
 		link(rel='shortcut icon', type='image/vnd.microsoft.icon', href='#{url("/favicon.ico")}')
 		link(rel="stylesheet", type='text/css', href="#{url('/stylesheets/reset.css')}")
 		link(rel="stylesheet", type='text/css', href="#{url('/stylesheets/new.css')}")
+		link(rel="stylesheet", type='text/css', href="#{url('/stylesheets/demos.css')}")
 		link(rel="stylesheet", type='text/css', href="#{url('/stylesheets/hightlight2.css')}")
 		link(rel='stylesheet', type='text/css', href='#{qtip("nightly", "css")}')
 		link(rel='stylesheet', type='text/css', href='http://fonts.googleapis.com/css?family=Average+Sans|Montserrat|Open+Sans:400,300,600,700|Droid+Sans+Mono&subset=latin,latin-ext')
 		block stylesheets
+
+		// jQuery
+		script(type='text/javascript', src='http://code.jquery.com/jquery.min.js')
 
 		// Google Analytics
 		include includes/analytics
@@ -30,10 +34,13 @@ html
 		strong qTip<sup>2</sup>&nbsp;
 
 	body
+		a(name="master")
 		#master
 
+			a(name="header")
 			#header
 				.fixed
+					a(name="nav")
 					#nav.center(class="#{page}")
 						ul
 							li.style(title='Choose a global tooltip style')
@@ -54,7 +61,9 @@ html
 							li.nomargin: a.forum(href='http://craigsworks.com/projects/forums/forum-qtip2', title='Get help from the qTip2 community') Forum
 
 
+			a(name="content")
 			#content
+				a(name="intro")
 				#intro.category.group
 					h1
 						font Introducing&hellip;
@@ -62,6 +71,7 @@ html
 							mixin logo()
 						img(class="owl", src="#{cdn('owl_small.png')}", width="45", height="50")
 
+					a(name="about")
 					#about.section
 						h2 About
 						p
@@ -82,6 +92,7 @@ html
 							| and best of all... it's 
 							a(href='#license') completely free under the MIT/GPLv2 licenses!
 
+					a(name="features")
 					#features.section
 						h2 Features
 						p
@@ -105,6 +116,7 @@ html
 								mixin featureblock("IE6 support (BGIframe)")
 						| &hellip;and lots more!
 
+					a(name="browsers")
 					#browsers.section
 						h2 Compatibility
 						span
@@ -123,14 +135,15 @@ html
 							img(src='#{cdn("browsers/64-safari.png")}', alt='Safari', width='45', height='42')
 							| 2+, iOS 4+
 
+				a(name="demos")
 				#demos.category.group
-					h1
-						| Demos
+					h1 Demos
 						font
 							| see 
 							mixin logo()
 							| in action
 
+					a(name="contents")
 					#contents.section
 						h2 HTML, Text and AJAX
 						p
@@ -138,7 +151,7 @@ html
 							| allows you to use not only regular textual content, but also complex
 							| HTML from other elements on the page. It can even pull content in from other pages via
 							| the optional 
-							a(href='') AJAX plugin
+							a(href='#plugins-ajax') AJAX plugin
 
 						.examples
 							ul
@@ -154,6 +167,7 @@ html
 
 
 
+					a(name="styling")
 					#styling.section
 						h2 Styles and Customisation
 						p
@@ -164,19 +178,24 @@ html
 							| libraries. And with custom themes creatable with just a few lines of CSS, you'll be up
 							| and running in no time!
 
-						mixin style(name, title, titlebar)
+						p Choose a style from below to change the styling of every qTip on the page!
+
+						mixin style(name, title, titlebar, active)
 							defClass = name === 'ui' ? '' : 'qtip-default '
 							classes = defClass+'qtip qtip qtip qtip-rounded qtip-shadow qtip-'+name
 							if name === 'ui'
 								classes = classes+' ui-helper-reset ui-widget ui-tooltip'
 
-							div(id="#styling-type-"+name, class=classes, title=title, data-titlebar=titlebar)
-								div.qtip-titlebar(class=(name === 'ui' ? 'ui-widget-header ui-tooltip-title' : ''))
-								div.qtip-content(class=(name === 'ui' ? 'ui-widget-content ui-tooltip-content' : ''))
+							div(class='qtip-container ' + (active ? 'active' : ''))
+								div(id="#styling-type-"+name, class=classes, title=title, data-titlebar=titlebar, data-style='qtip-'+name)
+									div.qtip-titlebar(class=(name === 'ui' ? 'ui-widget-header ui-tooltip-title' : ''))
+									div.qtip-content(class=(name === 'ui' ? 'ui-widget-content ui-tooltip-content' : ''))
 							
 						.examples
-							#styling-builtin.styles(data-type='Builtin style')
-								mixin style('default', 'Default yellow style', 'true')
+							a(name="styling")
+							#styling-builtin.styles(data-type='Basic style')
+								h3 Basic
+								mixin style('default', 'Default yellow style', 'true', true)
 								mixin style('light', 'Light style, for the minimalists', 'true')
 								mixin style('dark', 'An opposing dark style', 'true')
 								mixin style('red', 'Great for error related messages', 'true')
@@ -190,7 +209,9 @@ html
 								label(for="styling-shadow") Shadow
 
 								
+							a(name="styling")
 							#styling-extra.styles(data-type='CSS3 style')
+								h3 CSS3
 								mixin style('youtube', "Google's YouTube style", 'true')
 								mixin style('tipsy', 'Great minimalist Tipsy style', 'true')
 								mixin style('bootstrap', "Bootstrap your qTip's with this style", 'true')
@@ -202,10 +223,12 @@ html
 							| from the Themeswitcher below to see it in action.
 
 						.examples
-							#styling-ui.styles(data-type='jQuery UI Themeroller')
+							a(name="styling")
+							#styling-ui.styles.group(data-type='jQuery UI Themeroller')
 								div#themeswitcher.immediate
 
 					
+					a(name="positioning")
 					#positioning.section
 						h2 Positioning
 						p
@@ -246,6 +269,7 @@ html
 							| plugins
 
 						.examples
+							a(name="positioning")
 							#positioning-imgmap
 								img(width='485', height='315', border='0', usemap='#statesmap', src='#{cdn("demos/usa.gif")}')
 								map#statesmap(name='statesmap')
@@ -304,6 +328,7 @@ html
 									a(href='http://www.americanbanker.com/state/state.html', target='_blank') American Banker
 
 
+					a(name="events")
 					#events.section
 						h2 Show and Hide properties
 						p
@@ -328,6 +353,8 @@ html
 									mixin demoblock("Hide others when opening", "fdavn")
 								li#showhide-inactive
 									mixin demoblock("Hide when inactive", "fdavn")
+								li#showhide-distance
+									mixin demoblock("Hide after a variable mouse distance", "fdavn")
 
 						p
 							| Not only are there multiple built-in properties to determine <i>when</i> your tooltips
@@ -336,8 +363,6 @@ html
 
 						.examples
 							ul
-								li#showhide-fade
-									mixin demoblock("Long fade", "fdavn")
 								li#showhide-slide
 									mixin demoblock("Sliding in", "fdavn")
 								li#showhide-fadeslide
@@ -348,6 +373,7 @@ html
 									mixin demoblock("Customised .animate()", "fdavn")
 
 
+					a(name="apicallbacks")
 					#apicallbacks.section.group
 						h2 API and Callbacks
 						p
@@ -361,6 +387,8 @@ html
 						.examples
 							div.demogroup.left
 								h4 Dialogs
+									small Utilise the 
+										a(href="#plugins-modal") Modal plugin
 									a.source(href="http://jsfiddle.net/fdavn") view source
 
 								ul
@@ -379,9 +407,9 @@ html
 
 								ul
 									li#apicallbacks-youtube.clickable
-										mixin demoblock("YouTube")
+										mixin demoblock('<a href="http://www.youtube.com/watch?v=MF3Vbq2BPbE"><b>YouTube</b> - Elf Owl Eating</a>')
 									li#apicallbacks-vimeo.clickable
-										mixin demoblock("Vimeo")
+										mixin demoblock('<a href="http://vimeo.com/1949449#"><b>Vimeo</b> - Eagle Owl</a>')
 
 							div.demogroup.left
 								h4 Geolocation
@@ -434,14 +462,15 @@ html
 									li
 										mixin demoblock('<a href="http://youtube.com">YouTube</a>')
 
+				a(name="download")
 				#download.category.group
-					h1
-						| Download
+					h1 Download
 						font
 							| grab 
 							mixin logo()
 							| for free!
 
+					a(name="cdn")
 					#cdn.section
 						h2 CDN <small>(recommended)</small>
 						p
@@ -466,6 +495,7 @@ html
 							a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.js")
 								| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.js
 
+					a(name="builder")
 					#builder.section
 						h2 Build your own
 
@@ -562,6 +592,7 @@ html
 									nightly: !{JSON.stringify(build.nightly.filesizes)}
 								}
 
+					a(name="git")
 					#git.section
 						h2 GitHub development
 						p
@@ -585,6 +616,7 @@ html
 							.badge
 								iframe(src='http://ghbtns.com/github-btn.html?user=craga89&type=follow&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='152px', height='20px')
 
+					a(name="license")
 					#license.section
 						h2 Licensing
 						p
@@ -595,50 +627,23 @@ html
 							| you're not too familiar with licensing don't worry about it!
 
 
+				a(name="docs")
 				#docs.category.group
-					h1
-						| Documentation
+					h1 Documentation
 						font
 							| get started with 
 							mixin logo()
 
-					#installation.section
-						h2 Installation
-						p
-							| Once you've 
-							a(href="#download") downloaded the 
-								mixin logo() 
-								| files
-							| , you'll need to then include them within the HTML of your page/template.
-						p 
-							| I highly recommend that the 
-							mixin logo()
-							| script be placed just before the end </body> tag, <i>not inside the &lt;head&gt;</i>, as it is a additional UI-centric
-							| script you don't need blocking your page rendering.
+					!{wikipage(markdown.gettingstarted)}
 
-						:html
-							<html>
-							<head>
-							<title>My site</title>
-							<!-- css file -->
-							<link type="text/css" rel="stylesheet" href="/path/to/jquery.qtip-2.0.0.css" />
-							</head>
-							<body>
-							<!-- content here -->
-							<script type="text/javascript" src="/path/to/jquery.1.4.2.min.js"></script>
-							<!-- Notice we only include the minified script here. You can include the non-minified version, just don't include both! -->
-							<script type="text/javascript" src="/path/to/jquery.qtip-2.0.0.min.js"></script>
-							</body>
-							</html>
-						
-						p.note <b>Note:</b> Make sure to include either the non-minified or the un-minified script, not both! 
-						p.note <b>Note:</b> Notice the jQuery library is included before qTip2. This is absolutely essential for correct functioning of the plugin!
-
+					a(name="guides")
 					#guides.section
 						h2 Guides
+							i Read these first!
 						ul
 							li: a(href="https://github.com/Craga89/qTip2/wiki/content-guide"): span: span Content types
 
+					a(name="api")
 					#api.section
 						h2 Configuration options
 						ul
@@ -661,8 +666,11 @@ html
 								a(href="https://github.com/Craga89/qTip2/wiki/style")
 									span: span <b>Styling</b> properties
 
+					a(name="plugins")
 					#plugins.section
 						h2 Plugins
+							i Make sure 
+							a(href="#builder") they're included!
 						ul
 							li#plugins-ajax
 								a(href="https://github.com/Craga89/qTip2/wiki/AJAX")
@@ -683,6 +691,7 @@ html
 								a(href="https://github.com/Craga89/qTip2/wiki/IE6")
 									span: span IE6 compatibility
 
+					a(name="api")
 					#api.section
 						h2 API
 						ul
@@ -693,9 +702,9 @@ html
 								a(href="https://github.com/Craga89/qTip2/wiki/events")
 									span Events and callbacks
 
+				a(name="donate")
 				#donate.category.group
-					h1
-						| Donate
+					h1 Donate
 						font show your love for the project
 
 					form(action="https://www.paypal.com/uk/cgi-bin/webscr", data-paypal="https://www.paypal.com/uk/cgi-bin/webscr", data-moneybookers="https://www.moneybookers.com/app/payment.pl")
@@ -726,11 +735,13 @@ html
 						input(type="hidden", name="amount2")
 						input(type="hidden", name="merchant_fields", value="first_name,last_name")
 
+						a(name="name")
 						#name.section
 							h2 What is your name?
 							div.inputgroup
 								input(type="text", name="firstname", value="Anonymous")
 
+						a(name="amount")
 						#amount.section
 							h2 Choose an amount
 							ul
@@ -752,6 +763,7 @@ html
 											| <font>&pound;</font>
 											input(id="amount-custom", type="number", name="amount", value="10")
 
+						a(name="service")
 						#service.section
 							h2 Choose a service
 
@@ -766,6 +778,7 @@ html
 							p.note <b>Note:</b> Upon submission, you will be redirected to the chosen services website to login/register and verify your donation.
 							p.note <b>Note:</b> If you prefer to send money in a different currency, alternative options are available once at the external site (see above).
 
+						a(name="donators")
 						#donators.section
 							h2 Donators <i>Random tag cloud</i>
 							- donators.forEach(function(item) {
@@ -774,11 +787,13 @@ html
 								span(style="color:rgb("+color+"); font-size:"+font+"em; line-height:"+(font+0.2)+"em;")=item
 							- })
 
+				a(name="faq")
 				#faq.category.group
-					!{faq}
+					h1 FAQ
+						font Frequently asked questions
+					!{wikipage(markdown.faq)}
 
 		// Javascript
-		script(type='text/javascript', src='http://code.jquery.com/jquery.min.js')
 		script(type='text/javascript', src='http://code.jquery.com/ui/1.8.24/jquery-ui.min.js')
 		script(type='text/javascript', src='#{qtip("nightly", "js")}')
 

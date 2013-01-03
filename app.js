@@ -9,11 +9,10 @@ var Registry = require('./registry')
 	, gzip = require('connect-gzip')
 	, http = require('http')
 	, path = require('path')
-	, date = require('date').date
 	, moment = require('moment')
 	, nsh = require('node-syntaxhighlighter')
 	, highlight = require('highlight').Highlight
-	, markdown = require('markdown').markdown;
+	, marked = require('marked');
 
 // Setup the server
 var app = express();
@@ -93,20 +92,38 @@ app.locals({
 	},
 
 	// Helpers
-	date: function(date) {
-		return date.apply(date, arguments);
-	},
 	moment: moment,
 	markdown: function(str) {
-		return markdown.toHTML(str);
+		return marked(str);
 	},
 	highlight: function(code, lang) {
-		return nsh.highlight(code, nsh.getLanguage(lang), {
+		return nsh.highlight(code, nsh.getLanguage(lang || 'js'), {
 			gutter: false
 		});
 	},
-	timeago: require('timeago')
-})
+	wikipage: function(markdown) {
+		return marked( markdown )
+
+		// Remove h1 headers
+		.replace(/<h1>[^\<]+<\/h1>/g, '')
+
+		// Replace with correct HTML section syntax
+		.replace(/<h2>/g, '<div class="section"><h2>').replace(/<\/p>\s*$/g, '</p></div>')
+		.replace(/<\/p>\s*<div class="section">/g, '</p></div><div class="section">')
+
+		// Don;'t use strong, use b
+		.replace(/<(\/)?strong>/g, '<$1b>')
+
+		// Replace qTip2 with proper HTML formatting to keep it inline with the rest of the page
+		.replace(/qTip\s*(<sup>)?2\s*(<\/sup>)?/gi, '<strong>qTip<sup>2</sup>&nbsp;</strong>');
+	}
+});
+
+// Set markdown defaults
+marked.setOptions({
+	gfm: true,
+	highlight: app.locals.highlight
+});
 
 // Setup routes
 app.get('/', routes.index);
