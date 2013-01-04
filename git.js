@@ -20,12 +20,12 @@ var _files = {
 
 
 var cwd = '';
-function exec(result, cmd, newcwd) {
-	return result.then(function() {
+function exec(cmd, newcwd) {
+	return function() {
 		return Q.ninvoke(cp, 'exec', cmd, {
 			cwd: (cwd = newcwd || cwd)
 		});
-	});
+	}
 }
 
 /*
@@ -38,11 +38,7 @@ function wiki() {
 	var result = Q.resolve();
 
 	// Update the wiki repo
-	return result.then(function() {
-		return Q.ninvoke(cp, 'exec', 'git pull', {
-			cwd: paths.wiki
-		});
-	})
+	return result.then( exec('git pull', paths.wiki) )
 
 	// Update wiki files in Registry
 	.then(function() {
@@ -66,19 +62,19 @@ function repos() {
 	['nightly', 'stable'].forEach(function(version) {
 		// Clean up dist/
 		console.log('Cleaning up dist/ dir...');
-		result = exec(result, 'grunt clean', paths.git[version]);
+		result = result.then(exec('grunt clean', paths.git[version]));
 
 		// Pull newest commits
 		console.log('Pulling %s repo...', version);
-		result = exec(result, 'git pull origin master');
+		result = result.then(exec('git pull origin master'));
 
 		// If stable... checkout the latest tag
 		if(version === 'stable') {
-			result = exec(result, 'git tag -l | tail -1')
+			result = result.then(exec('git tag -l | tail -1'))
 				.then(function(tag) {
-					console.log('Checking out latest stable release... %s', tag)
-					git(result, 'git checkout tags/'+tag)
-				});
+					console.log('Checking out latest stable release... %s', tag[0].trim())
+					return exec('git checkout '+tag[0].trim())()
+				})
 		}
 
 		// Generate file size object
