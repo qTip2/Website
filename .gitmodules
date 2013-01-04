@@ -1,0 +1,9 @@
+[submodule "build/stable"]
+	path = build/stable
+	url = git@github.com:Craga89/qTip2.git
+[submodule "build/nightly"]
+	path = build/nightly
+	url = git@github.com:Craga89/qTip2.git
+[submodule "build/wiki"]
+	path = build/wiki
+	url = git@github.com:Craga89/qTip2.wiki.git
