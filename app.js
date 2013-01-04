@@ -28,6 +28,23 @@ app.configure(function(){
 	});
 	require('./jadefilters') // Load custom filters
 
+	// Setup IP checks
+	app.use(function(req, res, next) {
+		if(req.ip !== '78.105.190.31') {
+			res.send('Under construction'); return;
+		}
+
+		next();
+	});
+
+	// Allow demo data to be accessed by anyone (CORS)
+	app.use('/demos/data', function(req, res, next) {
+		res.header('Access-Control-Allow-Origin', '*');
+		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+		res.header('Access-Control-Allow-Headers', 'Content-Type');
+		next();
+    });
+
 	// Setup blog vhost
 	app.use(express.vhost(
 		'blog.qtip2.com', require('./node-blog/app').app
