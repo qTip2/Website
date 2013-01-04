@@ -1,0 +1,102 @@
+extends ../layouts/demo
+
+block title
+	| AJAX
+
+block styles
+	style(type='text/css')
+		.ui-tooltip-wiki{
+			max-width: 440px;
+		}
+
+			.ui-tooltip-wiki .ui-tooltip-content{
+				padding: 10px;
+
+				line-height: 12.5px;
+			}
+
+			.ui-tooltip-wiki h1{
+				margin: 0 0 7px;
+
+				font-size: 1.5em;
+				line-height: 1em;
+			}
+
+			.ui-tooltip-wiki img{ padding: 0 10px 0 0; }
+
+			.ui-tooltip-wiki p{ margin-bottom: 9px; }
+			.ui-tooltip-wiki .note{ margin-bottom: 0; font-style: italic; color: #888; }
+
+			
+block content
+	h4.right Click the links to see more information about those owls
+	h2 Owls
+	.clear
+
+	img.right(src='#{cdn("demos/spottedowl.jpg")}', alt="", title="Spotted Owl", width="180", height="274")
+
+	p
+		| The Strigiformes (Owls) are an order of birds of prey, comprising 200 extant species. Owls mostly hunt small mammals, insects, and other birds, though a few species specialize in
+		| hunting fish. Most are solitary, and nocturnal, with some exceptions (e.g. the
+		a(href='http://en.wikipedia.org/wiki/Burrowing_Owl', rel='#{url("/demos/data/burrowingowl")}') Burrowing Owl
+		| ).
+		| They are found in all regions of the Earth except Antarctica, most of Greenland, and some remote islands. Some, like the
+		a(href='http://en.wikipedia.org/wiki/Snowy_Owl', rel='#{url("/demos/data/snowyowl")}') Snowy Owl
+		| , even inhabit some of the harshest environments on Earth, such as the Artic Circle.
+	p
+		| The living owls are divided into two families, the typical owls, Strigidae, and the barn-owls, Tytonidae. Owls have been a feature of falconry for years. In recent years, many owls
+		| have moved from their previous rural habitats to start to inhabit urban areas. The
+		a(href='http://en.wikipedia.org/wiki/Tawny_Owl', rel='#{url("/demos/data/tawnyowl")}') Tawny Owl
+		| has been a common visitor to cities across the UK for about forty years, where it survives on a diet of pigeons and small birds. Owls in urban areas are also known to prey on new-born kittens.
+	p
+		| The modern West generally associates owls with wisdom. This link goes back at least as far as Ancient Greece, where Athens, noted for art and scholarship, and Athena, Athens' patron goddess and the goddess of wisdom,
+		| had the owl as a symbol. Marija Gimbutas traces veneration of the owl as a goddess, among other birds, to the culture of Old Europe, long pre-dating intrusive Indo-European cultures.
+	p
+		b Source:
+		a(href='http://en.wikipedia.org/wiki/Strigiformes', target='_blank') Wikipedia
+
+	.clear
+
+
+block scripts
+	script(class='example', type='text/javascript')
+		// Create the tooltips only on document load
+		$(document).ready(function()
+		{
+			// Make sure to only match links to wikipedia with a rel tag
+			$('a[href*="wikipedia.org/"][rel]').each(function()
+			{
+				// We make use of the .each() loop to gain access to each element via the "this" keyword...
+				$(this).qtip(
+				{
+					content: {
+						// Set the text to an image HTML string with the correct src URL to the loading image you want to use
+						text: '<img class="throbber" src="#{cdn("throbber.gif")}" alt="Loading..." />',
+						ajax: {
+							url: $(this).attr('rel') // Use the rel attribute of each element for the url to load
+						},
+						title: {
+							text: 'Wikipedia - ' + $(this).text(), // Give the tooltip a title using each elements text
+							button: true
+						}
+					},
+					position: {
+						at: 'bottom center', // Position the tooltip above the link
+						my: 'top center',
+						viewport: $(window), // Keep the tooltip on-screen at all times
+						effect: false // Disable positioning animation
+					},
+					show: {
+						event: 'click',
+						solo: true // Only show one tooltip at a time
+					},
+					hide: 'unfocus',
+					style: {
+						classes: 'ui-tooltip-wiki ui-tooltip-light ui-tooltip-shadow'
+					}
+				})
+			})
+
+			// Make sure it doesn't follow the link when we click it
+			.click(function(event) { event.preventDefault(); });
+		});

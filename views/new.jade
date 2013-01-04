@@ -1,0 +1,599 @@
+!!! 5
+html
+	head
+		title qTip2 - Pretty powerful tooltips #{locals.title ? ' - ' + title.join(' - ') : ''}
+
+		// Metadata
+		include includes/metadata
+
+		// Stylesheets
+		link(rel='shortcut icon', type='image/vnd.microsoft.icon', href='#{url("/favicon.ico")}')
+		link(rel="stylesheet", type='text/css', href="#{url('/stylesheets/reset.css')}")
+		link(rel="stylesheet", type='text/css', href="#{url('/stylesheets/new.css')}")
+		link(rel='stylesheet', type='text/css', href='#{qtip("nightly", "css")}')
+		link(rel='stylesheet', type='text/css', href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin,latin-ext')
+		block stylesheets
+		link(rel='stylesheet', type='text/css', href='#{cdn(page+".css")}')
+
+		// Google Analytics
+		include includes/analytics
+
+	mixin source(fiddle)
+		a.source(href='http://jsfiddle.net/craga89/'+fiddle) view source
+
+	body
+		#master
+
+			#header
+				.fixed
+					//h1.left
+					//	a(href='#{WEB_DIR}/')
+					//		img.logo(src='#{cdn("logo-horizontal.png")}', alt='qTip2 - Pretty powerful tooltips', width='122', height='40')
+
+					#nav.center(class="#{page}")
+						ul
+							li.style(title='Choose a global tooltip style')
+								&nbsp;
+								div.qtip.qtip-default.qtip-rounded
+									div.qtip-titlebar.qtip-rounded
+									div.qtip-content
+
+							li.first: a.home(href='#{url("/new#")}', title='Find out what qTip2 has to offer') Introduction
+							li: a.demos(href='#demos', title='Check out qTip2 in action') Demos
+							li: a.download(href='#download', title="Grab it while it's hot") Download
+							li: a.guides(href='#guides', title='Comprehensive guides to get you up and running') Guides
+							li: a.docs(href='#api', title='View the complete API reference') API Reference
+							li: a.converter(href='#converter', title='Convert your old qTip v1.0 code') Converter
+							li: a.donate(href='donate', title='Show some love for the project!') Donate
+							li: a.docs(href='#faq', title='Answers to the common questions') FAQ
+							li.nomargin: a.forum(href='/projects/forums/forum-qtip2', title='Get help from the qTip2 community') Forum
+
+
+			#content
+				#intro.group
+					h1
+						font Introducing&hellip;
+						| qTip<sup>2</sup>
+						img(class="owl", src="#{cdn('owl_small.png')}", width="45", height="50")
+
+					#about.section
+						h2 About
+						p
+							| qTip<sup>2</sup> is the second generation of the advanced 
+							a(href="#{'http://craigsworks.com/projects/qtip/'}") qTip 
+							| plugin for the ever popular 
+							a(href='http://jquery.com') jQuery framework.
+						p
+							| Building on 1.0's <b>user friendly</b>, yet 
+							a(href='#features') feature rich
+							|  base, qTip<sup>2</sup> provides you with tonnes of features like 
+							b speech bubble tips 
+							| and
+							b imagemap support, 
+							| and best of all... it's 
+							a(href='#license') completely free under the MIT/GPLv2 licenses!
+
+					#features.section
+						h2 Features
+						| qTip<sup>2</sup> is packed full of features including:
+						ul.subnav
+							li.active: a(href="#features-tips") <span>Speech bubble 'tips'</span>
+							li: a(href="#features-ajax") <span>Integrated AJAX</span>
+							li: a(href="#features-viewport") <span>Viewport repositioning</span>
+							li: a(href="#features-stacking") <span>z-index stacking</span>
+							li: a(href="#features-modal") <span>Modal tooltips</span>
+							li: a(href="#features-imgsvg") <span>Imagemap &amp; SVG support</span>
+							li: a(href="#features-ie6") <span>IE6 support (BGIframe)</span>
+						| &hellip;and lots more!
+
+						#features-tips.subsection
+							h3 Speech bubble 'tips'
+							p
+							| What
+
+
+					#browsers.section
+						h2 Compatibility
+						span
+							img(src='#{cdn("browsers/64-chrome.png")}', alt='Chrome', width='45', height='42')
+							| 8+
+						span
+							img(src='#{cdn("browsers/64-firefox.png")}', alt='Firefox', width='45', height='42')
+							| 3+
+						span
+							img(src='#{cdn("browsers/64-ie.png")}', alt='Internet Explorer', width='45', height='42')
+							| 6+
+						span
+							img(src='#{cdn("browsers/64-opera.png")}', alt='Opera', width='45', height='42')
+							| 9+
+						span
+							img(src='#{cdn("browsers/64-safari.png")}', alt='Safari', width='45', height='42')
+							| 2+, iOS 4+
+
+				#demos.group
+					h1
+						| Demos
+						font see qTip<sup>2</sup> in action
+
+					#contents.section
+						h2 HTML, Text and AJAX
+						p
+							| qTip<sup>2</sup> allows you to use not only regular textual content, but also complex
+							| HTML from other elements on the page. It can even pull content in from other pages via
+							| the optional 
+							a(href='') AJAX plugin
+
+						.examples
+							ul
+								li.active
+									a#contents-text <span>Simple text</span>
+									mixin source()
+								li
+									a#contents-html <span>Inline HTML</span>
+									mixin source()
+								li
+									a#contents-ajax <span>AJAX'd HTML</span>
+									mixin source()
+								li
+									a#contents-loading <span>Loading icons</span>
+									mixin source()
+							
+
+					#positioning.section
+						h2 Positioning
+						p
+							| Featuring a fully configurable, human-readable positioning system, qTip<sup>2</sup>
+							| allows you to easily position your tooltips using element corners, and even reposition
+							| themselves when the viewport sizes changes!
+
+						.examples
+							img.corners(src='#{cdn("corners.jpg")}', width='350')
+							
+							ul
+								li.active
+									a#positioning-corner <span>Using a corner</span>
+									mixin source()
+								li.active
+									a#positioning-adjust <span>Adding small adjustments</span>
+									mixin source()
+								li
+									a#positioning-target <span>Using a different target</span>
+									mixin source()
+								li
+									a#positioning-mouse <span>Open at the current mouse position</span>
+									mixin source()
+								li
+									a#positioning-track <span>Anchor the tooltip to the mouse</span>
+									mixin source()
+								li
+									a#positioning-viewport <span>Viewport repositioning</span>
+									mixin source()
+
+						p
+							| qTip<sup>2</sup> also supports corner positioning on <i>&lt;map&gt;</i>, <i>&lt;area&gt;</i> and
+							| most <i>&lt;svg&gt;</i> elements
+
+						.examples
+							#positioning-imgmap
+								img(width='485', height='315', border='0', usemap='#statesmap', src='#{cdn("demos/usa.gif")}')
+								map#statesmap(name='statesmap')
+									area(alt='Alabama', coords='319,197,321,247,329,247,328,240,351,240,340,195', shape='poly')
+									area(alt='Arizona', coords='84,165,71,211,102,232,119,234,124,171', shape='poly')
+									area(alt='Arkansas', coords='261,184,261,214,266,221,290,221,301,183', shape='poly')
+									area(alt='California', coords='9,91,42,98,35,131,71,186,67,209,44,208,20,179,6,117', shape='poly')
+									area(alt='Colorado', coords='134,127,130,170,190,175,191,131', shape='poly')
+									area(alt='Connecticut', coords='432,96,436,110,479,116,478,108,448,105,445,96', shape='poly')
+									area(alt='Delaware', coords='422,125,430,127,467,129,466,138,426,136', shape='poly')
+									area(alt='District of Columbia', coords='412,144,420,147,425,161,462,163,461,152,429,149,419,145', shape='poly')
+									area(alt='Florida', coords='330,242,332,248,364,248,380,262,377,273,402,299,407,297,409,280,387,240,353,243', shape='poly')
+									area(alt='Georgia', coords='342,195,354,241,386,237,388,223,358,193', shape='poly')
+									area(alt='Idaho', coords='85,29,71,100,117,110,118,84,105,83', shape='poly')
+									area(alt='Illinois', coords='292,113,294,119,285,140,305,172,311,171,317,152,312,113', shape='poly')
+									area(alt='Indiana', coords='317,115,319,153,317,163,342,148,336,116', shape='poly')
+									area(alt='Iowa', coords='242,105,248,134,283,134,292,118,280,104', shape='poly')
+									area(alt='Kansas', coords='194,144,194,174,256,176,254,155,249,145', shape='poly')
+									area(alt='Kentucky', coords='307,176,314,173,319,163,345,151,360,151,365,162,358,172', shape='poly')
+									area(alt='Louisiana', coords='264,223,268,258,309,263,303,245,287,245,290,223', shape='poly')
+									area(alt='Maine', coords='442,52,445,46,447,28,460,25,477,49,453,73', shape='poly')
+									area(alt='Maryland', coords='406,131,418,129,423,140,463,140,463,150,425,146', shape='poly')
+									area(alt='Massachusetts', coords='431,87,441,86,452,83,482,75,481,91,448,92,432,94', shape='poly')
+									area(alt='Michigan', coords='291,66,315,77,317,114,351,114,355,101,338,70,328,60,303,58', shape='poly')
+									area(alt='Minnesota', coords='236,41,242,75,242,102,280,101,269,85,269,71,288,50', shape='poly')
+									area(alt='Mississippi', coords='300,199,293,221,290,243,306,243,310,251,319,249,317,199', shape='poly')
+									area(alt='Missouri', coords='249,138,258,154,260,181,300,181,302,173,280,140', shape='poly')
+									area(alt='Montana', coords='94,28,92,42,107,80,120,82,119,75,179,82,180,39', shape='poly')
+									area(alt='Nebraska', coords='179,109,179,128,194,129,195,141,245,142,235,114', shape='poly')
+									area(alt='Nevada', coords='46,99,39,129,74,179,90,108', shape='poly')
+									area(alt='New Hampshire', coords='442,35,422,33,422,45,427,46,436,57,439,84,452,79,441,54', shape='poly')
+									area(alt='New Jersey', coords='423,108,432,112,470,119,467,127,435,125,423,123,427,120', shape='poly')
+									area(alt='New Mexico', coords='128,174,123,226,177,231,179,178', shape='poly')
+									area(alt='New York', coords='380,102,386,96,384,90,406,84,408,67,422,64,430,105,416,98', shape='poly')
+									area(alt='North Carolina', coords='375,173,354,192,381,187,395,188,409,196,431,171,425,163', shape='poly')
+									area(alt='North Dakota', coords='183,40,181,71,238,74,231,41', shape='poly')
+									area(alt='Ohio', coords='339,117,346,147,363,149,375,131,371,109', shape='poly')
+									area(alt='Oklahoma', coords='183,176,183,182,208,183,209,204,257,213,255,178', shape='poly')
+									area(alt='Oregon', coords='25,47,77,62,65,96,11,86,25,47', shape='poly')
+									area(alt='Pennsylvania', coords='374,106,378,131,398,130,419,124,423,119,420,114,421,105,414,99', shape='poly')
+									area(alt='Rhode Island', coords='448,94,450,100,481,104,480,93', shape='poly')
+									area(alt='South Carolina', coords='362,193,382,188,393,190,406,198,388,221', shape='poly')
+									area(alt='South Dakota', coords='182,74,180,106,238,111,237,77', shape='poly')
+									area(alt='Tennesee', coords='306,181,300,198,351,192,371,173', shape='poly')
+									area(alt='Texas', coords='183,184,181,234,146,232,173,264,184,256,232,303,264,260,261,218,209,208,206,185', shape='poly')
+									area(alt='Utah', coords='94,110,115,112,115,124,130,127,126,168,85,162', shape='poly')
+									area(alt='Vermont', coords='408,47,425,47,434,59,436,69,437,85,430,85,425,61,408,61', shape='poly')
+									area(alt='Virginia', coords='369,163,364,170,423,161,419,148,411,145,409,138,400,133,389,158', shape='poly')
+									area(alt='Washington', coords='28,13,25,41,78,57,84,25', shape='poly')
+									area(alt='West Virginia', coords='377,133,362,151,372,163,384,159,399,133', shape='poly')
+									area(alt='Wisconsin', coords='283,64,271,73,271,86,290,111,313,111,312,80', shape='poly')
+									area(alt='Wyoming', coords='124,78,117,120,174,127,178,84', shape='poly')
+
+								p.attribution
+									| imagemap courtesy of 
+									a(href='http://www.americanbanker.com/state/state.html', target='_blank') American Banker
+
+
+
+					#styling.section
+						h2 Styles and Customisation
+						p
+							| Not much of an artist? No problem! qTip<sup>2</sup> comes with multiple built-in styles
+							| that are ready for use, including styles from several other popular tooltip
+							| libraries. And with custom themes creatable with just a few lines of CSS, you'll be up
+							| and running in no time!
+
+						mixin style(name, title, titlebar)
+							defClass = name === 'ui' ? '' : 'qtip-default '
+							classes = defClass+'qtip qtip qtip qtip-rounded qtip-shadow qtip-'+name
+							if name === 'ui'
+								classes = classes+' ui-helper-reset ui-widget'
+
+							div(id="#styling-type-"+name, class=classes, title=title, data-titlebar=titlebar)
+								div.qtip-titlebar(class=(name === 'ui' ? 'ui-widget-header' : ''))
+								div.qtip-content(class=(name === 'ui' ? 'ui-widget-content' : ''))
+							
+						.examples
+							#styling-builtin.styles(data-type='Builtin style')
+								mixin style('default', 'Default yellow style', 'true')
+								mixin style('light', 'Light style, for the minimalists', 'true')
+								mixin style('dark', 'An opposing dark style', 'true')
+								mixin style('red', 'Great for error related messages', 'true')
+								mixin style('blue', 'Placid blue, for those informative messages', 'true')
+								mixin style('green', 'A generic but tasteful green style', 'true')
+
+								input(id="styling-rounded", type="checkbox", checked="checked", data-class="qtip-rounded")
+								label(for="styling-rounded") Rounded
+
+								input(id="styling-shadow", type="checkbox", checked="checked", data-class="qtip-shadow")
+								label(for="styling-shadow") Shadow
+
+								
+							#styling-extra.styles(data-type='CSS3 style')
+								mixin style('youtube', "Google's YouTube style", 'true')
+								mixin style('tipsy', 'Great minimalist Tipsy style', 'true')
+								mixin style('bootstrap', "Bootstrap your qTip's with this style", 'true')
+								mixin style('tipped', 'One of the many Tipped library styles', 'true')
+								mixin style('jtools', 'jTools-style tooltips', 'true')
+						p
+							| qTip<sup>2</sup> even supports styling via the jQuery UI Themeroller themes! Choose a theme
+							| from the Themeswitcher below to see it in action.
+
+						.examples
+							#styling-ui.styles(data-type='jQuery UI Themeroller')
+								div#themeswitcher
+
+					
+
+
+
+					#events.section
+						h2 Show and Hide properties
+						p
+							| Sometimes a regular mouseover just won't cut it, so why hack away? qTip<sup>2</sup> provides
+							| a complete solution to defining custom show and hide properties, so you can open your tooltips on
+							| click, focus or <insert custom event here>!
+
+						.examples
+							ul
+								li.active
+									a#showhide-click.clickable <span>Click (and click again!)</span>
+									mixin source()
+								li
+									a <input id="showhide-focus" value="Focus and blur" />
+									mixin source()
+								li
+									a#showhide-unfocus <span>Hide when clicking elsewhere</span>
+									mixin source()
+								li
+									a#showhide-fixed <span>Stay visible when mousing onto tooltip</span>
+									mixin source()
+								li
+									a#showhide-delay <span>Custom hide and show delays</span>
+									mixin source()
+								li
+									a#showhide-solo <span>Hide others when opening</span>
+									mixin source()
+								li
+									a#showhide-inactive <span>Hide when inactive</span>
+									mixin source()
+
+						p
+							| Not only are there multiple built-in properties to determine <i>when</i> your tooltips
+							| show and hide, but there's properties for describing <i>how they do it</i> i.e. <b>individual,
+							| custom show and hide effects</b>!
+
+						.examples
+							ul
+								li.active
+									a#showhide-fade <span>Long fade</span>
+									mixin source()
+								li
+									a#showhide-slide <span>Sliding in</span>
+									mixin source()
+								li
+									a#showhide-fadeslide <span>Fade in, slide out</span>
+									mixin source()
+								li
+									a#showhide-ui <span>jQuery UI effects</span>
+									mixin source()
+								li
+									a#showhide-custom <span>Customised .animate()</span>
+									mixin source()
+
+
+					#apicallbacks.section
+						h2 API and Callbacks
+						p
+							| Manipulating and customising the behaviour of the qTip<sup2</sup> library couldn't be easier
+							| using the builtin API, which features multiple callbacks and attributes to precisely fine tune
+							| your tooltips.
+
+						.examples
+							ul
+								li
+									a#apicallbacks-jgrowl.clickable <span>jGrowl simulation</span>
+									mixin source()
+								li
+									a#apicallbacks-alert.clickable <span>Alert</span>, 
+									a#apicallbacks-confirm.clickable <span>Confirm</span> 
+									| and 
+									a#apicallbacks-prompt.clickable <span>Prompt</span>
+									mixin source()
+
+						p
+							| We can use the API features and callbacks to integrate with other 3rd party plugins
+							| and products.
+
+						.examples
+							ul
+								li.active
+									a#apicallbacks-youtube.clickable <span>YouTube previews</span>
+									mixin source()
+								li
+									a#apicallbacks-vimeo.clickable <span>Vimeo previews</span>
+									mixin source()
+								li
+									span#apicallbacks-twitter
+										| Latest Tweet: 
+										a(href="http://twitter.com/craigsworks") craigsworks
+										| , 
+										a(href="http://twitter.com/jquery") jQuery
+										| , 
+										a(href="http://twitter.com/paul_irish") Paul Irish
+									mixin source()
+								li
+									span#apicallbacks-maps
+										| Google maps: 
+										a.clickable(data-coords="38.89859,-77.035971") White House
+										| , 
+										a.clickable(data-coords="38.8921,-77.033689") Washington Monument
+										| , 
+										a.clickable(data-coords="38.871008,-77.055979") The Pentagon
+									mixin source()
+								li
+									span#apicallbacks-geoloc
+										| IP Geolocation: 
+										a.clickable(href="http://whatismyip.com") #{ip}
+									mixin source()
+								li
+									span#apicallbacks-imdb
+										| IMDb ratings: 
+										a(href="http://www.imdb.com/title/tt0468569/") The Dark Knight
+										| , 
+										a(href="http://www.imdb.com/title/tt0110912/") Pulp Fiction
+										| , 
+										a(href="http://www.imdb.com/title/tt0137523/") Fight Club
+									mixin source()
+								li
+									span#apicallbacks-websnapr
+										| WebSnapr thumbails: 
+										a(href="http://google.com") Google
+										| , 
+										a(href="http://youtube.com") YouTube
+										| , 
+										a(href="http://facebook.com") Facebook
+									mixin source()
+
+
+				#download.group
+					h1
+						| Download
+						font grab qTip<sup>2</sup> for free!
+
+					#stable.section
+						h2 Latest stable
+						p
+							| Download the latest stable version of qTip2 (v2.0.0) here
+
+						p
+							| Changelog:
+
+					#builder.section
+						h2 Customise your download
+
+						form(action='#{url("/download/build")}', method='post')
+							p Which version of qTip<sup>2</sup> would you like to download?
+							ul
+								li
+									input(id="download-stable", name="version", type="radio", value="stable", disabled="disabled")
+									label(for="download-stable")
+										| Latest stable 
+									i suitable for production and development environments
+								li
+									input(id="download-nightly", name="version", type="radio", value="nightly", checked="checked")
+									label(for="download-nightly")
+										| Latest nightly 
+									i not suitable for production environments
+
+							p What styles would you like included in your build?
+							ul
+								li
+									input(id="download-styles-core", name="styles[core]", type="checkbox", checked="checked", disabled="disabled")
+									label(for="download-styles-core")
+										| Core styles 
+									i the primitive qTip<sup>2</sup> styles and default yellow style
+								li
+									input(id="download-styles-basic", name="styles[basic]", type="checkbox", checked="checked")
+									label(for="download-styles-basic")
+										| Basic colour styles 
+									i basic red, green, blue, dark and light styles
+								li
+									input(id="download-styles-css3", name="styles[css3]", type="checkbox", checked="checked")
+									label(for="download-styles-css3")
+										| CSS3 styles 
+									i shadows, rounded corners, Tipsy, Bootstrap, YouTube, jTools, ClueTip and Tipped styles
+
+							p What features do you want included in your build?
+							ul
+								li
+									input(id="download-jquery", name="jquery", value="1.7.2", type="checkbox", checked="checked")
+									label(for="download-jquery")
+										| jQuery 1.7.2 
+									i latest tested and verified jQuery version
+								li
+									input(id="download-plugins-tips", name="plugins[tips]", type="checkbox", checked="checked")
+									label(for="download-plugins-tips")
+										| Speech bubble 'tips' 
+									i add little speech bubble pointers to your tooltips
+								li
+									input(id="download-plugins-viewport", name="plugins[viewport]", type="checkbox", checked="checked")
+									label(for="download-plugins-viewport")
+										| Viewport adjustment 
+									i add viewport repositioning abilities to your tooltips
+								li
+									input(id="download-plugins-ajax", name="plugins[ajax]", type="checkbox", checked="checked")
+									label(for="download-plugins-ajax")
+										| AJAX 
+									i add the ability to load remote content into your tooltips
+								li
+									input(id="download-plugins-imagemap", name="plugins[imagemap]", type="checkbox", checked="checked")
+									label(for="download-plugins-imagemap")
+										| Imagemap support 
+									i add &lt;map&gt; and &lt;area&gt; element support to the positioning system
+								li
+									input(id="download-plugins-svg", name="plugins[svg]", type="checkbox", checked="checked")
+									label(for="download-plugins-svg")
+										| SVG support 
+									i add SVG support to the positioning system
+								li
+									input(id="download-plugins-ie6", name="plugins[ie6]", type="checkbox", checked="checked")
+									label(for="download-plugins-ie6")
+										| IE6 support 
+										i
+											| Add 
+											a(href='http://github.com/craga89/qtip2/tree/master/docs/plugins/ie6.md') IE6 compatibility
+
+							button Download
+							span#filesize
+								| Approximate filesize: 
+								b 206Kb (69Kb minified / 29Kb gzipped)
+
+							script
+								fileSizes = {
+									stable: !{JSON.stringify(nightly.filesizes)},
+									nightly: !{JSON.stringify(nightly.filesizes)}
+								}
+
+					#git.section
+						h2 GitHub development
+						p
+							| qTip<sup>2</sup> is actively developed over at 
+							a(href="http://github.com/craga89/qtip2") GitHub 
+							| and updated frequently with the latest bug fixes and new features. If you wish to
+							| contribute to the projects efforts, don't be afraid to <i>fork the repo</i> and submit some
+							| <i>pull requests</i>, and make sure to 
+							a(href="http://github.com/craga89/qtip2/issues") report any bugs 
+							| you find!
+
+					#license.section
+						h2 Licensing
+						p
+							| qTip<sup>2</sup> is dual-licensed under the open source MIT and GPLv2 licenses. These licenses must be 
+							| distributed with all scripts falling under their terms, either in file form, or a link to a 
+							| copy in the header of the files. This is already done for you in the scripts headers, so if
+							| you're not too familiar with licensing don't worry about it!
+
+
+				#guides.group
+					h1
+						| Guides
+						font get started with qTip<sup>2</sup>
+
+					ul.section
+						li: a(href="https://github.com/Craga89/qTip2/blob/master/docs/gettingstarted.md") Getting started
+						li: a(href="https://github.com/Craga89/qTip2/blob/master/docs/guide-content.md") Content types
+
+				#api.group
+					h1
+						| API Reference
+						font complete API reference
+
+					ul.section
+						li: a(href="https://github.com/Craga89/qTip2/blob/master/docs/core.md") <b>Core</b> options
+						li: a(href="https://github.com/Craga89/qTip2/blob/master/docs/content.md") <b>Content</b> and titles
+						li: a(href="https://github.com/Craga89/qTip2/blob/master/docs/position.md") <b>Positioning</b> and corner types
+						li: a(href="https://github.com/Craga89/qTip2/blob/master/docs/show.md") <b>Show</b> properties and effects
+						li: a(href="https://github.com/Craga89/qTip2/blob/master/docs/hide.md") <b>Hide</b> properties and effects
+						li: a(href="https://github.com/Craga89/qTip2/blob/master/docs/style.md") <b>Styling</b> properties
+						li: a(href="https://github.com/Craga89/qTip2/blob/master/docs/methods.md") <b>API</b> - Methods and properties
+						li: a(href="https://github.com/Craga89/qTip2/blob/master/docs/events.md") <b>API</b> - Events and callbacks
+
+				#converter.group
+					h1
+						| Converter
+						font convert your old qTip 1.0 code
+
+				#donate.group
+					h1
+						| Donate
+						font show your love for the project
+
+				#faq.group
+					h1
+						| FAQ
+						font answers to the common questions
+
+
+		// Javascript
+		script(type='text/javascript', src='#{cdn("jquery")}')
+		script(type='text/javascript', src='#{qtip("nightly", "js")}')
+		script(type='text/javascript', src='#{cdn("base.js")}')
+		
+		script(type='text/javascript', src="http://www.youtube.com/player_api")
+		script(type='text/javascript', src="http://a.vimeocdn.com/js/froogaloop2.min.js")
+		script(type='text/javascript', src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCMuMk-DLITXimlZj2SZPW0HZjSBBK2WnQ&sensor=false")
+		script(type='text/javascript', src="http://www.websnapr.com/js/websnapr.js")
+		script(type='text/javascript', src='http://jqueryui.com/themeroller/themeswitchertool/')
+		script(type='text/javascript', src='#{url('/javascripts/demos.js')}')
+		script(type='text/javascript', src='#{url('/javascripts/download.js')}')
+
+		script
+			$('#header a, #header li.style').qtip({
+				position: {
+					my: 'top center',
+					at: 'bottom center',
+					viewport: $(window)
+				},
+				style: {
+					classes: 'qtip-rounded'
+				}
+			});

@@ -1,0 +1,143 @@
+extends ../layouts/demo
+
+block title
+	| YouTube previews
+
+block styles
+	style(type="text/css")
+		.ui-tooltip-youtube{
+			/* We set the width explicitly in the qTip config */
+			height: 180px;
+			max-width: none;
+		}
+
+		/* No padding for the content so it's flush with the border too! */
+		.ui-tooltip-youtube .ui-tooltip-content{
+			padding: 0; 
+		}
+
+block content
+	h3(style='margin-top: 0;') Inline YouTube previews
+	.clear
+	img.left(src='#{cdn("greathornedowl.jpg")}', alt="", title="Great Horned Owl")
+	img.right(src='#{cdn("maskedowl.jpg")}', alt="", title="Masked Owl")
+	p
+		| Owls have large forward-facing eyes and ear-holes, a hawk-like beak, a flat face, and usually a conspicuous circle of feathers around each eye called a facial disc.
+		| Although owls have binocular vision, their large eyes are fixed in their sockets, as with other birds, and they must turn their entire head to change views.
+	p
+		| The smallest owl is the
+		a(href='http://www.youtube.com/watch?v=MF3Vbq2BPbE') Elf Owl
+		| , at as little as 31 g and 13.5 cm. Some of the pygmy owls are
+		| scarcely larger than this. The largest owls are Eagle owls, the
+		a(href='http://www.youtube.com/watch?v=CAvYGHhdkPo') Eurasian Eagle Owl
+		| and
+		a(href='http://www.youtube.com/v/1knmiokkW0A') Blakiston's Fish Owl
+		| , which may reach a size of 60cm to 71cm long, have a wingspan of almost 2m, and weight of nearly 4.5 kg.
+	p
+		| Most owls are nocturnal, actively hunting for prey only under the cover of darkness. Several types of owl, however, are active during the twilight hours of dawn and dusk;
+		| one example is the
+		a(href='http://www.youtu.be/eT_0hC4cyLg') Pygmy Owl
+		| . A few are also active during the day; the
+		a(href='http://www.youtube.com/watch?v=8TL8pSFd-hQ') Burrowing Owl
+		| and the
+		a(href='http://www.youtube.com/watch?v=oW1_ZfQOPHc') Short-eared Owl
+		| . The time at which an owl hunts is correlated with the colour of its eyes: dark brown or black eyes
+		| indicate nocturnal activity, orange indicates dawn or dusk, and owls with yellow eyes are diurnal and hunt during the day.
+	p.attribution
+		span
+			b Source:
+			a(href='http://en.wikipedia.org/wiki/Owl', target='_blank') Wikipedia
+		span
+			b Photo 1:
+			a(href='http://commons.wikimedia.org/wiki/User:Sandstein', target='_blank') Sandstein
+			| -
+			a(href='http://creativecommons.org/licenses/by/2.0/', target='_blank') CC 2.0 Attribution license.
+		span
+			b Photo 2:
+			a(href='http://commons.wikimedia.org/wiki/User:Benjamint444', target='_blank') Benjamint444
+			| -
+			a(href='http://www.gnu.org/copyleft/fdl.html', target='_blank') GFDL license.
+
+block scripts
+	script(type="text/javascript", src="http://www.youtube.com/player_api")
+	script(class="example", type="text/javascript")
+		$(document).ready(function()
+		{
+			// Use each method to gain access to all youtube links
+			$('a[href*="youtube.co"], a[href*="youtu.be"]').each(function()
+			{
+				// Grab video ID from the url (supports youtu.be and youtube.com links)
+				var videoID = this.href.match(/(youtu\.be\/|&*v=|\/v\/|\/embed\/)+([A-Za-z0-9\-_]{5,11})/);
+
+				// If we couldn't parse the URL, continue on to the next link...
+				if(!videoID || videoID.length < 1) { return; }
+
+				/*
+				* We'll also add a unique identifier to the end so we can have multiple tooltips
+				* with the same youtube URL...
+				*/
+				videoID = videoID[2] + $.fn.qtip.nextid;
+
+				// Create our tooltip
+				$(this).qtip(
+				{
+					// Stick in a dummy <div /> we can use to embed the player and set it's ID
+					content: $('<div />', { id: videoID }),
+					position: {
+						at: 'bottom center',
+						my: 'top center',
+						viewport: $(window) // Keep it on-screen at all times if possible
+					},
+					show: {
+						event: 'click', // Show it on click...
+						solo: true, // ...and hide all others when its shown
+						
+						/*
+						* Unfortunately for us, FF reloads iframe contents when any of its parents
+						* visibility is toggled, meaning we lose the player API reference on first hide.
+						* Luckily for us, setting and resetting the display property also causes the onReady
+						* event of the API palyer to fire! Woop. So we'll just reload it manually.
+						*/
+						effect: function() {
+							var style = this[0].style;
+							style.display = 'none';
+							setTimeout(function() { style.display = 'block'; }, 1);
+						}
+					},
+					hide: 'unfocus', // Hide when the tooltip loses focus
+					style: {
+						classes: 'ui-tooltip-youtube', // Use a custom tooltip class
+						width: 275 // Set a static width
+					},
+					events: {
+						render: function(event, api) {
+							new YT.Player(videoID, {
+								playerVars: {
+									autoplay: 1,
+									enablejsapi: 1,
+									origin: document.location.host
+								},
+								origin: document.location.host,
+								height: 180,
+								width: 275,
+								videoId: videoID.substr(0, 11), // YouTube ID's are only 11 characters long :)
+								events: {
+									'onReady': function(e) {
+										// Store the player in the API
+										api.player = e.target;
+									},
+								}
+							});
+						},
+						hide: function(event, api){
+							// Pause the video when tooltip is hidden
+							if(api.player && api.player.stopVideo) {
+								api.player.stopVideo();
+							}
+						}
+					}
+				})
+				// Prevent the link from being followed when we click it
+				.click(false)
+			});
+		});

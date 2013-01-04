@@ -1,0 +1,127 @@
+extends ../layouts/demo
+
+block title
+	| Vimeo previews
+
+block styles
+	style(type="text/css")
+		.ui-tooltip-vimeo{
+			/* We set the width explicitly in the qTip config */
+			height: 180px;
+			max-width: none;
+		}
+
+		/* No padding for the content so it's flush with the border too! */
+		.ui-tooltip-vimeo .ui-tooltip-content{
+			padding: 2px;
+
+			background-color: #E7E7DE;
+			border-color: #E7E7DE;
+		}
+
+block content
+	h3(style='margin-top: 0;') Inline YouTube previews
+	.clear
+	img.left(src='#{cdn("greathornedowl.jpg")}', alt="", title="Great Horned Owl")
+	img.right(src='#{cdn("maskedowl.jpg")}', alt="", title="Masked Owl")
+	p
+		| Owls have large forward-facing eyes and ear-holes, a hawk-like beak, a flat face, and usually a conspicuous circle of feathers around each eye called a facial disc.
+		| Although owls have binocular vision, their large eyes are fixed in their sockets, as with other birds, and they must turn their entire head to change views.
+	p
+		| The smallest owl is the
+		a(href='http://www.youtube.com/watch?v=MF3Vbq2BPbE') Elf Owl
+		| , at as little as 31 g and 13.5 cm. Some of the pygmy owls are
+		| scarcely larger than this. The largest owls are Eagle owls, the
+		a(href='http://www.youtube.com/watch?v=CAvYGHhdkPo') Eurasian Eagle Owl
+		| and
+		a(href='http://www.youtube.com/v/1knmiokkW0A') Blakiston's Fish Owl
+		| , which may reach a size of 60cm to 71cm long, have a wingspan of almost 2m, and weight of nearly 4.5 kg.
+	p
+		| Most owls are nocturnal, actively hunting for prey only under the cover of darkness. Several types of owl, however, are active during the twilight hours of dawn and dusk;
+		| one example is the
+		a(href='http://www.youtu.be/eT_0hC4cyLg') Pygmy Owl
+		| . A few are also active during the day; the
+		a(href='http://www.youtube.com/watch?v=8TL8pSFd-hQ') Burrowing Owl
+		| and the
+		a(href='http://www.youtube.com/watch?v=oW1_ZfQOPHc') Short-eared Owl
+		| . The time at which an owl hunts is correlated with the colour of its eyes: dark brown or black eyes
+		| indicate nocturnal activity, orange indicates dawn or dusk, and owls with yellow eyes are diurnal and hunt during the day.
+	p.attribution
+		span
+			b Source:
+			a(href='http://en.wikipedia.org/wiki/Owl', target='_blank') Wikipedia
+		span
+			b Photo 1:
+			a(href='http://commons.wikimedia.org/wiki/User:Sandstein', target='_blank') Sandstein
+			| -
+			a(href='http://creativecommons.org/licenses/by/2.0/', target='_blank') CC 2.0 Attribution license.
+		span
+			b Photo 2:
+			a(href='http://commons.wikimedia.org/wiki/User:Benjamint444', target='_blank') Benjamint444
+			| -
+			a(href='http://www.gnu.org/copyleft/fdl.html', target='_blank') GFDL license.
+
+block scripts
+	script(type="text/javascript", src="http://a.vimeocdn.com/js/froogaloop2.min.js")
+	script(class="example", type="text/javascript")
+		$(document).ready(function()
+		{
+			// Use each method to gain access to all youtube links
+			$('a[href*="vimeo.co"]').each(function() {
+				var videoID, html, id;
+
+				// Setup a unique ID for the iframe element
+				id = 'player_' + $.fn.qtip.nextid;
+
+				// Grab video ID from the url (supports youtu.be and youtube.com links)
+				videoID = this.href.match(/http:\/\/(?:www\.)?vimeo.com\/(\d+)/);
+
+				// If we couldn't parse the URL, continue on to the next link...
+				if (!videoID || videoID.length < 2) { return; }
+				else { videoID = videoID[1]; }
+
+				// Setup Vimeo HTML5 iframe embed HTML
+				html = '<iframe src="http://player.vimeo.com/video/' + videoID + '?api=1&autoplay=1&player_id='+id+'" ' +
+					'width="275" height="155" frameborder="0" id="'+id+'"></iframe>';
+
+				// Create our tooltip
+				$(this).qtip(
+				{
+					// Stick in a dummy <div /> we can use to embed the player and set it's ID
+					content: html,
+					position: {
+						at: 'bottom center',
+						my: 'top center',
+						viewport: $(window) // Keep it on-screen at all times if possible
+					},
+					show: {
+						event: 'click', // Show it on click...
+						solo: true, // ...and hide all others when its shown
+					},
+					hide: 'unfocus', // Hide when the tooltip loses focus
+					style: {
+						classes: 'ui-tooltip-vimeo ui-tooltip-rounded ui-tooltip-shadow', // Use a custom tooltip classes
+						width: 275, height: 155
+					},
+					events: {
+						render: function(event, api) {
+							var iframe = $('iframe', this)[0];
+							$f(iframe).addEvent('ready', function(player_id) {
+								// Set the API player
+								api.player = $f(player_id);
+
+								// Mute it on load
+								api.player.api('setVolume', 0);
+							});
+						},
+						hide: function(event, api) {
+							// Pause the video on hide
+							api.player.api('pause');
+						}
+					}
+				})
+				// Prevent the link from being followed when we click it
+				.click(false);
+			
+			});
+		});

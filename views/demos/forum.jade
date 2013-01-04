@@ -1,0 +1,67 @@
+extends ../layouts/demo
+
+block title
+	| Forum integration
+
+block content
+	.side.left
+		h4: a(href='#{url("/forum/user/2/")}') craig
+		ul
+			li.avatar(rel='1')
+				img(src='http://craigsworks.com/projects/forums/uploads/avatars/avatar_1.jpg', alt='Craig\'s Avatar')
+			li.position Creator
+			li.status
+				span Online
+	.main
+		h4.right 1
+		h4 Thursday 19th March, 2009 19:11:31
+		p
+			| Here's a dummy forum post...
+			i
+				b mouse over 
+				| my avatar 
+			| for some more details about me as a user. The data in the tooltip is retrieved from a dynamic PHP script via AJAX. Cool huh?
+			br
+			| ____________________________________________
+			br
+			| Craig Thompson
+			br
+			| Web Developer / Designer
+			br
+			| Craigsworks
+			br
+			a(href='http://www.craigsworks.com') http://www.craigsworks.com
+
+		.clear(style='height: 0;')
+
+
+block scripts
+	script(type="text/javascript", class="example")
+		$(document).ready(function()
+		{
+			$('li.avatar').each(function() // Loop over each avatar using the .each() method
+			{
+				// Thanks to .each() "this" refers to each element within the loop
+				$(this).qtip({
+					content: {
+						text: 'Loading...', // Make sure we declare some basic loading content
+						ajax: {
+							url: '#{url("/demos/data/userinfo")}', // Grab user data from serverside script...
+							data: {
+								userid: $(this).attr('rel') // ...providing a 'userid' which is stored in the avatars REL attribute
+							}
+						}
+					},
+					position: {
+						my: 'left center', // Position the tooltip...
+						at: 'right center', // ...to the right of the avatar
+						adjust: { screen: true } // Adjust to keep in the viewport
+					},
+					show: { delay: 700 }, // Give it a reasonable delay so they don't view it accidentally
+					hide: { fixed: true, delay: 100 }, // Allow the user the mouseover the tooltip without it hiding
+					style: {
+						classes: 'ui-tooltip-dark ui-tooltip-shadow'
+					}
+				});
+			});
+		});

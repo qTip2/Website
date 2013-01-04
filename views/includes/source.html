@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>qTip - Demo Source - <?=$title?></title>
+<!--Stylesheets-->
+<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="<?=WEB_DIR?>/favicon.ico" />
+<link rel="stylesheet" type="text/css" href="<?=CSS_DIR?>/master.css" />
+<link rel="stylesheet" type="text/css" href="<?=CSS_DIR?>/highlight.css" />
+<!--Meta-->
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+</head>
+<body class="source">
+
+<?php if(isset($js)){ ?>
+<a class="viewtype right" href="#">View as plain text</a>
+<h2 class="js">JavaScript</h2>
+<div class="source js">
+   <?=$js?>
+
+</div>
+<? } ?>
+
+
+<?php if(isset($html)){ ?>
+<a class="viewtype right" href="#">View as plain text</a>
+<h2 class="html nomargin">HTML</h2>
+<div class="source html">
+   <?=$html?>
+
+</div>
+<? } ?>
+
+<?php $this->renderElement('javascript'); ?>
+<script type="text/javascript" src="<?=JS_DIR?>/highlight/jquery.copy.js"></script>
+<script type="text/javascript" src="<?=JS_DIR?>/source.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+extends ../layouts/demo
+
+block title
+	| IMDb Rating
+
+block styles
+	style(type="text/css")
+		/* Center align vertically our IMDb logo */
+		img, .ui-tooltip-imdb img{
+			vertical-align: -3px;
+			margin-right: 3px;
+		}
+
+block content
+	h2 Some of my favourite films
+	ul
+		li
+			a(href='http://www.imdb.com/title/tt0111161/', target='_parent') The Shawshank Redemption
+			| (1994)
+		li
+			a(href='http://www.imdb.com/title/tt0120689/', target='_parent') The Green Mile
+			| (1999)
+		li
+			a(href='http://www.imdb.com/title/tt1375666/', target='_parent') Inception
+			| (2010)
+		li
+			a(href='http://www.imdb.com/title/tt0071562/', target='_parent') The Godfather: Part II
+			| (1974)
+		li
+			a(href='http://www.imdb.com/title/tt0375679/', target='_parent') Crash
+			| (2004)
+		li
+			a(href='http://www.imdb.com/title/tt0468569/', target='_parent') The Dark Knight
+			| (2008)
+		li
+			a(href='http://www.imdb.com/title/tt0110912/', target='_parent') Pulp Fiction
+			| (1994)
+		li
+			a(href='http://www.imdb.com/title/tt0137523/', target='_parent') Fight Club
+			| (1999)
+		li
+			a(href='http://www.imdb.com/title/tt0167260/', target='_parent') The Lord of the Rings: The Return of the King
+			| (2003)
+		li
+			a(href='http://www.imdb.com/title/tt1119646/', target='_parent') The Hangover
+			| (2009)
+
+	p
+		| Mouse over them to see their
+		img(src='#{cdn("demos/imdb_logo.png")}', alt="IMDB", width="31", height="15")
+		| rating appear!
+
+block scripts
+	script(class="example", type="text/javascript")
+		$(document).ready(function()
+		{
+			/*
+			* This should point to a script that parse an IMDb movie ID and returns the
+			* rating of the movie in JSON format. To do this I used IMDbPHP2, which can be
+			* be found here: http://projects.izzysoft.de/trac/imdbphp
+
+			* This script should be located on the same server as this JavaScript.
+			*/
+			var url = '#{url("/demos/data/imdb")}';
+
+			// Only match IMDb links
+			$('a[href^="http://www.imdb.com"]').each(function() {
+				// Grab IMDB ID
+				var id = $(this).attr('href').match(/tt([0-9]{7})/);
+				if(id.length < 2) { return true; } // Continue to next element if we can't find the id
+
+				// Setup the tooltip...
+				$(this).qtip(
+				{
+					content: {
+						text: 'Rating...', // Generic loading message
+						ajax: {
+							url: url,
+							loading: false, // Don't show anything whilst it loads
+							data: { id: id[1] }, // Pass the IMDB ID
+							dataType: 'json', // The script returns JSON
+							success: function(json) {
+								// Create our content string
+								var content = '<img src="#{cdn("demos/imdb_logo.png")}" alt="IMDB Rating:" width="31" height="15" />' + json.rating;
+
+								// Set the content
+								this.set('content.text', content);
+							},
+							error: function() { this.destroy(); } // If we wan't get the rating... destroy the tooltip
+						}
+					},
+					position: {
+						my: 'left center',
+						at: 'right center'
+					},
+					style: {
+						classes: 'ui-tooltip-imdb ui-tooltip-tipsy ui-tooltip-shadow'
+					}
+				})
+			});
+		});

@@ -1,0 +1,28 @@
+extends ../layouts/demo
+
+block title
+	| Mouse tracking
+
+block content
+	h3: Hover over this box to see mouse tracking in action
+
+block scripts
+	script(type="text/javascript", class="example")
+		$(document).ready(function()
+		{
+			$('#demo-mouse').qtip({
+				content: 'I position myself at the current mouse position',
+				position: {
+					my: 'top left',
+					target: 'mouse',
+					viewport: $(window), // Keep it on-screen at all times if possible
+					adjust: {
+						x: 10,  y: 10
+					}
+				},
+				hide: {
+					fixed: true // Helps to prevent the tooltip from hiding ocassionally when tracking!
+				},
+				style: 'ui-tooltip-shadow'
+			});
+		});

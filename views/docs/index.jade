@@ -1,0 +1,13 @@
+extends ../layouts/default
+
+append stylesheets
+	link(rel='stylesheet', type='text/css', href='#{url("stylesheets/markdown.css")}')
+	link(rel='stylesheet', type='text/css', href='#{url("stylesheets/highlight-core.css")}')
+	link(rel='stylesheet', type='text/css', href='#{url("stylesheets/highlight.css")}')
+
+block content
+
+	include ../includes/docs_header
+
+	#content
+		.center!=content

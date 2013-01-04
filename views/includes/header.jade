@@ -1,0 +1,26 @@
+include where
+
+#header
+	.center
+		h1.left
+			a(href='#{WEB_DIR}/')
+				img.logo(src='#{cdn("logo-horizontal.png")}', alt='qTip2 - Pretty powerful tooltips', width='193', height='63')
+		
+		.where.right
+			h2: a(href='#{url("where/")}') Where are you using qTip<sup>2</sup>?
+			span Tell us where and get featured on the homepage!
+			
+		img.owl.right(src='#{cdn("owl_small.png")}', alt='Owl says...', width='60', height='66')
+		.clear
+
+#nav.topnav
+	.center(class="#{page}")
+		ul
+			li: a.home(href='#{WEB_DIR}/', title='Find out what qTip2 has to offer') About
+			li: a.demos(href='#{url("demos/")}', title='Check out qTip2 in action') Demos
+			li: a.download(href='#{url("download/")}', title="Grab it while it's hot") Download
+			li: a.donate(href='#{url("donate/")}', title='Show some love for the project!') Donate
+			li.right.nomargin: a.forum(href='/projects/forums/forum-qtip2', title='Get help from the qTip2 community') Forum
+			li.right: a.tutorials(href='#{url("tutorials/")}', title='Learn some neat tricks') Tutorials
+			li.right: a.docs(href='#{url("docs/")}', title='Make the most of qTip2') Documentation
+			li.right: a.converter(href='#{url("converter/")}', title='Convert your old v1.0 code') Converter

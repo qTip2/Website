@@ -1,0 +1,239 @@
+extends ../layouts/demo
+
+block title
+	| Styling suite
+
+block content
+	style(type="text/css")
+		body{
+			padding: 0;
+			margin: 0;
+		}
+
+		.contain{
+			background-color: white;
+			border: 2px solid #ddd;
+
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			border-radius: 3px;
+		}
+
+		.banner{
+			padding: 5px 8px;
+
+			background-color: #ddd;
+
+			-moz-border-radius: 0 0 3px 3px;
+			-webkit-border-radius:  0 0 3px 3px;
+			border-radius: 0 0 3px 3px;
+		}
+
+		.padder{
+			padding: 8px;
+		}
+
+		#top{
+			margin-bottom: 15px;
+		}
+
+		#styles{
+			-moz-border-radius: 3px 3px 3px 0;
+			-webkit-border-radius: 3px 3px 3px 0;
+			border-radius: 3px 3px 3px 0;
+		}
+
+		#styles ul{
+			float: left;
+			padding-right: 10px;
+			margin-right: 10px;
+			border-right: 2px solid #f1f1f1;
+		}
+
+		#styles li{
+			float: left;
+			width: 35px;
+			margin: 0 3px;
+			padding: 5px;
+
+			-moz-border-radius: 8px;
+			-webkit-border-radius: 8px;
+			border-radius: 8px;
+		}
+
+		#styles li.active{ background-color: #eee; }
+
+		#styles li a{
+			position: static !important;
+			display: block !important;
+			min-width: 0px !important;
+		}
+
+		#styles li a span{
+			display: block;
+			height: 20px;
+			padding: 0;
+		}
+
+		#styles li a span.ui-tooltip-titlebar{
+			height: 10px;
+			min-height: 0px;
+		}
+
+		#styles .ui-tooltip-tipped .ui-tooltip-content{
+			height: 15px;
+		}
+
+		#styles .ui-tooltip-youtube .ui-tooltip-content{
+			height: 19px;
+		}
+
+		#styles .ui-tooltip-jtools .ui-tooltip-content{
+			height: 17px;
+		}
+
+		#options{
+			float: left;
+		}
+
+			#options input,
+			#options label{
+				float: left;
+			}
+
+			#options input{
+				margin: 3px 5px 0 12px;
+			}
+
+			#options label{
+				margin-right: 12px;
+			}
+
+		#code .padder, #result .padder{
+			min-height: 400px;
+		}
+
+		#code{
+			float: left;
+			width: 20%;
+			margin-right: 15px;
+		}
+
+			#code textarea{
+				padding: 10px;
+				width: 90%;
+				height: 90%;
+				margin: 0 auto;
+			}
+
+		#result{
+			position: relative;
+			top: -30px;
+			overflow: hidden;
+		}
+
+			#result .banner{
+				float: right;
+				min-height: 20px;
+				min-width: 200px;
+
+				-moz-border-radius: 3px 3px 0 0;
+				-webkit-border-radius: 3px 3px 0 0;
+				border-radius: 3px 3px 0 0;
+			}
+
+			#result .contain{
+				clear: both;
+
+				-moz-border-radius: 3px 0 3px 3px;
+				-webkit-border-radius: 3px 0 3px 3px;
+				border-radius: 3px 0 3px 3px;
+			}
+
+	script(type="text/javascript")
+		$(function() {
+			// Setup hover/active classes
+			$('#styles').delegate('li', 'mouseenter click mouseleave', function(event) {
+				var self = $(this), isClick = event.type === 'click';
+
+				if(isClick) {
+					self.closest('div').find('li').removeClass('active');
+					self.addClass('active');
+				}
+				else {
+					self.toggleClass('hover', event.type === 'mouseenter');
+				}
+			})
+		});
+	#top
+		#styles.contain.padder
+			ul
+				li
+					a.ui-tooltip.ui-tooltip-rounded(title='Default', description='The default creamy tooltip style.')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+				li
+					a.ui-tooltip.ui-tooltip-rounded.ui-tooltip-blue(title='Blue', description='Basic blue style, perfect for informative messages.')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+				li
+					a.ui-tooltip.ui-tooltip-rounded.ui-tooltip-green(title='Green', description='Mellow green style. Great for success messages!')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+				li
+					a.ui-tooltip.ui-tooltip-rounded.ui-tooltip-red(title='Red', description='Assertive red style, a must for error messages.')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+				li
+					a.ui-tooltip.ui-tooltip-rounded.ui-tooltip-cream(title='Cream', description='The old \'cream\' style from qTip 1.0...more golden!')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+				li
+					a.ui-tooltip.ui-tooltip-rounded.ui-tooltip-dark(title='Dark', description='Sleek dark style for your darker designs.')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+				li
+					a.ui-tooltip.ui-tooltip-rounded.ui-tooltip-light(title='Light', description='Basic light style, good for pretty much anything!')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+			ul
+				li
+					a.ui-tooltip.ui-tooltip-youtube(title='Youtube', description='Youtube-style tooltips for your page.')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+				li
+					a.ui-tooltip.ui-tooltip-bootstrap(title='Bootstrap', description='Twitter Bootstrap style')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+				li
+					a.ui-tooltip.ui-tooltip-tipsy(title='Tipsy', description='Great Tipsy style, as seen on GitHub')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+				li
+					a.ui-tooltip.ui-tooltip-tipped(title='Tipped', description='Cloned style from Strakenburg\'s Tipped plugin')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+				li
+					a.ui-tooltip.ui-tooltip-cluetip(title='Cluetip', description='The ever famous ClueTip comes to qTip in style!')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+				li.wide
+					a.ui-tooltip.ui-tooltip-jtools(title='jTools', description='Sleek jTools style with fancy CSS3 shadow!')
+						span.ui-tooltip-titlebar
+						span.ui-tooltip-content
+			.clear
+
+		#options.banner
+			input#shadow(type='checkbox')
+			label(for='shadow') Drop shadow
+			input#rounded(type='checkbox')
+			label(for='rounded') Rounded corners
+		.clear
+
+		#code.contain
+			.padder
+				textarea
+
+		#result
+			.banner
+			.contain.padder

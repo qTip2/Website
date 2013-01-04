@@ -1,0 +1,73 @@
+extends ../layouts/demo
+
+block title
+	| Websnapr thumbnails
+
+block styles
+	style(type="text/css")
+		/* Keep our thumbnails flush with the tooltip border */
+		.ui-tooltip-thumbnail .ui-tooltip-content{
+			padding: 0;
+		}
+
+block content
+	h2 Hover over a link below to see a thumbnail of the site!
+
+	p.cloud
+		a.cloud5(href='http://google.com') Google
+		a.cloud4(href='http://yahoo.com') Yahoo
+		a.cloud3(href='http://amazon.com') Amazon
+		a.cloud5(href='http://ebay.com') Ebay
+		a.cloud7(href='http://facebook.com') Facebook
+		a.cloud1(href='http://digg.com') Digg
+		a.cloud8(href='http://youtube.com') Youtube
+		a.cloud3(href='http://live.com') Live
+		a.cloud6(href='http://wikipedia.org') Wikipedia
+		a.cloud1(href='http://blogger.com') Blogger
+		a.cloud5(href='http://myspace.com') MySpace
+		a.cloud6(href='http://microsoft.com') Microsoft
+		a.cloud1(href='http://wordpress.com') Wordpress
+		a.cloud4(href='http://imdb.com') IMDB
+		a.cloud2(href='http://adobe.com') Adobe
+
+block scripts
+	script(type="text/javascript", src="http://www.websnapr.com/js/websnapr.js")
+	script(class="example", type="text/javascript")
+		// Create the tooltips only on document load
+		$(document).ready(function()
+		{
+			/*
+			* You'll need your own API key, don't abuse mine please!
+			* Get yours here: http://www.websnapr.com/free_services/
+			*/
+			var apiKey = '0KUn7MSO3322';
+				
+			// Notice the use of the each method to gain access to each element individually
+			$('#content a').each(function()
+			{
+				// Grab the URL from our link
+				var url = encodeURIComponent( $(this).attr('href') ),
+
+				// Create image thumbnail using Websnapr thumbnail service
+				thumbnail = $('<img />', {
+					src: 'http://images.websnapr.com/?url=' + url + '&key=' + apiKey + '&hash=' + encodeURIComponent(websnapr_hash),
+					alt: 'Loading thumbnail...',
+					width: 202,
+					height: 152
+				});
+
+				// Setup the tooltip with the content
+				$(this).qtip(
+				{
+					content: thumbnail,
+					position: {
+						my: 'top center',
+						at: 'bottom center',
+						viewport: $(window) // Attempt to keep it on screen at all times
+					},
+					style: {
+						classes: 'ui-tooltip-thumbnail ui-tooltip-shadow'
+					}
+				});
+			});
+		});

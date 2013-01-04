@@ -1,0 +1,136 @@
+extends layouts/default
+
+append stylesheets
+	link(rel='stylesheet', type='text/css', href='#{cdn("smoothness/jquery-ui-1.8.4.custom.css")}')
+	link(rel='stylesheet', type='text/css', href='#{cdn("highlight.css")}')
+	link(rel='stylesheet', type='text/css', href='#{cdn("converter.css")}')
+
+append scripts
+	script(type='text/javascript', src='#{cdn("jquery.autogrow.js")}')
+	script(type='text/javascript', src='#{cdn("jquery-ui-1.8.4.custom.min.js")}')
+
+block content
+	#contentheader
+		.center
+			h2.main Code converter
+			.column.left
+				h2.version
+					<small>v</small>1
+
+				#from.ui-tabs.ui-widget.ui-widget-content.ui-corner-all
+					ul.ui-tabs.ui-widget.ui-widget-content.ui-corner-all.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header
+						li.ui-state-default.ui-corner-top.ui-tabs-selected.ui-state-active
+							a(href='#from-code') Options object
+						li.ui-state-default.ui-corner-top
+							a(href='#from-styles') Global styles
+						li.tab-right.ui-state-default.ui-corner-top
+							a(href='#from-options') Settings
+
+					#from-code.ui-tabs-panel.ui-widget-content.ui-corner-bottom
+						.help.ui-state-default.ui-corner-all(title='Help!')
+							span.ui-icon.ui-icon-help
+							div
+								| Enter your old qTip 1.0 configuration object here i.e. the object in between the .qtip() function:
+								//{highlight('js', "\{ content: 'Hello! Tooltips...', position: \{ corner: \{ tooltip: 'topRight' \} \}, style: \{ name: 'blue' \}\}")}
+								
+						h3 Your options object
+						textarea.hl-main
+							| {
+							| 	content: {
+							| 		text: 'Sample config object',
+							| 		url: 'content.html',
+							| 		data: { id: 1 }
+							| 	},
+							| 	position: {
+							| 			corner: 'top left',
+							| 			adjust: {
+							| 				screen: true
+							| 			}
+							| 	},
+							| 	hide: {
+							| 		effect: {
+							| 			type: 'slide',
+							| 			length: 5
+							| 		}
+							| 	},
+							| 	style: {
+							| 		name: 'dark',
+							| 		fontSize: '.9em',
+							| 		border: {
+							| 			width: 5,
+							| 			radius: 4,
+							| 			color: 'red'
+							| 		},
+							| 		title: { background: 'black' }
+							| 	}
+							| }
+
+					#from-styles.ui-tabs-panel.ui-widget-content.ui-corner-bottom.ui-tabs-hide
+						.help.ui-state-default.ui-corner-all(title='Help!')
+							span.ui-icon.ui-icon-help
+							div
+								p Enter your old $.fn.qtip.styles objects here e.g.
+						
+						h3 Global style objects
+						textarea.hl-main
+							| $.fn.qtip.styles.myStyle = {
+							| 	name: 'blue',
+							| 	fontSize: '1.4em',
+							| 	backgroundColor: 'white'
+							| };
+							| 
+							| $.fn.qtip.styles.myStyle2 = {
+							| 	name: 'light',
+							| 	fontFamily: 'serif'
+							| };
+
+					#from-options.ui-tabs-panel.ui-widget-content.ui-corner-bottom.ui-tabs-hide
+						h3 Converter settings
+						ul.options
+							li#from-options-css.selectable
+								h4 Use ID for CSS
+								| If the options include an
+								a(href='#{url("docs/core/#id")}') id
+								| , use it to reference the qTip in the CSS stylesheet.
+
+							li#from-options-api.selectable
+								h4 Use ID for additional code
+								| If the options include an
+								a(href='#{url("docs/core/#id")}') id
+								| , use it to reference the qTip in additional code e.g. API binds
+
+			.column.right
+				h2.version: <small>v</small>2
+
+				#loading.loading.hidden
+					img(src='#{cdn("loading.gif")}')
+				#loading-over.ui-corner-all
+
+				#to.ui-tabs.ui-widget.ui-widget-content.ui-corner-all
+					ul.ui-tabs.ui-widget.ui-widget-content.ui-corner-all.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header
+						li.ui-state-default.ui-corner-top.ui-tabs-selected.ui-state-active
+							a(href='#to-code') Options object
+						li.ui-state-default.ui-corner-top
+							a(href='#to-bind') Extra code
+						li.ui-state-default.ui-corner-top
+							a(href='#to-css') CSS
+						li.tab-right.ui-state-default.ui-corner-top
+							a(href='#to-errors') Messages (1)
+
+					#to-code.ui-tabs-panel.ui-widget-content.ui-corner-bottom
+						h3 New options object
+						textarea.hl-main(autocomplete='off', readonly='readonly')
+
+					#to-bind.ui-tabs-panel.ui-widget-content.ui-corner-bottom.ui-tabs-hide
+						h3 Extra code
+						textarea.hl-main(autocomplete='off', readonly='readonly')
+
+					#to-css.ui-tabs-panel.ui-widget-content.ui-corner-bottom.ui-tabs-hide
+						h3 Stylesheet
+						textarea.hl-main(autocomplete='off', readonly='readonly')
+
+					#to-errors.ui-tabs-panel.ui-widget-content.ui-corner-bottom.ui-tabs-hide
+						h3 Messages
+						ul.options
+
+			.clear

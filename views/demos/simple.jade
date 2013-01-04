@@ -1,0 +1,70 @@
+extends ../layouts/demo
+
+block title
+	| Simple integration
+
+block content
+	h3 Uncertainty principle
+	p
+		| In
+		a(href='/wiki/Quantum_mechanics', title='Wikipedia: Quantum mechanics') quantum mechanics
+		| , the
+		b Heisenberg uncertainty principle
+		| states by precise inequalities that certain pairs of physical properties,
+		| such as position and
+		a(href='/wiki/Momentum', title='Wikipedia: Momentum') momentum
+		| , cannot be simultaneously known to arbitrarily high precision. That is, the more precisely one property is measured, the less
+		| precisely the other can be measured.
+	p
+		| Published by
+		a(href='/wiki/Werner_Heisenberg', title='Wikipedia: Werner Heisenberg') Werner Heisenberg
+		| in 1927, the principle means that it is impossible to
+		i determine
+		| simultaneously both the position and the
+		| momentum of an electron or any other particle with any great degree of accuracy or certainty. This is not a statement about researchers' ability to measure the quantities. Rather, it is a statement about the
+		| system itself. That is, a system cannot be
+		i defined
+		| to have simultaneously singular values of these pairs of quantities. The principle states that a minimum exists for the product of the uncertainties
+		| in these properties that is equal to or greater than one half of the
+		a(href='/wiki/Reduced_Planck_constant', title='Wikipedia: Reduced Planck constant') reduced Planck constant
+		| (
+		i &#295;
+		| =
+		i h
+		| /2&pi;).
+	p
+		| In quantum physics, a particle is described by a
+		a(href='/wiki/Wave_packet', title='Wikipedia: Wave packet') wave packet
+		| , which gives rise to this phenomenon. Consider the measurement of the position of a particle.
+		| It could be anywhere. The particle's wave packet has non-zero
+		a(href='/wiki/Amplitude', title='Wikipedia: Amplitude') amplitude
+		| , meaning the position is
+		b uncertain
+		| – it could be almost anywhere along the wave packet.
+		| To obtain an accurate reading of position, this wave packet must be 'compressed' as much as possible, meaning it must be made up of increasing numbers of
+		a(href='/wiki/Sine_waves', title='Wikipedia: Sine waves') sine waves
+		a(href='/wiki/Superposition_principle', title='Wikipedia: Superposition principle') added together
+		| . The momentum of the particle is proportional
+		| to the
+		a(href='/wiki/Wavenumber', title='Wikipedia: Wavenumber') wavenumber
+		| of one of these waves, but it
+		i could be
+		| any of them. So a more precise position measurement – by adding together more waves – means the
+		| momentum measurement becomes less precise (and vice versa).
+	p
+		| The only kind of wave with a definite position is concentrated at one point, and such a wave has an indefinite wavelength (and therefore an indefinite momentum). Conversely, the only kind of wave with a definite
+		| wavelength is an infinite regular periodic oscillation over all space, which has no definite position. So in quantum mechanics, there can be no states that describe a particle with both a definite position and a
+		| definite momentum. The more precise the position, the less precise the momentum.
+	p.attribution
+		span
+		b Source:
+		a(href='http://en.wikipedia.org/wiki/Uncertainty_principle') Wikipedia
+
+
+block scripts
+	script(type="text/javascript", class="example")
+		$(document).ready(function()
+		{
+			// Match all <A/> links with a title tag and use it as the content (default).
+			$('a[title]').qtip();
+		});
