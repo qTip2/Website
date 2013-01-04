@@ -17,8 +17,8 @@ a:hover, a:active{
 
 a[name]{
 	display: block;
-	height: 40px;
-	margin-top: -40px;
+	height: 60px;
+	margin-top: -60px;
 	visibility: hidden;
 }
 a[name][href]{
@@ -486,6 +486,12 @@ body.dragging *{
 	}
 
 #category-donate{}
+
+	#section-name input{
+		padding: 5px 10px;
+		font-size: 150%;
+		line-height: 1.1;
+	}
 
 	#section-amount input[type="number"]{
 		width: 60px;

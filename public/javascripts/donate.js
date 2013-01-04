@@ -1,5 +1,5 @@
 $(function() {
-	var container = $('#donate'),
+	var container = $('#category-donate'),
 		form = $('form', container),
 		inputs = {
 			moneybookers: [

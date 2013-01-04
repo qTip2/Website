@@ -32,30 +32,34 @@ function exec(result, cmd, newcwd) {
  * Wiki update
  */
 function wiki() {
+	console.log('Updating wiki files...');
+
 	// Grab the JSON payload
 	var result = Q.resolve();
 
-	// Update the wiki
-	console.log('Updating wiki files...');
+	// Update the wiki repo
 	return result.then(function() {
 		return Q.ninvoke(cp, 'exec', 'git pull', {
 			cwd: paths.wiki
 		});
-	});
+	})
+
+	// Update wiki files in Registry
+	.then(function() {
+		Registry.markdown.gettingstarted = fs.readFileSync(path.join(paths.wiki, 'Getting-Started.md')).toString(),
+		Registry.markdown.faq = fs.readFileSync(path.join(paths.wiki, 'FAQ.md')).toString()
+	})
 }
 
 /*
- * GitHub update
+ * Repository update
  * 
  * Updates the git repositories and generates new file size
  * mappings and commit message for download page
  */
-function update() {
+function repos() {
 	// Grab the JSON payload
 	var result = Q.resolve();
-
-	// Update wiki
-	wiki();
 
 	// For both nightly and stable repos
 	console.log('Updating repos and parsing src file sizes...');
@@ -121,12 +125,6 @@ function update() {
 		});
 	})
 
-	// Update wiki files in Registry
-	.then(function() {
-		Registry.markdown.gettingstarted = fs.readFileSync(path.join(paths.wiki, 'Getting-Started.md')).toString(),
-		Registry.markdown.faq = fs.readFileSync(path.join(paths.wiki, 'FAQ.md')).toString()
-	})
-
 	// Record on complete/failure
 	.fin(function() { console.log('Done.'); })
 	.fail(function(err) {
@@ -136,18 +134,21 @@ function update() {
 	return result;
 }
 
-function hook(req, res, next) {
-	// GitHub Post hook IPs: 207.97.227.253, 50.57.128.197, 108.171.174.178
-	var githubIPs = /207\.97\.227\.253|50\.57\.128\.197|108\.171\.174\.178/;
+// GitHub Post hook IPs: 207.97.227.253, 50.57.128.197, 108.171.174.178
+var githubIPs = /207\.97\.227\.253|50\.57\.128\.197|108\.171\.174\.178/;
 
+function hookAuth(req, res, next) {
 	// Only allow GitHub IP's through
-	if(!githubIPs.test(req.ip)) { return res.redirect('/'); }
+	if(!githubIPs.test(req.ip)) {
+		return res.send(500, 'Hold up... you\'re not GitHub! Shoo!');
+	}
 
-	console.log('POST hook from GitHub received, updating...');
-	update();
+	console.log('POST hook from GitHub received...');
+	next();
 }
 
 module.exports = {
-	hook: hook,
-	update: update
+	hookAuth: hookAuth,
+	repos: repos,
+	wiki: wiki
 } 

@@ -30,7 +30,7 @@ app.configure(function(){
 
 	// Setup IP checks
 	app.use(function(req, res, next) {
-		if(req.ip !== '78.105.190.31') {
+		if(!/207\.97\.227\.253|50\.57\.128\.197|108\.171\.174\.178|78\.105\.190\.31/.test(req.ip)) {
 			res.send('Under construction'); return;
 		}
 
@@ -44,6 +44,9 @@ app.configure(function(){
 		res.header('Access-Control-Allow-Headers', 'Content-Type');
 		next();
     });
+
+    // Attach Git hook-specific middleware
+    app.use('/git', git.hookAuth);
 
 	// Setup blog vhost
 	app.use(express.vhost(
@@ -160,12 +163,15 @@ app.get('/docs/:page?/:plugin?', routes.docs);
 app.post('/where', routes.where);
 
 // "Private" hooks
-app.post('/_git', git.hook);
+app.post('/git/update/wiki', git.wiki);
+app.post('/git/update/repos', git.repos);
 
 // Update our repos and upon completion, start the server
-git.update().fin(function() {
-	// Setup the server
-	app.listen(app.get('port'), function() {
-		console.log("Express server listening on port " + app.get('port'));
+git.repos()
+	.then(git.wiki)
+	.fin(function() {
+		// Setup the server
+		app.listen(app.get('port'), function() {
+			console.log("Express server listening on port " + app.get('port'));
+		});
 	});
-});
