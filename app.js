@@ -23,10 +23,17 @@ app.configure(function(){
 	app.set('port', process.env.PORT || 80);
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
-	app.set('view options', {
-		layout: 'layouts/default'
-	});
-	require('./jadefilters') // Load custom filters
+
+	// Load custom filters
+	require('./jadefilters')
+
+	// Change favicon
+	app.use(express.favicon(__dirname + '/public/favicon.ico')); 
+
+	// Package archive
+	app.use(express.static(path.join(__dirname, 'stable')));
+	app.use('/v', express.static(path.join(__dirname, 'build', 'archive')));
+	app.use('/v', express.directory(path.join(__dirname, 'build', 'archive')));
 
 	// Setup IP checks
 	app.use(function(req, res, next) {
@@ -49,16 +56,17 @@ app.configure(function(){
     app.use('/git', git.hookAuth);
 
 	// Setup blog vhost
-	app.use(express.vhost(
-		'blog.qtip2.com', require('./node-blog/app').app
-	));
+	//app.use(express.vhost(
+	//	'blog.qtip2.com', require('./node-blog/app').app
+	//));
 
 	//app.use(gzip.gzip())
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
-	app.use(express.static(path.join(__dirname, 'public')));
+	app.use('/static', express.static(path.join(__dirname, 'public')));
+
 });
 
 // Development
@@ -73,8 +81,8 @@ app.locals({
 	GIT_URI: 'http://github.com/Craga89/qTip2/',
 
 	// Google Analytics
-	ANALYTICS_ENABLED: true,
-	ANALYTICS_UA: 'UA-5228245-10',
+	ANALYTICS_ENABLED: false,
+	ANALYTICS_UA: 'UA-5228245-13',
 
 	// CDN
 	cdn: function(file) {
@@ -106,9 +114,9 @@ app.locals({
 	},
 
 	// qTip packages helper
-	qtip: function(version, ext, minified) {
+	qtip: function(ext, minified) {
 		var min = minified !== false ? 'min.' : ''
-		return 'http://craigsworks.com/projects/qtip2/packages/'+version+'/jquery.qtip.'+min+ext;
+		return 'http://qtip2.com/v/nightly/jquery.qtip.'+min+ext;
 	},
 
 	// Helpers
@@ -135,7 +143,7 @@ app.locals({
 		.replace(/<(\/)?strong>/g, '<$1b>')
 
 		// Replace qTip2 with proper HTML formatting to keep it inline with the rest of the page
-		.replace(/qTip\s*(<sup>)?2\s*(<\/sup>)?/gi, '<strong>qTip<sup>2</sup>&nbsp;</strong>');
+		.replace(/qTip\s*(<sup>)?2\s*(<\/sup>)?(?!\.com)/gi, '<strong>qTip<sup>2</sup>&nbsp;</strong>');
 	}
 });
 
@@ -147,20 +155,16 @@ marked.setOptions({
 
 // Setup routes
 app.get('/', routes.index);
-app.get('/about', routes.about);
-app.get('/new', routes.new);
+app.get('/demos', routes.demos);
+app.get('/api', routes.api);
+app.get('/api/:page', routes.api);
+app.get('/guides', routes.guide);
+app.get('/donate', routes.donate);
+app.get('/faq', routes.faq);
 
-app.get('/demos/:demo?', routes.demos);
-app.get('/demos/data/:type', routes.demoData);
-app.post('/demos/data/:type', routes.demoData);
-
+// Download hooks
 app.get('/download', routes.download);
 app.post('/download/build', routes.build);
-
-app.get('/donate', routes.donate);
-app.get('/converter', routes.converter);
-app.get('/docs/:page?/:plugin?', routes.docs);
-app.post('/where', routes.where);
 
 // "Private" hooks
 app.post('/git/update/wiki', git.wiki);

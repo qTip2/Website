@@ -10,7 +10,7 @@ $(function() {
 	});
 
 	// Add active class to active header nav elements
-	$('#header li').click(function() {
+	$('#header li:not(.logo)').click(function() {
 		$('a', this).addClass('active')
 			.end().siblings().children('a').removeClass('active');
 	});
@@ -53,5 +53,5 @@ $(function() {
 	});
 
 	// Highlight the correct nav element bvased on hash
-	$('a[href="'+document.location.hash+'"]').addClass('active');
+	//$('a[href="'+document.location.pathname+'"]').addClass('active');
 });

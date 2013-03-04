@@ -6,7 +6,8 @@ var Registry = require('./registry')
 	, path = require('path')
 	, git = require('gift')
 	, cp = require('child_process')
-	, glob = require('glob-whatev');
+	, glob = require('glob-whatev')
+	, colors = require('colors');
 
 // File list to generate file sizes for and it's JSON key mapping
 var _files = {
@@ -20,8 +21,12 @@ var _files = {
 
 
 var cwd = '';
-function exec(cmd, newcwd) {
+function exec(cmd, newcwd, message) {
 	return function() {
+		if(message) {
+			console.log(message+'...', cmd.green);
+		}
+
 		return Q.ninvoke(cp, 'exec', cmd, {
 			cwd: (cwd = newcwd || cwd)
 		});
@@ -40,11 +45,19 @@ function wiki() {
 	// Update the wiki repo
 	return result.then( exec('git pull', paths.wiki) )
 
-	// Update wiki files in Registry
+	// List all the wiki files
 	.then(function() {
-		Registry.markdown.gettingstarted = fs.readFileSync(path.join(paths.wiki, 'Getting-Started.md')).toString(),
-		Registry.markdown.faq = fs.readFileSync(path.join(paths.wiki, 'FAQ.md')).toString()
+		return Q.ninvoke(fs, 'readdir', paths.wiki);
 	})
+
+	// Update wiki files in Registry
+	.then(function(files) {
+		files.forEach(function(file) {
+			Registry.markdown[ path.basename(file, '.md') ] = fs.readFileSync(
+				path.join(paths.wiki, file)
+			).toString();
+		});
+	});
 }
 
 /*
@@ -55,27 +68,46 @@ function wiki() {
  */
 function repos() {
 	// Grab the JSON payload
-	var result = Q.resolve();
+	var result = Q.resolve(),
+		stableVersion;
 
 	// For both nightly and stable repos
 	console.log('Updating repos and parsing src file sizes...');
 	['nightly', 'stable'].forEach(function(version) {
 		// Clean up dist/
-		console.log('Cleaning up dist/ dir...');
-		result = result.then(exec('grunt clean', paths.git[version]));
+		result = result.then(exec('grunt clean', paths.git[version], 'Cleaning up dist/ dir'));
 
 		// Pull newest commits
-		console.log('Pulling %s repo...', version);
-		result = result.then(exec('git pull origin master'));
+		result = result.then(exec('git pull origin master', null, 'Pulling '+version+' repo '));
 
-		// If stable... checkout the latest tag
+		// If stable... check out latest tag
 		if(version === 'stable') {
 			result = result.then(exec('git tag -l | tail -1'))
+				.then(function(tag) { return tag[0].trim(); }) // Clean it up
 				.then(function(tag) {
-					console.log('Checking out latest stable release... %s', tag[0].trim())
-					return exec('git checkout '+tag[0].trim())()
+					stableVersion = tag.substr(1);
+					return exec('git checkout '+tag, null, 'Checking out latest stable ')();
 				})
 		}
+
+
+		// Generate archive files
+		result = result.then(function() {
+			var dir = path.join(paths.archive, version === 'stable' ? stableVersion : version);
+
+			// Ensure the package archive has this tag....
+			var q = exec('mkdir ' + dir)().fail(function() { })
+				.then(exec('grunt dev', null, 'Generate '+version+' archive files'))
+				.then(exec('cp -r dist/* ' + dir, null, 'Copying generated files'));
+
+			// Create stable latest link files
+			if(version === 'stable') {			
+				q.then(exec('rm stable &> /dev/null', paths.archive))
+				.then(exec('ln -s '+dir+' stable', paths.archive, 'Linking latest files'));
+			}
+
+			return q;
+		})
 
 		// Generate file size object
 		result = result.then(function() {
@@ -99,10 +131,12 @@ function repos() {
 				});
 			}
 		});
+
+
 	});
 
 	// Generate cached commit message and digest in build folder
-	result.then(function() {
+	result = result.then(function() {
 		console.log('Caching latest commit message and digest...');
 
 		// Setup git repo object

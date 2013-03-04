@@ -424,13 +424,18 @@ var demos = {
 							loading: false,
 							dataType: 'jsonp',
 							success: function(json) {
-								var result = json.responseData.results[0],
-									rating = result.content.match(/<b>Ratings<\/b>: ([0-9\.]+)/)[1];
-								
+								// Parse rating from results
+								var rating;
+								$.each(json.responseData.results, function(i, data) {
+									var match = data.content.match(/([0-9\.]+)\/.+10/);
+									if(match && (rating = match[1])) { return false; }
+								});
+
+								// If we got a rating, perfect. If not, destroy it!
 								if(rating) { this.set('content.text', rating); }
-								else { this.destory(); }
+								else { this.destroy(); }
 							},
-							error: function() { this.destroy(); }
+							error: function() { this.destroy(true); }
 						}
 					},
 					position: {
@@ -695,7 +700,7 @@ $.each(demos, function(type, children) {
 		if($.isPlainObject(config)) {
 			config.id = name;
 			elem.qtip(config);
-			$('a', elem).click(function(e) { e.preventDefault(); });
+			$('a:not(.source)', elem).click(function(e) { e.preventDefault(); });
 		}
 		else if($.isFunction(config)) {
 			config(elem);
@@ -704,7 +709,7 @@ $.each(demos, function(type, children) {
 });
 
 // Setup viewport adjustment type selector
-$('#section-positioning-viewport select').change(function() {
+$('#positioning-viewport select').change(function() {
 	$(this).parent().qtip('option', 'position.adjust.method', $(this).val());
 });
 
@@ -729,7 +734,7 @@ $('#section-styling .examples .qtip').each(function() {
 var globalStyle = 'qtip-default';
 
 // Setup styling shadow/rounded checkboxes
-$('#section-styling-builtin :checkbox').change(function() {
+$('#styling-builtin :checkbox').change(function() {
 	var parent = $(this).parent(),
 		state = this.checked,
 		cls = $(this).data('class');
@@ -787,7 +792,7 @@ $('#themeswitcher').themeswitcher({
 	height: 200,
 	buttonheight: 25,
 	initialtext: 'Choose a jQuery UI theme...',
-	imgpath: 'images/themeswitcher/',
+	imgpath: '/static/images/themeswitcher/',
 	onopen: function() {
 		currentColor = $('#qtip-themeroller .ui-tooltip-header').css('backgroundColor');
 	},
@@ -822,7 +827,7 @@ $('#themeswitcher').themeswitcher({
 	position: {
 		at: 'left center',
 		my: 'right top',
-		container: $('#section-styling-ui')
+		container: $('#styling-ui')
 	},
 	style: {
 		widget: true,

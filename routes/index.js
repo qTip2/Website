@@ -6,18 +6,21 @@ var Registry = require('../registry')
  */
 exports.index = function(req, res) {
 	res.render('index', {
-		page: 'new',
-		ip: req.ip,
-		hostip: '109.123.70.57',
-		build: Registry.build,
-		markdown: Registry.markdown,
-		donators: Registry.donate.contributors.split("\n")
+		page: 'index'
 	});
 }
 
 /*
- * Demos data
+ * Demos
  */
+exports.demos = function(req, res) {
+	res.render('demos', {
+		page: 'demos',
+		ip: req.ip,
+		hostip: '109.123.70.57'
+	});
+}
+
 exports.demoData = function(req, res) {
 	var page = req.params.type,
 		body = req.body,
@@ -51,9 +54,17 @@ exports.demoData = function(req, res) {
 	res.render('demos/data/' + req.params.type, params);
 }
 
-/* 
- * Download builder
+
+/*
+ * Download
  */
+exports.download = function(req, res) {
+	res.render('download', {
+		page: 'download',
+		build: Registry.build
+	});
+}
+
 exports.build = function(req, res) {
 	// Shout (if shouting)!
 	if(req.body.shoutout) {
@@ -62,4 +73,47 @@ exports.build = function(req, res) {
 
 	// Build it
 	build.apply(build, arguments);
+}
+
+/*
+ * API Reference
+ */
+exports.api = function(req, res) {
+	res.render('api/' + req.params.page, {
+		page: 'api api-' + (req.params.page || 'index'),
+		markdown: Registry.markdown
+	});
+}
+
+
+/*
+ * Guide
+ */
+exports.guide = function(req, res) {
+	res.render('guide', {
+		page: 'guide',
+		markdown: Registry.markdown
+	});
+}
+
+
+/*
+ * Donate
+ */
+exports.donate = function(req, res) {
+	res.render('donate', {
+		page: 'donate',
+		donators: Registry.donate.contributors.split("\n")
+	});
+}
+
+
+/*
+ * Donate
+ */
+exports.faq = function(req, res) {
+	res.render('faq', {
+		page: 'faq',
+		markdown: Registry.markdown
+	});
 }

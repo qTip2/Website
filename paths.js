@@ -8,6 +8,7 @@ module.exports = {
 	logs: path.resolve('./log'),
 	build: path.resolve('./build'),
 	buildcache: path.resolve('./build/cache'),
+	archive: path.resolve('./build/archive'),
 	git: {
 		nightly: path.resolve('./build/nightly/'),
 		stable: path.resolve('./build/stable')
