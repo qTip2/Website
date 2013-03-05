@@ -1,0 +1,346 @@
+extends layouts/default
+
+mixin demoblock(text, fiddle)
+	span !{text}
+	- if(fiddle)
+		mixin sourcelink(fiddle)
+
+append title
+	| - Demos
+
+block stylesheets
+	link(rel="stylesheet", type='text/css', href="#{url('/static/stylesheets/demos.css')}")
+
+block javascript
+	script(type='text/javascript', src="http://www.youtube.com/player_api")
+	script(type='text/javascript', src="http://a.vimeocdn.com/js/froogaloop2.min.js")
+	script(type='text/javascript', src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCMuMk-DLITXimlZj2SZPW0HZjSBBK2WnQ&sensor=false")
+	script(type='text/javascript', src="http://www.websnapr.com/js/websnapr.js")
+	script(type='text/javascript', src='#{url('/static/javascripts/libs/jquery.themeswitcher.min.js')}')
+	script(type='text/javascript', src='#{url('/static/javascripts/demos.js')}')
+
+block content
+	a(name="demos")
+	#category-demos.category.group
+		h1 Demos
+			font
+				| see 
+				mixin logo()
+				| in action
+
+		a(name="contents")
+		#section-contents.section
+			h2 HTML, Text and AJAX
+			p
+				mixin logo()
+				| allows you to use not only regular textual content, but also complex
+				| HTML from other elements on the page. It can even pull content in from other pages via
+				| the optional 
+				a(href='/docs#plugins-ajax') AJAX plugin
+
+			.examples
+				ul.blocks
+					li#contents-text
+						mixin demoblock("Simple text", "fdavn")
+					li#contents-html
+						mixin demoblock("Inline HTML", "G2sqU")
+					li#contents-ajax
+						mixin demoblock("AJAX'd HTML", "L6yq3")
+
+
+		a(name="styling")
+		#section-styling.section
+			h2 Styles and Customisation
+			p
+				| Not much of an artist? No problem! 
+				mixin logo()
+				| comes with multiple styles that are ready for use, including ones from several other popular tooltip
+				| libraries. And with custom themes creatable with just a few lines of CSS, you'll be up and running in no time!
+
+			p Choose a style from below to <b>change the styling of every qTip on the page!</b>
+
+			mixin style(name, title, titlebar, active)
+				styleName = name.toLowerCase()
+				defClass = styleName === 'ui' ? '' : 'qtip-default '
+				classes = defClass+'qtip qtip qtip qtip-'+styleName
+				if styleName === 'ui'
+					classes = classes+' ui-helper-reset ui-widget ui-tooltip'
+
+				div(class='qtip-container ' + (active ? 'active' : ''))
+					div(id="#styling-type-"+styleName, class=classes, title=title, data-title=name, data-titlebar=titlebar, data-style='qtip-'+styleName)
+						div.qtip-titlebar(class=(styleName === 'ui' ? 'ui-widget-header ui-tooltip-title' : ''))
+						div.qtip-content(class=(styleName === 'ui' ? 'ui-widget-content ui-tooltip-content' : ''))
+				
+			.examples
+				a(name="styling-builtin")
+				#styling-builtin.styles(data-type='Basic style')
+					h3 Basic
+					mixin style('Default', 'Default yellow style', 'true', true)
+					mixin style('Light', 'Light style, for the minimalists', 'true')
+					mixin style('Dark', 'An opposing dark style', 'true')
+					mixin style('Red', 'Great for error related messages', 'true')
+					mixin style('Blue', 'Placid blue, for those informative messages', 'true')
+					mixin style('Green', 'A generic but tasteful green style', 'true')
+
+					input(id="styling-rounded", type="checkbox", data-class="qtip-rounded")
+					label(for="styling-rounded") Rounded
+
+					input(id="styling-shadow", type="checkbox", data-class="qtip-shadow")
+					label(for="styling-shadow") Shadow
+
+					
+				a(name="styling-extra")
+				#styling-extra.styles(data-type='CSS3 style')
+					h3 CSS3
+					mixin style('Youtube', "Google's YouTube style", 'true')
+					mixin style('Tipsy', 'Great minimalist Tipsy style', 'true')
+					mixin style('Bootstrap', "Bootstrap your qTip's with this style", 'true')
+					mixin style('Tipped', 'One of the many Tipped library styles', 'true')
+					mixin style('jTools', 'jTools-style tooltips', 'true')
+			p
+				mixin logo()
+				| even supports styling via the jQuery UI Themeroller themes! Choose a theme
+				| from the Themeswitcher below to see it in action.
+
+			.examples
+				a(name="styling-ui")
+				#styling-ui.styles.group(data-type='jQuery UI Themeroller')
+					#themeswitcher.immediate
+
+		
+		a(name="positioning")
+		#section-positioning.section
+			h2 Positioning
+			p
+				| Featuring a fully configurable, human-readable positioning system, 
+				mixin logo()
+				| allows you to easily position your tooltips using element corners, and even reposition
+				| themselves when the viewport sizes changes!
+
+			.examples
+				img.corners.right(src='#{cdn("corners.jpg")}', width='390')
+				
+				ul.blocks
+					li#positioning-corner
+						mixin demoblock("Using a corner", "dahrg")
+					li#positioning-adjust
+						mixin demoblock("Adding small adjustments")
+					li#positioning-target
+						mixin demoblock("Using a different target")
+					li#positioning-mouse
+						mixin demoblock("Open at the current mouse position", "qSr8B")
+					li#positioning-track
+						mixin demoblock("Anchor the tooltip to the mouse", "sTGux")
+					li#positioning-viewport.draggable
+						mixin demoblock("Viewport repositioning")
+						select
+							option(value="flipinvert") Flip invert
+							option(value="flip") Flip
+							option(value="shift") Shift
+
+			p
+				mixin logo()
+				| also supports corner positioning on <i>&lt;map&gt;</i>, <i>&lt;area&gt;</i> and
+				| most <i>&lt;svg&gt;</i> elements via the
+				b optional 
+				a(href="/docs#plugins-imagemap") Image map 
+				| and 
+				a(href="/docs#plugins-svg") SVG 
+				| plugins
+
+			.examples
+				a(name="positioning")
+				#section-positioning-imgmap
+					img(width='485', height='315', border='0', usemap='#statesmap', src='#{cdn("demos/usa.gif")}')
+					map#statesmap(name='statesmap')
+						area(alt='Alabama', coords='319,197,321,247,329,247,328,240,351,240,340,195', shape='poly')
+						area(alt='Arizona', coords='84,165,71,211,102,232,119,234,124,171', shape='poly')
+						area(alt='Arkansas', coords='261,184,261,214,266,221,290,221,301,183', shape='poly')
+						area(alt='California', coords='9,91,42,98,35,131,71,186,67,209,44,208,20,179,6,117', shape='poly')
+						area(alt='Colorado', coords='134,127,130,170,190,175,191,131', shape='poly')
+						area(alt='Connecticut', coords='432,96,436,110,479,116,478,108,448,105,445,96', shape='poly')
+						area(alt='Delaware', coords='422,125,430,127,467,129,466,138,426,136', shape='poly')
+						area(alt='District of Columbia', coords='412,144,420,147,425,161,462,163,461,152,429,149,419,145', shape='poly')
+						area(alt='Florida', coords='330,242,332,248,364,248,380,262,377,273,402,299,407,297,409,280,387,240,353,243', shape='poly')
+						area(alt='Georgia', coords='342,195,354,241,386,237,388,223,358,193', shape='poly')
+						area(alt='Idaho', coords='85,29,71,100,117,110,118,84,105,83', shape='poly')
+						area(alt='Illinois', coords='292,113,294,119,285,140,305,172,311,171,317,152,312,113', shape='poly')
+						area(alt='Indiana', coords='317,115,319,153,317,163,342,148,336,116', shape='poly')
+						area(alt='Iowa', coords='242,105,248,134,283,134,292,118,280,104', shape='poly')
+						area(alt='Kansas', coords='194,144,194,174,256,176,254,155,249,145', shape='poly')
+						area(alt='Kentucky', coords='307,176,314,173,319,163,345,151,360,151,365,162,358,172', shape='poly')
+						area(alt='Louisiana', coords='264,223,268,258,309,263,303,245,287,245,290,223', shape='poly')
+						area(alt='Maine', coords='442,52,445,46,447,28,460,25,477,49,453,73', shape='poly')
+						area(alt='Maryland', coords='406,131,418,129,423,140,463,140,463,150,425,146', shape='poly')
+						area(alt='Massachusetts', coords='431,87,441,86,452,83,482,75,481,91,448,92,432,94', shape='poly')
+						area(alt='Michigan', coords='291,66,315,77,317,114,351,114,355,101,338,70,328,60,303,58', shape='poly')
+						area(alt='Minnesota', coords='236,41,242,75,242,102,280,101,269,85,269,71,288,50', shape='poly')
+						area(alt='Mississippi', coords='300,199,293,221,290,243,306,243,310,251,319,249,317,199', shape='poly')
+						area(alt='Missouri', coords='249,138,258,154,260,181,300,181,302,173,280,140', shape='poly')
+						area(alt='Montana', coords='94,28,92,42,107,80,120,82,119,75,179,82,180,39', shape='poly')
+						area(alt='Nebraska', coords='179,109,179,128,194,129,195,141,245,142,235,114', shape='poly')
+						area(alt='Nevada', coords='46,99,39,129,74,179,90,108', shape='poly')
+						area(alt='New Hampshire', coords='442,35,422,33,422,45,427,46,436,57,439,84,452,79,441,54', shape='poly')
+						area(alt='New Jersey', coords='423,108,432,112,470,119,467,127,435,125,423,123,427,120', shape='poly')
+						area(alt='New Mexico', coords='128,174,123,226,177,231,179,178', shape='poly')
+						area(alt='New York', coords='380,102,386,96,384,90,406,84,408,67,422,64,430,105,416,98', shape='poly')
+						area(alt='North Carolina', coords='375,173,354,192,381,187,395,188,409,196,431,171,425,163', shape='poly')
+						area(alt='North Dakota', coords='183,40,181,71,238,74,231,41', shape='poly')
+						area(alt='Ohio', coords='339,117,346,147,363,149,375,131,371,109', shape='poly')
+						area(alt='Oklahoma', coords='183,176,183,182,208,183,209,204,257,213,255,178', shape='poly')
+						area(alt='Oregon', coords='25,47,77,62,65,96,11,86,25,47', shape='poly')
+						area(alt='Pennsylvania', coords='374,106,378,131,398,130,419,124,423,119,420,114,421,105,414,99', shape='poly')
+						area(alt='Rhode Island', coords='448,94,450,100,481,104,480,93', shape='poly')
+						area(alt='South Carolina', coords='362,193,382,188,393,190,406,198,388,221', shape='poly')
+						area(alt='South Dakota', coords='182,74,180,106,238,111,237,77', shape='poly')
+						area(alt='Tennesee', coords='306,181,300,198,351,192,371,173', shape='poly')
+						area(alt='Texas', coords='183,184,181,234,146,232,173,264,184,256,232,303,264,260,261,218,209,208,206,185', shape='poly')
+						area(alt='Utah', coords='94,110,115,112,115,124,130,127,126,168,85,162', shape='poly')
+						area(alt='Vermont', coords='408,47,425,47,434,59,436,69,437,85,430,85,425,61,408,61', shape='poly')
+						area(alt='Virginia', coords='369,163,364,170,423,161,419,148,411,145,409,138,400,133,389,158', shape='poly')
+						area(alt='Washington', coords='28,13,25,41,78,57,84,25', shape='poly')
+						area(alt='West Virginia', coords='377,133,362,151,372,163,384,159,399,133', shape='poly')
+						area(alt='Wisconsin', coords='283,64,271,73,271,86,290,111,313,111,312,80', shape='poly')
+						area(alt='Wyoming', coords='124,78,117,120,174,127,178,84', shape='poly')
+
+					p.attribution
+						| imagemap courtesy of 
+						a(href='http://www.americanbanker.com/state/state.html', target='_blank') American Banker
+
+
+		a(name="events")
+		#section-events.section
+			h2 Show and Hide properties
+			p
+				| Sometimes a regular mouseover just won't cut it, so why hack away? 
+				mixin logo()
+				| provides a complete solution to defining custom show and hide properties, so you can open your tooltips on
+				| click, focus or <insert custom event here>!
+
+			.examples
+				ul.blocks
+					li#showhide-click.clickable
+						mixin demoblock("Click (and click again!)", "wHpvW")
+					li
+						mixin demoblock('<input id="showhide-focus" type="text" value="Focus and blur" />', "qtyTJ")
+					li#showhide-unfocus
+						mixin demoblock("Hide when clicking elsewhere", "ADER8")
+					li#showhide-fixed
+						mixin demoblock("Stay visible when mousing onto tooltip", "H4aTZ")
+					li#showhide-delay
+						mixin demoblock("Custom hide and show delays", "ZFTAJ")
+					li#showhide-solo
+						mixin demoblock("Hide others when opening", "kgJtn")
+					li#showhide-inactive
+						mixin demoblock("Hide when inactive", "GUpvE")
+					li#showhide-distance
+						mixin demoblock("Hide after a variable mouse distance", "dcFCz")
+
+			p
+				| Not only are there multiple built-in properties to determine <i>when</i> your tooltips
+				| show and hide, but there's properties for describing <i>how they do it</i> i.e. <b>individual,
+				| custom show and hide effects</b>!
+
+			.examples
+				ul.blocks
+					li#showhide-slide
+						mixin demoblock("Sliding in", "3Sf6x")
+					li#showhide-fadeslide
+						mixin demoblock("Fade in, slide out", "FmsDe")
+					li#showhide-ui
+						mixin demoblock("jQuery UI effects", "t2eDt")
+					li#showhide-custom
+						mixin demoblock("Customised .animate()")
+
+
+		a(name="apicallbacks")
+		#section-apicallbacks.section.group
+			h2 API and Callbacks
+			p
+				| Manipulating and customising the behaviour of the 
+				mixin logo()
+				| library couldn't be easier
+				| using the builtin API, which features multiple callbacks and attributes to precisely fine tune
+				| your tooltips. We can use these features and callbacks to integrate with other 3rd party plugins
+				| and products too.
+
+			.examples
+				div.demogroup.left
+					h4 Dialogs 
+						small (Utilising the 
+							a(href="#plugins-modal") Modal plugin
+							| )
+						mixin sourcelink("ZJpLH")
+
+					ul.blocks
+						li#apicallbacks-alert.clickable
+							mixin demoblock("Alert")
+						li#apicallbacks-confirm.clickable
+							mixin demoblock("Confirm")
+						li#apicallbacks-prompt.clickable
+							mixin demoblock("Prompt")
+
+				div.demogroup.left
+					h4 &nbsp;
+					ul.blocks
+						li#apicallbacks-jgrowl.clickable
+							mixin demoblock("jGrowl", "YCfx4")
+				
+				div.demogroup.left
+					h4 Video link previews
+					ul.blocks
+						li#apicallbacks-youtube.clickable
+							mixin demoblock('<a href="http://www.youtube.com/watch?v=MF3Vbq2BPbE"><b>YouTube</b> - Elf Owl Eating</a>', 'q7pcN')
+						li#apicallbacks-vimeo.clickable
+							mixin demoblock('<a href="http://vimeo.com/1949449#"><b>Vimeo</b> - Eagle Owl</a>', 'UvABX')
+
+				div.demogroup.left
+					h4 Geolocation
+						mixin sourcelink("hh2y2")
+
+					ul.blocks#apicallbacks-geoloc
+						li.clickable
+							mixin demoblock('<a data-ip="'+ip+'">Your IP: ' + ip + '</a>')
+						li.clickable
+							mixin demoblock('<a data-ip="'+hostip+'">Server IP: ' + hostip + '</a>')
+
+				br
+				div.demogroup.left
+					h4 Google maps: 
+						mixin sourcelink("CSYcQ")
+
+					ul.blocks#apicallbacks-maps
+						li.clickable
+							mixin demoblock('<a data-coords="38.89859,-77.035971">White House</a>')
+						li.clickable
+							mixin demoblock('<a data-coords="38.871008,-77.055979">The Pentagon</a>')
+
+				div.demogroup.left
+					h4 Twitter feeds
+						mixin sourcelink("YcPJE")
+
+					ul.blocks#apicallbacks-twitter
+						li
+							mixin demoblock('<a href="http://twitter.com/jquery">jQuery</a>')
+						li
+							mixin demoblock('<a href="http://twitter.com/paul_irish">Paul Irish</a>')
+				br
+				div.demogroup.left
+					h4 IMDb ratings
+						mixin sourcelink("Fc6Wc")
+
+					ul.blocks#apicallbacks-imdb
+						li
+							mixin demoblock('<a href="http://www.imdb.com/title/tt0468569/">The Dark Knight</a>')
+						li
+							mixin demoblock('<a href="http://www.imdb.com/title/tt0110912/">Pulp Fiction</a>')
+
+				div.demogroup.left
+					h4 WebSnapr thumbails
+						mixin sourcelink("JCESC")
+
+					ul.blocks#apicallbacks-websnapr
+						li
+							mixin demoblock('<a href="http://facebook.com">Facebook</a>')
+						li
+							mixin demoblock('<a href="http://youtube.com">YouTube</a>')

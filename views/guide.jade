@@ -1,0 +1,10 @@
+extends layouts/api
+
+append title
+	| - Guides
+
+block content
+	!{wikipage(markdown['Getting-Started'])}
+
+	!{wikipage(markdown['Content-Guide'])}
+	!{wikipage(markdown['Style-Guide'])}

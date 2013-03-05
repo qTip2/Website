@@ -1,0 +1,74 @@
+#legend{
+	position: fixed;
+	top: 100px;
+	right: 0;
+	padding: 5px 20px;
+
+	list-style: none;
+	text-align: right;
+}
+
+#legend li{
+
+}
+
+hr{
+	display: none;
+}
+
+#content .category{
+	margin-bottom: 10px;
+}
+
+.category h1 + p{
+	margin-left: 200px;
+	font-size: 15px;
+}
+
+#content .section + .category.group{
+	margin-top: 80px;
+}
+
+.section ul{
+	margin-top: 2px;
+}
+
+.signatures{
+	padding: 5px 0 5px 10px;
+}
+
+.section h3{
+	font-size: 130%;
+	font-family: 'Average Sans';
+}
+
+.section pre + h3{
+	margin-top: 20px;	
+}
+
+.section p + pre{
+	margin-top: -15px;
+}
+
+.section pre + p{
+	margin-top: 20px;
+}
+
+.signature{
+	margin-bottom: 15px;
+}
+
+.signature h4{
+	margin-bottom: 6px;
+}
+
+.signature p{
+	margin: 0 0 0 5px;
+	padding: 5px 0 10px 10px;
+
+	border-left: 3px solid #eee;
+}
+
+body.api .section h2 + p{
+	font-size: 125%;
+}

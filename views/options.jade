@@ -1,0 +1,12 @@
+extends layouts/api
+
+append title
+	| - Options
+
+block legend
+	- var items = ['Core', 'Content', 'Position', 'Show', 'Hide', 'Style']
+
+append content
+	- var options = ['Core', 'Content', 'Position', 'Show', 'Hide', 'Style']
+	each option in options
+		!{wikipage(markdown[option])}

@@ -1,0 +1,11 @@
+extends layouts/default
+
+append title
+	| - FAQ
+
+block content
+	a(name="faq")
+	#category-faq.category.group
+		h1 FAQ
+			font Frequently asked questions
+		!{wikipage(markdown.FAQ)}

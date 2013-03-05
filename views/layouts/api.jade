@@ -1,0 +1,14 @@
+extends default
+
+block stylesheets
+	link(rel="stylesheet", type='text/css', href="#{url('/static/stylesheets/docs.css')}")
+	link(rel="stylesheet", type='text/css', href="#{url('/static/stylesheets/hightlight2.css')}")
+
+block content
+
+	ul#legend
+		li Sections
+
+		block legend
+		each item in items
+			li: a(href='#'+item.toLowerCase())=item

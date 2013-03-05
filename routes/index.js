@@ -76,19 +76,29 @@ exports.build = function(req, res) {
 }
 
 /*
- * API Reference
+ * API and Guides
  */
 exports.api = function(req, res) {
-	res.render('api/' + req.params.page, {
-		page: 'api api-' + (req.params.page || 'index'),
+	res.render('api', {
+		page: 'api',
 		markdown: Registry.markdown
 	});
 }
 
+exports.events = function(req, res) {
+	res.render('events', {
+		page: 'events',
+		markdown: Registry.markdown
+	});
+}
 
-/*
- * Guide
- */
+exports.options = function(req, res) {
+	res.render('options', {
+		page: 'options',
+		markdown: Registry.markdown
+	});
+}
+
 exports.guide = function(req, res) {
 	res.render('guide', {
 		page: 'guide',

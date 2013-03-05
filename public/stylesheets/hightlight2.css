@@ -1,201 +1,147 @@
-.syntaxhighlighter a,
-.syntaxhighlighter div,
-.syntaxhighlighter code,
-.syntaxhighlighter table,
-.syntaxhighlighter table td,
-.syntaxhighlighter table tr,
-.syntaxhighlighter table tbody,
-.syntaxhighlighter table thead,
-.syntaxhighlighter table caption,
-.syntaxhighlighter textarea {
-  -moz-border-radius: 0 0 0 0 !important;
-  -webkit-border-radius: 0 0 0 0 !important;
-  background: none !important;
-  border: 0 !important;
-  bottom: auto !important;
-  float: none !important;
-  height: auto !important;
-  left: auto !important;
-  line-height: 1.1em !important;
-  margin: 0 !important;
-  outline: 0 !important;
-  overflow: visible !important;
-  padding: 0 !important;
-  position: static !important;
-  right: auto !important;
-  text-align: left !important;
-  top: auto !important;
-  vertical-align: baseline !important;
-  width: auto !important;
-  box-sizing: content-box !important;
-  font-family: "Droid Sans Mono", "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
-  font-weight: normal !important;
-  font-style: normal !important;
-  font-size: 1em !important;
-  min-height: inherit !important;
-  min-height: auto !important;
+code,pre {
+    padding: 0 3px 2px;
+    font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+    font-size: 12px;
+    color: #333;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px
 }
 
-.syntaxhighlighter {
-  width: 100% !important;
-  margin: 1em 0 1em 0 !important;
-  position: relative !important;
-  overflow: auto !important;
-  font-size: 1em !important;
-}
-.syntaxhighlighter.source {
-  overflow: hidden !important;
-}
-.syntaxhighlighter .bold {
-  font-weight: bold !important;
-}
-.syntaxhighlighter .italic {
-  font-style: italic !important;
-}
-.syntaxhighlighter .line {
-  white-space: pre !important;
-}
-.syntaxhighlighter table {
-  width: 100% !important;
-}
-.syntaxhighlighter table caption {
-  text-align: left !important;
-  padding: .5em 0 0.5em 1em !important;
-}
-.syntaxhighlighter table td.code {
-  width: 100% !important;
-}
-.syntaxhighlighter table td.code .container {
-  position: relative !important;
-}
-.syntaxhighlighter table td.code .container textarea {
-  box-sizing: border-box !important;
-  position: absolute !important;
-  left: 0 !important;
-  top: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  border: none !important;
-  background: white !important;
-  padding-left: 1em !important;
-  overflow: hidden !important;
-  white-space: pre !important;
-}
-.syntaxhighlighter table td.gutter .line {
-  text-align: right !important;
-  padding: 0 0.5em 0 1em !important;
-}
-.syntaxhighlighter table td.code .line {
-  padding: 0 1em !important;
-}
-.syntaxhighlighter.nogutter td.code .container textarea, .syntaxhighlighter.nogutter td.code .line {
-  padding-left: 0em !important;
-}
-.syntaxhighlighter.show {
-  display: block !important;
-}
-.syntaxhighlighter.collapsed table {
-  display: none !important;
+code {
+    padding: 2px 4px;
+    color: #78B301;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+    white-space: nowrap
 }
 
+pre {
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 20px;
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre;
+    white-space: pre-wrap;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,0.15);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px
+}
 
-.syntaxhighlighter {
-  background-color: white !important;
+pre.prettyprint {
+    margin-bottom: 20px
 }
-.syntaxhighlighter .line.alt1 {
-  background-color: white !important;
+
+pre code {
+    padding: 0;
+    color: inherit;
+    white-space: pre;
+    white-space: pre-wrap;
+    background-color: transparent;
+    border: 0
 }
-.syntaxhighlighter .line.alt2 {
-  background-color: white !important;
+
+pre code {
+    display: block;
+    padding: .5em;
+    background: #3f3f3f;
+    color: #dcdcdc
 }
-.syntaxhighlighter .line.highlighted.alt1, .syntaxhighlighter .line.highlighted.alt2 {
-  background-color: #e0e0e0 !important;
+
+pre .keyword,pre .tag,pre .css .class,pre .css .id,pre .lisp .title,pre .nginx .title,pre .request,pre .status,pre .clojure .attribute {
+    color: #e3ceab
 }
-.syntaxhighlighter .line.highlighted.number {
-  color: black !important;
+
+pre .django .template_tag,pre .django .variable,pre .django .filter .argument {
+    color: #dcdcdc
 }
-.syntaxhighlighter table caption {
-  color: black !important;
+
+pre .number,pre .date {
+    color: #8cd0d3
 }
-.syntaxhighlighter .gutter {
-  color: #afafaf !important;
+
+pre .dos .envvar,pre .dos .stream,pre .variable,pre .apache .sqbracket {
+    color: #efdcbc
 }
-.syntaxhighlighter .gutter .line {
-  border-right: 3px solid #6ce26c !important;
+
+pre .dos .flow,pre .diff .change,pre .python .exception,pre .python .built_in,pre .literal,pre .tex .special {
+    color: #efefaf
 }
-.syntaxhighlighter .gutter .line.highlighted {
-  background-color: #6ce26c !important;
-  color: white !important;
+
+pre .diff .chunk,pre .subst {
+    color: #8f8f8f
 }
-.syntaxhighlighter.printing .line .content {
-  border: none !important;
+
+pre .dos .keyword,pre .python .decorator,pre .title,pre .haskell .type,pre .diff .header,pre .ruby .class .parent,pre .apache .tag,pre .nginx .built_in,pre .tex .command,pre .prompt {
+    color: #efef8f
 }
-.syntaxhighlighter.collapsed {
-  overflow: visible !important;
+
+pre .dos .winutils,pre .ruby .symbol,pre .ruby .symbol .string,pre .ruby .string {
+    color: #dca3a3
 }
-.syntaxhighlighter.collapsed .toolbar {
-  color: blue !important;
-  background: white !important;
-  border: 1px solid #6ce26c !important;
+
+pre .diff .deletion,pre .string,pre .tag .value,pre .preprocessor,pre .built_in,pre .sql .aggregate,pre .javadoc,pre .smalltalk .class,pre .smalltalk .localvars,pre .smalltalk .array,pre .css .rules .value,pre .attr_selector,pre .pseudo,pre .apache .cbracket,pre .tex .formula {
+    color: #cc9393
 }
-.syntaxhighlighter.collapsed .toolbar a {
-  color: blue !important;
+
+pre .shebang,pre .diff .addition,pre .comment,pre .java .annotation,pre .template_comment,pre .pi,pre .doctype {
+    color: #7f9f7f
 }
-.syntaxhighlighter.collapsed .toolbar a:hover {
-  color: red !important;
+
+pre .coffeescript .javascript,pre .javascript .xml,pre .tex .formula,pre .xml .javascript,pre .xml .vbscript,pre .xml .css,pre .xml .cdata {
+    opacity: .5
 }
-.syntaxhighlighter .toolbar {
-  color: white !important;
-  background: #6ce26c !important;
-  border: none !important;
+
+code,pre {
+    font-size: 13px;
+    font-family: Monaco,Consolas,"Lucida Console",monospace
 }
-.syntaxhighlighter .toolbar a {
-  color: white !important;
+
+pre {
+    padding: 0
 }
-.syntaxhighlighter .toolbar a:hover {
-  color: black !important;
+
+pre code {
+    font-size: 14px;
+    padding: 1em;
+    color: #f8f8f8;
+    background: #181818
 }
-.syntaxhighlighter .plain, .syntaxhighlighter .plain a {
-  color: black !important;
+
+pre .comment {
+    color: #7e7680
 }
-.syntaxhighlighter .comments, .syntaxhighlighter .comments a {
-  color: #998 !important;
-  font-style: italic;
+
+pre .keyword {
+    color: #e9df8f
 }
-.syntaxhighlighter .string, .syntaxhighlighter .string a {
-  color: #d14 !important;
+
+pre .string {
+    color: #82C201
 }
-.syntaxhighlighter .keyword {
-  color: navy !important;
-  font-weight: bold;
+
+pre .regexp {
+    color: #e9c062
 }
-.syntaxhighlighter .preprocessor {
-  color: #999 !important;
-  font-weight: bold;
+
+pre .number {
+    color: #cf6a4c
 }
-.syntaxhighlighter .variable {
-  color: #008080 !important;
+
+pre .title {
+    color: #cda869
 }
-.syntaxhighlighter .value {
-  color: #d14 !important;
+
+pre .params {
+    color: #7587a6
 }
-.syntaxhighlighter .functions {
-  color: #ff1493 !important;
-}
-.syntaxhighlighter .constants {
-  color: #099 !important;
-}
-.syntaxhighlighter .script {
-  font-weight: bold !important;
-  color: #006699 !important;
-  background-color: none !important;
-}
-.syntaxhighlighter .color1, .syntaxhighlighter .color1 a {
-  color: gray !important;
-}
-.syntaxhighlighter .color2, .syntaxhighlighter .color2 a {
-  color: #ff1493 !important;
-}
-.syntaxhighlighter .color3, .syntaxhighlighter .color3 a {
-  color: red !important;
+
+pre .literal {
+    color: #cda869
 }

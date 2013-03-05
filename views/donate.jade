@@ -1,0 +1,100 @@
+extends layouts/default
+
+append title
+	| - Donate
+
+block javascript
+	script(type='text/javascript', src='#{url('/static/javascripts/donate.js')}')
+
+block content
+	a(name="donate")
+	#category-donate.category.group
+		h1 Donate
+			font show your love for the project
+
+		form(action="https://www.paypal.com/uk/cgi-bin/webscr", data-paypal="https://www.paypal.com/uk/cgi-bin/webscr", data-moneybookers="https://www.moneybookers.com/app/payment.pl")
+			input(type="hidden", name="cmd", value="_donations")
+			input(type="hidden", name="business", value="craig@craigsworks.com")
+			input(type="hidden", name="item_name", value="qTip2 - Pretty powerful tooltips")
+			input(type="hidden", name="no_shipping", value="0")
+			input(type="hidden", name="no_note", value="1")
+			input(type="hidden", name="currency_code", value="GBP")
+			input(type="hidden", name="currency", value="GBP")
+			input(type="hidden", name="tax", value="0")
+			input(type="hidden", name="bn", value="PP-DonationsBF")
+			input(type="hidden", name="pay_to_email", value="craig@craigsworks.com")
+			input(type="hidden", name="status_url", value="Chttp://craigsworks.com/projects/qtip2/donate//thanks")
+			input(type="hidden", name="return_url", value="http://craigsworks.com/projects/qtip2/donate//thanks")
+			input(type="hidden", name="return_url_text", value="Complete the donation!")
+			input(type="hidden", name="language", value="EN")
+			input(type="hidden", name="recipient_description", value="qTip2 - Pretty powerful tooltips")
+			input(type="hidden", name="dynamic_descriptor", value="qTip2 - Pretty powerful tooltips")
+			input(type="hidden", name="detail1_description", value="qTip2 donation")
+			input(type="hidden", name="detail2_description", value="Author")
+			input(type="hidden", name="detail2_text", value="Craig Michael Thompson")
+			input(type="hidden", name="amount2_description", value="Donation:")
+			input(type="hidden", name="payment_methods", value="WLT,NGP,IDL,PWY,PWY5,PWY6,PWY7,PWY14,PWY15,PWY37,PWY17,PWY18,PWY19,PWY20,PWY21,PWY22,PWY26,PWY25,PWY28,PWY32,PWY33,PWY36,ACC,VSA,MSC,VSD,VSE,AMX,DIN,JCB,MAE,LSR,SLO,GCB,SFT,DID,GIR,ENT,EBT,SO2,NPY,PLI,DNK,CSI,PSP,EPY,BWI")
+			input(type="hidden", name="confirmation_note", value="Thanks for the donation and feel free to visit the support forums at any time!")
+			input(type="hidden", name="logo_url", value="http://media2.juggledesign.com/qtip2/images//logo-horizontal.png")
+			input(type="hidden", name="lastname", value="")
+			input(type="hidden", name="merchant_fields", value="first_name,last_name")
+
+			a(name="name")
+			#section-name.section
+				h2 What is your name?
+				div.inputgroup
+					input(type="text", name="firstname", value="Anonymous")
+
+			a(name="amount")
+			#section-amount.section
+				h2 Choose an amount
+				ul.blocks
+					li.checked
+						input(id="amount-1", name="amount", type="radio", checked="checked", value="1")
+						label(for="amount-1") 
+							span <font>&pound;</font>1
+					li
+						input(id="amount-2", name="amount", type="radio", value="2")
+						label(for="amount-2") 
+							span <font>&pound;</font>2
+					li
+						input(id="amount-5", name="amount", type="radio", value="5")
+						label(for="amount-5") 
+							span <font>&pound;</font>5
+					li
+						label(for="amount-custom") 
+							span
+								| <font>&pound;</font>
+								input(id="amount-custom", type="number", name="amountold", value="10")
+
+			a(name="service")
+			#section-service.section
+				h2 Choose a service
+
+				div.buttongroup
+					button(data-external="paypal") Donate using <b>PayPal</b>
+					button(data-external="moneybookers") Donate using <b>Skrill (MoneyBookers)</b>
+
+					a(href="http://flattr.com/thing/706279/qTip2-Pretty-Powerful-Tooltips", target="_blank", data-external="flatr")
+						img(src="http://api.flattr.com/button/flattr-badge-large.png", class="noq", alt="Donate using Flattr", border="0")
+
+				p.note 
+					b Note: 
+					| All donations are made to
+					a(href="mailto:craig@craigsworks.com")craig@craigsworks.com
+					| in the above services.
+				p.note
+					b Note: 
+					| Upon submission, you will be redirected to the chosen services website to login/register and verify your donation.
+				p.note
+					b Note: 
+					| If you prefer to send money in a different currency, alternative options are available once at the external site (see above).
+
+			a(name="donators")
+			#section-donators.section
+				h2 Donators <i>Random tag cloud</i>
+				- donators.forEach(function(item) {
+					- var color = 50 + Math.floor( Math.random() * 171 ); color = [color,color,color];
+					- var font = (70 + Math.floor( Math.random() * 71 )) / 100;
+					span(style="color:rgb("+color+"); font-size:"+font+"em; line-height:"+(font+0.2)+"em;")=item
+				- })

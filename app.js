@@ -125,39 +125,48 @@ app.locals({
 		return marked(str);
 	},
 	highlight: function(code, lang) {
-		return nsh.highlight(code, nsh.getLanguage(lang || 'js'), {
-			gutter: false
-		});
+		return highlight(code, null, null, lang);
 	},
 	wikipage: function(markdown) {
 		return marked( markdown )
 
-		// Remove h1 headers
-		.replace(/<h1>[^\<]+<\/h1>/g, '')
+		// Replace with correct HTML section syntax
+		.replace(/<h1>/g, '<div class="category group"><h1>')
+		.replace(/<\/(.*?)>\s*<div class="(category group)">/g, '</$1></div><div class="$2">')
 
 		// Replace with correct HTML section syntax
-		.replace(/<h2>/g, '<div class="section"><h2>').replace(/<\/p>\s*$/g, '</p></div>')
-		.replace(/<\/p>\s*<div class="section">/g, '</p></div><div class="section">')
+		.replace(/<h2>/g, '<div class="section"><h2>')
+		.replace(/<\/(.*?)>\s*<div class="(section)">/g, '</$1></div><div class="$2">')
 
 		// Don;'t use strong, use b
 		.replace(/<(\/)?strong>/g, '<$1b>')
 
 		// Replace qTip2 with proper HTML formatting to keep it inline with the rest of the page
-		.replace(/qTip\s*(<sup>)?2\s*(<\/sup>)?(?!\.com)/gi, '<strong>qTip<sup>2</sup>&nbsp;</strong>');
+		.replace(/qTip\s*(<sup>)?2\s*(<\/sup>)?(?!\.com)/gi, '<strong>qTip<sup>2</sup>&nbsp;</strong>')
+
+		// Terminate with a end div for groupings
+		+ '</div>';
 	}
 });
 
 // Set markdown defaults
 marked.setOptions({
 	gfm: true,
-	highlight: app.locals.highlight
+	sanitize: false,
+	highlight: function(code, lang) {
+		var langs = { 'js': 'javascript' };
+		return highlight(code, null, null, langs[lang] || lang);
+	},
+	langPrefix: 'language'
 });
 
 // Setup routes
 app.get('/', routes.index);
 app.get('/demos', routes.demos);
+app.get('/demos/data', routes.demoData);
 app.get('/api', routes.api);
-app.get('/api/:page', routes.api);
+app.get('/options', routes.options);
+app.get('/events', routes.events);
 app.get('/guides', routes.guide);
 app.get('/donate', routes.donate);
 app.get('/faq', routes.faq);

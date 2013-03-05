@@ -1,0 +1,67 @@
+!!! 5
+html
+	head
+		title
+			| qTip2 - Pretty powerful tooltips 
+			block title
+
+		// Metadata
+		include ../includes/metadata
+
+		// Stylesheets
+		link(rel='shortcut icon', type='image/vnd.microsoft.icon', href='#{url("/favicon.ico")}')
+		link(rel='stylesheet', type='text/css', href='http://fonts.googleapis.com/css?family=Average+Sans|Montserrat|Open+Sans:400,300,600,700|Droid+Sans+Mono&subset=latin,latin-ext')
+		link(rel="stylesheet", type='text/css', href="#{url('/static/stylesheets/reset.css')}")
+		link(rel="stylesheet", type='text/css', href="#{url('/static/stylesheets/style.css')}")
+		link(rel='stylesheet', type='text/css', href='#{qtip("css")}')
+		block stylesheets
+
+		// jQuery
+		script(type='text/javascript', src='http://code.jquery.com/jquery.min.js')
+
+		// Google Analytics
+		include ../includes/analytics
+
+	mixin sourcelink(fiddle)
+		a.source(href='http://jsfiddle.net/craga89/'+fiddle, target="_blank") view source
+
+	mixin logo()
+		strong qTip<sup>2</sup>&nbsp;
+
+	mixin nav(path, title, name)
+		- var active = path === '/'+page || path === '/' && page === 'index' ? ' active' : ''
+		a(class=name+active, href=path, title=title) #{name}
+
+	body(class=page)
+		#master
+			#header(class="#{page}")
+				ul#nav
+					-if(page == 'demos')
+						li.style
+							a(href="#styling", title='Choose a global tooltip style')
+								span.qtip.qtip-default
+									span.qtip-titlebar
+									span.qtip-content
+
+					li.logo
+						a(href='/')
+							img.logo(src='#{cdn("logo-horizontal.png")}', alt='qTip2 - Pretty powerful tooltips', width='122', height='40')
+
+					li.first: mixin nav('/', 'Find out what qTip2 has to offer', 'Home')
+					li: mixin nav('/demos', 'Check out qTip2 in action', 'Demos')
+					li: mixin nav('/download', "Grab it while it's hot", 'Download')
+					li: mixin nav('/api', 'Get to grips with the API', 'API')
+					li: mixin nav('/options', 'Check out the full range of config options', 'Options')
+					li: mixin nav('/guides', 'Get started in no time!', 'Guides')
+					li: mixin nav('/faq', 'Answers to the common questions', 'FAQ')
+					li: mixin nav('/donate', 'Show some love for the project!', 'Donate')
+					li.nomargin: mixin nav('http://craigsworks.com/projects/forums/forum-qtip2', 'Get help from the qTip2 community', 'Forum')
+
+			#content
+				block content
+
+		// Javascript
+		script(type='text/javascript', src='http://code.jquery.com/ui/1.10.0/jquery-ui.min.js')
+		script(type='text/javascript', src='#{qtip("js")}')
+		script(type='text/javascript', src='#{url('/static/javascripts/base.js')}')
+		block javascript

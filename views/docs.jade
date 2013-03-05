@@ -1,0 +1,80 @@
+extends layouts/default
+
+block stylesheets
+	link(rel="stylesheet", type='text/css', href="#{url('/static/stylesheets/hightlight2.css')}")
+
+block content
+	a(name="docs")
+	#category-docs.category.group
+		h1 Documentation
+			font
+				| get started with 
+				mixin logo()
+
+		!{wikipage(markdown.gettingstarted)}
+
+		a(name="guides")
+		#section-guides.section
+			h2 Guides
+				i Read these first!
+			ul
+				li: a(href="https://github.com/Craga89/qTip2/wiki/content-guide"): span: span Content types
+
+		a(name="api")
+		#section-api.section
+			h2 Configuration options
+			ul
+				li
+					a(href="https://github.com/Craga89/qTip2/wiki/core")
+						span: span <b>Core</b> options
+				li
+					a(href="https://github.com/Craga89/qTip2/wiki/content")
+						span: span <b>Content</b> and titles
+				li
+					a(href="https://github.com/Craga89/qTip2/wiki/position")
+						span: span <b>Positioning</b> and corner types
+				li
+					a(href="https://github.com/Craga89/qTip2/wiki/show")
+						span: span <b>Show</b> properties and effects
+				li
+					a(href="https://github.com/Craga89/qTip2/wiki/hide")
+						span: span <b>Hide</b> properties and effects
+				li
+					a(href="https://github.com/Craga89/qTip2/wiki/style")
+						span: span <b>Styling</b> properties
+
+		a(name="plugins")
+		#section-plugins.section
+			h2 Plugins
+				i Make sure 
+					a(href="#builder") they're included!
+			ul
+				li#plugins-ajax
+					a(href="https://github.com/Craga89/qTip2/wiki/AJAX", name="plugins-ajax")
+						span: span AJAX
+				li#plugins-modal
+					a(href="https://github.com/Craga89/qTip2/wiki/Modal", name="plugins-modal")
+						span: span Modal
+				li#plugins-viewport
+					a(href="https://github.com/Craga89/qTip2/wiki/Viewport", name="plugins-viewport")
+						span: span Viewport positioning
+				li#plugins-imagemap
+					a(href="https://github.com/Craga89/qTip2/wiki/Image-map", name="plugins-imagemap")
+						span: span Imagemap support
+				li#plugins-svg
+					a(href="https://github.com/Craga89/qTip2/wiki/SVG", name="plugins-svg")
+						span: span SVG support
+				li#plugins-ie6
+					a(href="https://github.com/Craga89/qTip2/wiki/IE6", name="plugins-ie6")
+						span: span IE6 compatibility
+
+		a(name="api")
+		#section-api.section
+			h2 API
+			ul
+				li
+					a(href="https://github.com/Craga89/qTip2/wiki/methods")
+						span Methods and properties
+				li
+					a(href="https://github.com/Craga89/qTip2/wiki/events")
+						span Events and callbacks

@@ -1,0 +1,186 @@
+extends layouts/default
+
+append title
+	| - Download
+
+block javascript
+	script(type='text/javascript', src='#{url('/static/javascripts/download.js')}')
+
+block content
+	a(name="download")
+	#category-download.category.group
+		h1 Download
+			font
+				| grab 
+				mixin logo()
+				| for free!
+
+		a(name="cdn")
+		#section-cdn.section
+			h2 CDN <small>(recommended)</small>
+			p
+				mixin logo()
+				| is distributed through the 
+				a(href="http://cdnjs.com/") cdnjs 
+				| CloudFlare CDN. You can grab the files at the following URLs:
+
+			h4 All features &amp; styles 
+				small (
+					a(href="#builder-styles") see below
+					| )
+			p.cdnlinks
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.min.js", target="_blank")
+					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.min.js
+				br
+
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.js", target="_blank")
+					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.js
+
+			h4 Basic features 
+				small (no 
+					a(href="#builder-styles") additional styles 
+					| or 
+					a(href="#builder-features") features
+					| )
+
+			p.cdnlinks
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.min.js", target="_blank")
+					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.min.js
+				br
+
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.js", target="_blank")
+					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.js
+
+		a(name="builder")
+		#section-builder.section
+			h2 Build your own
+
+			form(action='#{url("/download/build")}', method='post')
+				h4
+					| Which version of 
+					mixin logo()
+					| would you like to download?
+				ul.blocks
+					li.stable.version.checked(title="Suitable for production and development environments")
+						input(id="download-stable", name="version", type="radio", value="stable", checked="checked")
+						label(for="download-stable") 
+							span
+								| #{build.stable.version}
+								i Stable
+					
+					li.nightly.version(title="Not suitable for production environments", title=build.nightly.commitmsg)
+						input(id="download-nightly", name="version", type="radio", value="nightly")
+						label(for="download-nightly")
+							span
+								| Nightly 
+								small (#{moment(build.nightly.commitdate).fromNow()})
+								i "#{build.nightly.commitmsg.substr(0, 50)+'...'}"
+					
+				a(name="builder-styles")
+				h4 Choose included <i>styles</i>
+				ul.blocks
+					li.checked
+						input(id="download-styles-core", name="styles[core]", type="checkbox", checked="checked", disabled="disabled")
+						label(for="download-styles-core") 
+							span Core styles
+								i the essential library styles and default yellow style
+					li
+						input(id="download-styles-basic", name="styles[basic]", type="checkbox")
+						label(for="download-styles-basic") 
+							span Basic colour styles
+								i basic red, green, blue, dark and light styles
+					li
+						input(id="download-styles-css3", name="styles[css3]", type="checkbox")
+						label(for="download-styles-css3") 
+							span CSS3 styles
+								i shadows, rounded corners, Tipsy, Bootstrap, YouTube, jTools, ClueTip and Tipped styles
+
+				a(name="builder-features")
+				h4 Choose additional <i>features</i>
+				ul.blocks
+					li
+						input(id="download-plugins-tips", name="plugins[tips]", type="checkbox")
+						label(for="download-plugins-tips") 
+							span Speech bubble 'tips'
+								i add little speech bubble pointers to your tooltips
+					li
+						input(id="download-plugins-viewport", name="plugins[viewport]", type="checkbox")
+						label(for="download-plugins-viewport") 
+							span Viewport adjustment
+								i add viewport repositioning abilities to your tooltips
+					li
+						input(id="download-plugins-ajax", name="plugins[ajax]", type="checkbox")
+						label(for="download-plugins-ajax") 
+							span AJAX
+								i add the ability to load remote content into your tooltips
+					li
+						input(id="download-plugins-imagemap", name="plugins[imagemap]", type="checkbox")
+						label(for="download-plugins-imagemap") 
+							span Imagemap support
+								i add &lt;map&gt; and &lt;area&gt; element support to the positioning system
+					li
+						input(id="download-plugins-svg", name="plugins[svg]", type="checkbox")
+						label(for="download-plugins-svg") 
+							span SVG support
+								i add SVG support to the positioning system
+					li
+						input(id="download-plugins-ie6", name="plugins[ie6]", type="checkbox")
+						label(for="download-plugins-ie6") 
+							span IE6 support
+								i
+									| Add IE6 compatibility
+
+				a(name="builder-libraries")
+				h4 Choose additional <i>libraries</i>
+				ul.blocks
+					li
+						input(id="download-jquery", name="jquery", value="1.8.3", type="checkbox")
+						label(for="download-jquery") 
+							span jQuery 1.8.3
+								i latest tested and verified jQuery version
+
+				button Build &amp; Download
+				span#filesize
+					| Approximate filesize<sup>*</sup>: 
+					b 49KB (19KB minified / 10KB gzipped)
+					small <sup>*</sup> Excludes jQuery library
+
+				script
+					fileSizes = {
+						stable: !{JSON.stringify(build.nightly.filesizes)},
+						nightly: !{JSON.stringify(build.nightly.filesizes)}
+					}
+
+		a(name="git")
+		#section-git.section
+			h2 GitHub development
+			p
+				mixin logo()
+				| is actively developed over at 
+				a(href="http://github.com/craga89/qtip2") GitHub 
+				| and updated frequently with the latest bug fixes and new features. If you wish to
+				| contribute to the projects efforts, don't be afraid to 
+				a(href="http://github.com/craga89/qtip2/fork") fork the repo
+				|  and submit some 
+				a(href="http://github.com/craga89/qtip2/pull") pull requests
+				| , <i>and make sure to 
+				a(href="http://github.com/craga89/qtip2/issues") report any bugs 
+				| you find!</i>
+
+			.badges
+				.badge
+					iframe(src='http://ghbtns.com/github-btn.html?user=craga89&repo=qTip2&type=watch&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='80px', height='20px')
+				.badge
+					iframe(src='http://ghbtns.com/github-btn.html?user=craga89&repo=qTip2&type=fork&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='80px', height='20px')
+				.badge
+					iframe(src='http://ghbtns.com/github-btn.html?user=craga89&type=follow&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='152px', height='20px')
+
+		a(name="license")
+		#section-license.section
+			h2 Licensing
+			p
+				mixin logo()
+				| is dual-licensed under the open source MIT and GPLv2 licenses. These licenses must be 
+				| distributed with all scripts falling under their terms, either in file form, or a link to a 
+				| copy in the header of the files. This is already done for you in the scripts headers, so if
+				| you're not too familiar with licensing don't worry about it!

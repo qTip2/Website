@@ -1,0 +1,12 @@
+extends ../layouts/api
+
+block content
+	a(name="apievents")
+	#category-events.category.group
+		h1 Events
+			font
+				| Dynamically handle
+				mixin logo()
+				| API events 
+
+		!{wikipage(markdown.Events)}
