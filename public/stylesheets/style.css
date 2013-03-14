@@ -466,6 +466,7 @@ body.dragging *{
 	}
 
 	#themeswitcher{
+		float: right;
 		display: inline-block;
 	}
 

@@ -35,7 +35,9 @@
 }
 
 #qtip-themeroller{
-	position: static !important;
+	position: relative !important;
+	width: auto !important;
+	height: auto !important;
 }
 
 .qtip.googlemap{ max-width: none; }
