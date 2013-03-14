@@ -34,6 +34,10 @@
 	font-weight: 700;
 }
 
+#qtip-themeroller{
+	position: static !important;
+}
+
 .qtip.googlemap{ max-width: none; }
 
 .qtip.geolocation .loading{

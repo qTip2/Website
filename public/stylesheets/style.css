@@ -122,6 +122,15 @@ p.note{
 	transition: none !important;
 }
 
+.forcewrap, .section h2{
+	-ms-word-break: break-all;
+	word-break: break-all;
+	word-break: break-word;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	hyphens: auto;
+}
+
 .draggable{
 	pointer-events: auto !important;
 	position: relative;
@@ -337,6 +346,22 @@ body.dragging *{
 		display: inline-block;
 		margin: 0 20px 0 0;
 	}
+
+	#section-showcase a{
+		display: inline-block;
+
+		width: 175px;
+		min-height: 50px;
+		line-height: 110px;
+		text-align: center;
+		vertical-align: middle;
+	}
+	
+	#section-showcase img{
+		display: inline;
+		vertical-align: middle;
+	}
+
 
 #category-demos{}
 

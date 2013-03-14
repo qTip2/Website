@@ -1,8 +1,17 @@
-extends layouts/api
+extends layouts/docs
 
 append title
 	| - API
 
-block content
-	!{wikipage(markdown.API)}
-	!{wikipage(markdown.Global)}
+block legend
+	- var items = { 'api': 'API', 'global': 'Global', 'events': 'Events' }
+
+append content
+	a(name="api")
+	!{wikipage('API')}
+
+	a(name="events")
+	!{wikipage('Events')}
+
+	a(name="global")
+	!{wikipage('Global')}

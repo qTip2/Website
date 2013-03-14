@@ -1,15 +1,49 @@
 #legend{
 	position: fixed;
-	top: 100px;
+	top: 80px;
 	right: 0;
-	padding: 5px 20px;
+	z-index: 100;
+	padding: 5px 25px 5px 5px;
 
+	background-color: rgb(254, 254, 254);
+	background-color: rgba(254, 254, 254, 0.75);
+	border-radius: 5px 0 0 5px;
+}
+
+#legend,
+#legend ul{
+	margin: 0;
 	list-style: none;
 	text-align: right;
 }
 
-#legend li{
+#legend ul{
+	display: none;
+}
 
+#legend ul.active{
+	display: block;
+}
+
+#legend li{
+	font-weight: bold;
+}
+
+#legend a{
+	font-weight: normal;
+}
+
+#legend > li > a{
+	color: #444;
+	font-weight: bold;
+}
+
+#legend > li > a:hover{
+	text-decoration: underline;
+}
+
+#legend a.active{
+	font-weight: bold;
 }
 
 hr{
@@ -20,7 +54,7 @@ hr{
 	margin-bottom: 10px;
 }
 
-.category h1 + p{
+.category h1 ~ p{
 	margin-left: 200px;
 	font-size: 15px;
 }
@@ -38,7 +72,7 @@ hr{
 }
 
 .section h3{
-	font-size: 130%;
+	font-size: 150%;
 	font-family: 'Average Sans';
 }
 
@@ -52,6 +86,19 @@ hr{
 
 .section pre + p{
 	margin-top: 20px;
+}
+
+.section a[name]{
+	margin-top: -80px;
+	margin-bottom: 20px;
+}
+
+.section a[name] + h3{
+	margin-top: 15px;
+}
+
+.section h2 + a[name] + h3{
+	margin-top: 0;
 }
 
 .signature{
@@ -71,4 +118,8 @@ hr{
 
 body.api .section h2 + p{
 	font-size: 125%;
+}
+
+body.api .section a[data-type] + h2 + p{
+	font-size: 100%;
 }

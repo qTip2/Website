@@ -1,0 +1,17 @@
+extends layouts/docs
+
+append title
+	| - Guides
+
+block legend
+	- var items = { 'gettingstarted': 'Getting Started', 'content': 'Content Guide', 'style': 'Style Guide' }
+
+append content
+	a(name="gettingstarted")
+	!{wikipage('Getting-Started')}
+
+	a(name="content")
+	!{wikipage('Content-Guide')}
+
+	a(name="style")
+	!{wikipage('Style-Guide')}

@@ -7,7 +7,8 @@ var Registry = require('./registry')
 	, git = require('gift')
 	, cp = require('child_process')
 	, glob = require('glob-whatev')
-	, colors = require('colors');
+	, colors = require('colors')
+	, marked = require('marked');
 
 // File list to generate file sizes for and it's JSON key mapping
 var _files = {
@@ -36,28 +37,73 @@ function exec(cmd, newcwd, message) {
 /*
  * Wiki update
  */
-function wiki() {
-	console.log('Updating wiki files...');
+function processMarkdown(name, text) {
+	// Anchor prefix is analogous to URL slug
+	var anchorPrefix = name.toLowerCase().replace(/[^\w\d\-]/g, '-'),
+		lastType;
 
-	// Grab the JSON payload
-	var result = Q.resolve();
+	return marked(text)
 
-	// Update the wiki repo
-	return result.then( exec('git pull', paths.wiki) )
+	// Don't use strong, use b
+	.replace(/<(\/)?strong>/g, '<$1b>')
 
-	// List all the wiki files
-	.then(function() {
-		return Q.ninvoke(fs, 'readdir', paths.wiki);
+	// Remove <p> wrappers from anchors
+	.replace(/<p>\s*(<a\b[^>]*><\/a>)\s*<\/p>/g, '$1')
+
+	// Add category/section elements
+	.replace(/(<a\b[^>]*><\/a>\s*)?<h([12])>/g, function(match, anchor, h) {
+		var classes = h === '1' ? 'category group' : 'section',
+			prefix = lastType === 'section' ? classes !== 'section' ? '</div></div>' : '</div>' : '';
+
+		// Store last type to be replaced
+		lastType = classes;
+
+		return prefix + '<div class="'+classes+'">' + (anchor || '') + '<h'+h+'>';
 	})
 
+
+	// Fix up API links
+	.replace(/<a name="(\w+)"><\/a>/gi, '<a name="'+anchorPrefix+'.$1"></a>')
+	.replace(/<a href="#(\w+)">/gi, '<a href="#'+anchorPrefix+'.$1">')
+	.replace(/<a href="\.\/?\/(AJAX|IE6|Image-map|Modal|SVG|Tips|Viewport)">/gi, '<a href="/plugins#$1">')
+	.replace(/<a href="\.\.?\/(Global|API|Events)(?:#([^"]+))?">/gi, function(match, type, attr) {
+		var anchor = (type + (attr ? '.'+attr : '')).toLowerCase();
+		return '<a href="/api#'+anchor+'">';
+	})
+	.replace(/<a href="\.\.?\/(Content|Position|Core|Show|Hide|Style)(?:#([^"]+))?">/gi, function(match, type, attr) {
+		var anchor = (type + (attr ? '.'+attr : '')).toLowerCase();
+		return '<a href="/options#'+anchor+'">';
+	})
+
+	// Replace qTip2 with proper HTML formatting to keep it inline with the rest of the page
+	.replace(/([^\/])qTip\s*(<sup>)?2\s*(<\/sup>)?(?!\.com)/gi, '$1<strong>qTip<sup>2</sup>&nbsp;</strong>')
+
+	+ '</div></div>';
+}
+
+function wiki() {
+	var fileGlob = path.join(paths.wiki, '**/*.md');
+
+	// Update the wiki repo first
+	return exec('git pull', paths.wiki, 'Updating wiki files...')()
+
 	// Update wiki files in Registry
-	.then(function(files) {
-		files.forEach(function(file) {
-			Registry.markdown[ path.basename(file, '.md') ] = fs.readFileSync(
-				path.join(paths.wiki, file)
-			).toString();
+	.fin(function() {
+		glob.glob( fileGlob ).forEach(function(file) {
+			var name = path.basename(file, '.md');
+
+			// Process the markdown immediately
+			Registry.markdown[ name ] = processMarkdown(name,
+				fs.readFileSync(file).toString()
+			);
 		});
-	});
+	})
+
+	// Determine if the update failed or not
+	.then(
+		function() { console.log('Wiki updated successfully.'); },
+		function(reason) { console.log('Unable to update wiki... ' + reason); }
+	);
 }
 
 /*
@@ -164,20 +210,24 @@ function repos() {
 	return result;
 }
 
-// GitHub Post hook IPs: 207.97.227.253, 50.57.128.197, 108.171.174.178
-var githubIPs = /207\.97\.227\.253|50\.57\.128\.197|108\.171\.174\.178/;
+// GitHub Post hook IPs: 207.97.227.253/32, 50.57.128.197/32, 108.171.174.178/32, 50.57.231.61/32, 204.232.175.64/27, 192.30.252.0/22
+var githubIPs = /(207\.97\.227\.253)|(50\.57\.128\.197)|(108\.171\.174\.178)|(50\.57\.231\.61)|(204\.232\.175\.[6-9][0-9])|(192\.30\.25[2-5]\.[0-255])|(78\.105\.190\.31)/;
 
 function hookAuth(req, res, next) {
+	process.stdout.write('POST hook received... is it GitHub? ');
+
 	// Only allow GitHub IP's through
 	if(!githubIPs.test(req.ip)) {
+		console.log('Nope... from IP ' + req.ip);
 		return res.send(500, 'Hold up... you\'re not GitHub! Shoo!');
 	}
 
-	console.log('POST hook from GitHub received...');
+	console.log('Yep! Updating...');
 	next();
 }
 
 module.exports = {
+	ips: githubIPs,
 	hookAuth: hookAuth,
 	repos: repos,
 	wiki: wiki

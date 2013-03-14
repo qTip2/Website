@@ -80,29 +80,31 @@ exports.build = function(req, res) {
  */
 exports.api = function(req, res) {
 	res.render('api', {
-		page: 'api',
-		markdown: Registry.markdown
+		page: 'api'
 	});
 }
 
 exports.events = function(req, res) {
 	res.render('events', {
-		page: 'events',
-		markdown: Registry.markdown
+		page: 'events'
 	});
 }
 
 exports.options = function(req, res) {
 	res.render('options', {
-		page: 'options',
-		markdown: Registry.markdown
+		page: 'options'
 	});
 }
 
-exports.guide = function(req, res) {
-	res.render('guide', {
-		page: 'guide',
-		markdown: Registry.markdown
+exports.plugins = function(req, res) {
+	res.render('plugins', {
+		page: 'plugins'
+	});
+}
+
+exports.guides = function(req, res) {
+	res.render('guides', {
+		page: 'guides'
 	});
 }
 
@@ -123,7 +125,6 @@ exports.donate = function(req, res) {
  */
 exports.faq = function(req, res) {
 	res.render('faq', {
-		page: 'faq',
-		markdown: Registry.markdown
+		page: 'faq'
 	});
 }

@@ -1,3 +1,46 @@
+John Dailey
+Jason Taikato
+Cristian-Andrei Andrei
+Dario Pietraroia
+Fabien Mosen
+Stacey Thornton
+Rob Gerwing
+Austin Weidner
+SixPrizes
+David Beech
+William Gross
+Trey Clark
+Oisin Lavery
+WebEndev
+Isaac Fàbrega Sánchez
+Nicholas Aron
+Jean Peña Dotel
+Austin Weidner
+Daniel Pastusek
+Chris Boler
+ThinkingMedia
+Hélio Oliveira
+Robert Wilson
+Hans Brost
+Christopher Blanton
+Justin Ludwig
+Samoylov Vladimir
+James Hicks
+Fernando Zorrilla de San Martín Kuchta
+Giovanni Parra
+Yevgeniy Viktorov
+Dustin Kremer
+1a Yachtcharter GmbH
+Stefan Mirea
+Plan to Eat
+fourfour media, llc.
+Maria Obando
+Dominick Guzzo
+Steven Masala
+Corwin Smith
+Crew Labs, LLC
+Christian Brusch
+Frank Spade
 Oleksandr Gnatyshyn
 David Carse
 Robin Lyles
@@ -31,8 +74,8 @@ Daniel Lemos Itaborai Itaborai
 Milko Lima
 Tako Bruinsma
 Геннадий Кляченков
-Stanley Watts
-MSI Services, Inc.
+Stanley Watts 
+MSI Services, Inc. 
 easy2web.co.uk
 Mihai Draghicioiu
 Trent Moffatt
@@ -40,12 +83,12 @@ dong zhou
 Vanessa Dutrieux
 hayden karel chambers
 Bradley Weston
-Valery Petroff
+Valery Petroff 
 CJ Kozarski
 Mohammad Alsayeh
 Lauren Parrett
 Jeimi Woffinden
-Denis Beurive
+Denis Beurive 
 Fox and Geese LLC
 Red Letter Creative
 Davide Muraro
@@ -84,7 +127,7 @@ Chris Wilson
 MODELS.com, Inc.
 Dailey Development
 Joe Privett
-logiforms.com
+logiforms.com 
 Chad Blackmon
 m h s geelen
 Tim Romano

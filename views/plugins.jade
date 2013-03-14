@@ -1,0 +1,13 @@
+extends layouts/docs
+
+append title
+	| - Plugins
+
+block legend
+	- var items = { 'ajax': 'AJAX', 'tips': 'Tips', 'modal': 'Modal', 'viewport': 'Viewport', 'imagemap': 'Image map', 'svg': 'SVG', 'ie6': 'IE6' }
+
+append content
+	- var items = { 'ajax': 'AJAX', 'tips': 'Tips', 'modal': 'Modal', 'viewport': 'Viewport', 'imagemap': 'Image-map', 'svg': 'SVG', 'ie6': 'IE6' }
+	each item, name in items
+		a(name=name)
+		!{wikipage(item)}

@@ -10,5 +10,5 @@ block content
 		li Sections
 
 		block legend
-		each item in items
-			li: a(href='#'+item.toLowerCase())=item
+		each name, link in items
+			li: a(href='#'+link)=name

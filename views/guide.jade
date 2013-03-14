@@ -3,8 +3,15 @@ extends layouts/api
 append title
 	| - Guides
 
-block content
+block legend
+	- var items = ['Getting Started', 'Content Guide', 'Style Guide']
+
+append content
+	a(name="getting-started")
 	!{wikipage(markdown['Getting-Started'])}
 
+	a(name="content-guide")
 	!{wikipage(markdown['Content-Guide'])}
+
+	a(name="style-guide")
 	!{wikipage(markdown['Style-Guide'])}

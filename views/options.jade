@@ -1,12 +1,13 @@
-extends layouts/api
+extends layouts/docs
 
 append title
 	| - Options
 
 block legend
-	- var items = ['Core', 'Content', 'Position', 'Show', 'Hide', 'Style']
+	- var items = { core: 'Core', content: 'Content', position: 'Position', show: 'Show', hide: 'Hide', style: 'Style' }
 
 append content
 	- var options = ['Core', 'Content', 'Position', 'Show', 'Hide', 'Style']
 	each option in options
-		!{wikipage(markdown[option])}
+		a(name=option.toLowerCase())
+		!{wikipage(option)}

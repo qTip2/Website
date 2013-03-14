@@ -9,8 +9,8 @@ var Registry = require('./registry')
 	, gzip = require('connect-gzip')
 	, http = require('http')
 	, path = require('path')
+	, fs = require('fs')
 	, moment = require('moment')
-	, nsh = require('node-syntaxhighlighter')
 	, highlight = require('highlight').Highlight
 	, marked = require('marked');
 
@@ -27,20 +27,32 @@ app.configure(function(){
 	// Load custom filters
 	require('./jadefilters')
 
-	// Change favicon
+	// Use favicon for all middlware
 	app.use(express.favicon(__dirname + '/public/favicon.ico')); 
 
+	// Static files first (don't log these)
+	app.use('/static', express.static(path.join(__dirname, 'public')));
+
 	// Package archive
+	app.use('/v', express.logger({
+		format: 'default',
+		stream: fs.createWriteStream( path.join(paths.logs, 'archive.log'), { flags: 'a' })
+	}));
 	app.use(express.static(path.join(__dirname, 'stable')));
 	app.use('/v', express.static(path.join(__dirname, 'build', 'archive')));
-	app.use('/v', express.directory(path.join(__dirname, 'build', 'archive')));
+	app.use('/v', express.directory(path.join(__dirname, 'build', 'archive'), { icons: true }));
+
+	// Setup logging
+	app.use(express.logger({
+		format: 'default',
+		stream: fs.createWriteStream( path.join(paths.logs, 'http.log'), { flags: 'a' })
+	}));
 
 	// Setup IP checks
 	app.use(function(req, res, next) {
-		if(!/207\.97\.227\.253|50\.57\.128\.197|108\.171\.174\.178|78\.105\.190\.31/.test(req.ip)) {
+		if(!git.ips.test(req.ip)) {
 			res.send('Under construction'); return;
 		}
-
 		next();
 	});
 
@@ -61,12 +73,8 @@ app.configure(function(){
 	//));
 
 	//app.use(gzip.gzip())
-	app.use(express.favicon());
-	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
-	app.use('/static', express.static(path.join(__dirname, 'public')));
-
 });
 
 // Development
@@ -121,31 +129,16 @@ app.locals({
 
 	// Helpers
 	moment: moment,
-	markdown: function(str) {
-		return marked(str);
-	},
+	markdown: marked,
 	highlight: function(code, lang) {
 		return highlight(code, null, null, lang);
 	},
-	wikipage: function(markdown) {
-		return marked( markdown )
+	wikipage: function(name) {
+		if(!Registry.markdown[name]) {
+			return 'Uhoh... no such page!'
+		}
 
-		// Replace with correct HTML section syntax
-		.replace(/<h1>/g, '<div class="category group"><h1>')
-		.replace(/<\/(.*?)>\s*<div class="(category group)">/g, '</$1></div><div class="$2">')
-
-		// Replace with correct HTML section syntax
-		.replace(/<h2>/g, '<div class="section"><h2>')
-		.replace(/<\/(.*?)>\s*<div class="(section)">/g, '</$1></div><div class="$2">')
-
-		// Don;'t use strong, use b
-		.replace(/<(\/)?strong>/g, '<$1b>')
-
-		// Replace qTip2 with proper HTML formatting to keep it inline with the rest of the page
-		.replace(/qTip\s*(<sup>)?2\s*(<\/sup>)?(?!\.com)/gi, '<strong>qTip<sup>2</sup>&nbsp;</strong>')
-
-		// Terminate with a end div for groupings
-		+ '</div>';
+		return Registry.markdown[name];
 	}
 });
 
@@ -163,11 +156,12 @@ marked.setOptions({
 // Setup routes
 app.get('/', routes.index);
 app.get('/demos', routes.demos);
-app.get('/demos/data', routes.demoData);
+app.get('/demos/data/:type', routes.demoData);
 app.get('/api', routes.api);
 app.get('/options', routes.options);
+app.get('/plugins', routes.plugins);
 app.get('/events', routes.events);
-app.get('/guides', routes.guide);
+app.get('/guides', routes.guides);
 app.get('/donate', routes.donate);
 app.get('/faq', routes.faq);
 
@@ -176,15 +170,14 @@ app.get('/download', routes.download);
 app.post('/download/build', routes.build);
 
 // "Private" hooks
-app.post('/git/update/wiki', git.wiki);
-app.post('/git/update/repos', git.repos);
+app.post('/git/update/wiki', git.hookAuth, git.wiki);
+app.post('/git/update/repos', git.hookAuth, git.repos);
+
+// Setup the server
+app.listen(app.get('port'), function() {
+	console.log("Express server listening on port " + app.get('port'));
+});
 
 // Update our repos and upon completion, start the server
-git.repos()
-	.then(git.wiki)
-	.fin(function() {
-		// Setup the server
-		app.listen(app.get('port'), function() {
-			console.log("Express server listening on port " + app.get('port'));
-		});
-	});
+git.wiki();
+git.repos();

@@ -33,9 +33,9 @@ $(function() {
 		var scrollers = $('html, body'),
 			newTop = target.offset().top;
 
-		if(animate === false) {
+		if(animate === false || Math.abs(newTop - scrollers.scrollTop()) > 14000) {
 			document.location.hash = '#'+id;
-			scrollers.scrollTop(newTop);
+			scrollers.stop().scrollTop(newTop);
 		}
 		else { 
 			scrollers.stop().animate({ scrollTop: newTop }, {

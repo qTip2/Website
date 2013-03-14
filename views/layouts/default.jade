@@ -50,9 +50,10 @@ html
 					li.first: mixin nav('/', 'Find out what qTip2 has to offer', 'Home')
 					li: mixin nav('/demos', 'Check out qTip2 in action', 'Demos')
 					li: mixin nav('/download', "Grab it while it's hot", 'Download')
-					li: mixin nav('/api', 'Get to grips with the API', 'API')
-					li: mixin nav('/options', 'Check out the full range of config options', 'Options')
 					li: mixin nav('/guides', 'Get started in no time!', 'Guides')
+					li: mixin nav('/options', 'Check out the full range of config options', 'Options')
+					li: mixin nav('/plugins', 'Optional plugins that add a range of additional functionality', 'Plugins')
+					li: mixin nav('/api', 'Get to grips with the API', 'API')
 					li: mixin nav('/faq', 'Answers to the common questions', 'FAQ')
 					li: mixin nav('/donate', 'Show some love for the project!', 'Donate')
 					li.nomargin: mixin nav('http://craigsworks.com/projects/forums/forum-qtip2', 'Get help from the qTip2 community', 'Forum')
@@ -62,6 +63,6 @@ html
 
 		// Javascript
 		script(type='text/javascript', src='http://code.jquery.com/ui/1.10.0/jquery-ui.min.js')
-		script(type='text/javascript', src='#{qtip("js")}')
+		script(type='text/javascript', src='http://theflat.dyndns-home.com/projects/qtip/2.x/trunk/dist/jquery.qtip.js')
 		script(type='text/javascript', src='#{url('/static/javascripts/base.js')}')
 		block javascript
