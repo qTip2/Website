@@ -1,4 +1,22 @@
+// Grab the global tooltip style from the cookie
+var globalStyle = $.fn.qtip.defaults.style.classes = $.cookie('qtip2_global_style') || '';
+!globalStyle && $.cookie('qtip2_global_style', (globalStyle = 'qtip-shadow'));
+
+$('body').bind('tooltipshow', function(event, api) {
+	if(!api.elements.target.hasClass('qtip') && !api.options.style.widget) {
+		if(!api.origStyle) {
+			api.origStyle = api.options.style.classes + ' qtip-default ';
+		}
+		var newStyle = api.origStyle + ' ' + globalStyle;
+
+		if(api.options.style.classes !== newStyle) {
+			api.set('style.classes', newStyle);
+		}
+	}
+});
+
 $(function() {
+
 	// Setup header tooltips
 	$('#header a[title]').qtip({
 		position: {
@@ -10,7 +28,7 @@ $(function() {
 	});
 
 	// Add active class to active header nav elements
-	$('#header li:not(.logo)').click(function() {
+	$('#header li:not(.logo, .style)').click(function() {
 		$('a', this).addClass('active')
 			.end().siblings().children('a').removeClass('active');
 	});
@@ -36,11 +54,18 @@ $(function() {
 		if(animate === false || Math.abs(newTop - scrollers.scrollTop()) > 14000) {
 			document.location.hash = '#'+id;
 			scrollers.stop().scrollTop(newTop);
+			window.SCROLLING = false;
 		}
 		else { 
+			window.SCROLLING = true;
 			scrollers.stop().animate({ scrollTop: newTop }, {
 				duration: 550,
-				easing: 'swing'
+				easing: 'swing',
+				complete: function() {
+					setTimeout(function() {
+						window.SCROLLING = false
+					}, 100);
+				}
 			});
 			document.location.hash = '#'+id;
 		}

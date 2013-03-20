@@ -12,7 +12,8 @@ var Registry = require('./registry')
 	, fs = require('fs')
 	, moment = require('moment')
 	, highlight = require('highlight').Highlight
-	, marked = require('marked');
+	, marked = require('marked')
+	, cdnVersions = ['2.0.0'];
 
 // Setup the server
 var app = express();
@@ -30,8 +31,23 @@ app.configure(function(){
 	// Use favicon for all middlware
 	app.use(express.favicon(__dirname + '/public/favicon.ico')); 
 
+	// Use gzip compression
+	app.use(express.compress());
+
 	// Static files first (don't log these)
 	app.use('/static', express.static(path.join(__dirname, 'public')));
+
+	// CDNJs Redirects
+	app.use(function(req, res, next) {
+		var matches = /^\/v\/([0-9\.]+)\/(.+\.(?:css|js))$/.exec(req.url),
+			isCDNd = matches && cdnVersions.indexOf(matches[1]) > -1;
+
+		// Continue if not CDN'd
+		if(!isCDNd) { return next(); }
+
+		// Redirect to CDNJS files
+		res.redirect(301, '//cdnjs.cloudflare.com/ajax/libs/qtip2/'+matches[1]+'/'+matches[2]);
+	});
 
 	// Package archive
 	app.use('/v', express.logger({
@@ -72,7 +88,14 @@ app.configure(function(){
 	//	'blog.qtip2.com', require('./node-blog/app').app
 	//));
 
-	//app.use(gzip.gzip())
+	// Set globalStyle var for each request via the cookie
+	app.use(express.cookieParser());
+	app.use(function(req, res, next) {
+		res.locals.globalStyle = req.cookies['qtip2_global_style'];
+		next();
+	});
+
+	// Use body parser and method override middlewares
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 });

@@ -5,6 +5,7 @@ var path = require('path');
  */
 module.exports = {
 	public: path.resolve('./public'),
+	cache: path.resolve('./cache'),
 	logs: path.resolve('./log'),
 	build: path.resolve('./build'),
 	buildcache: path.resolve('./build/cache'),

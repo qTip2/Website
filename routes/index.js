@@ -1,5 +1,22 @@
 var Registry = require('../registry')
-	, build = require('../build').build;
+	, build = require('../build').build
+	, paths = require('../paths')
+	, path = require('path')
+	, fs = require('fs')
+	, request = require('request')
+	, querystring = require('querystring')
+	, cronJob = require('cron').CronJob
+
+	// Translation specific	
+	, translateCacheFile = path.join(paths.cache, 'translate.json')
+	, translateCache = JSON.parse(fs.readFileSync(translateCacheFile).toString() || '{}')
+	, translateText = 'Highlight some of these word(s). A tooltip will appear with the Spanish translation!'
+	, translateData = {
+		key: 'AIzaSyD2NSl8IH_fEDEJyVFkpkvD9RK7LoYMv64',
+		source: 'en',
+		target: 'es'
+	};
+
 
 /*
  * Home page
@@ -24,23 +41,11 @@ exports.demos = function(req, res) {
 exports.demoData = function(req, res) {
 	var page = req.params.type,
 		body = req.body,
-		ratings = {
-			'0111161':9.3, '0120689':8.4,
-			'1375666':8.8, '0071562':9.1,
-			'0375679':7.9, '0468569':9.0,
-			'0110912':9.0, '0137523':8.9,
-			'1119646':7.8, '0167260':8.9
-		},
 		params = {},
 		state;
 
-	// IMDb ratings
-	if(page === 'imdb') {
-		res.header('Content-Type', 'application/json');
-		params.rating = JSON.stringify({ rating: ratings[ req.query.id ] });
-	}
 	// Form login
-	else if(page === 'login') {
+	if(page === 'login') {
 		res.header('Content-Type', 'application/json');
 
 		// un:qtip, pw:qtip for demo purposes
@@ -51,8 +56,45 @@ exports.demoData = function(req, res) {
 		});
 	}
 
+	// Translate
+	else if(page === 'translate') {
+		res.header('Content-Type', 'application/json');
+
+		// Ensure there's no funny business!
+		/*if(translateText.indexOf(req.params.q) < 0 || req.get('Referrer').indexOf('http://qtip.com') < 0) {
+			return res.send(500, 'No using my API key for your own translations please! Play nice and pay :)');
+		}*/
+
+		// No cached response...? gah. We'll have to use the API.
+		if( !(params.response = translateCache[req.query.q]) ) {
+			console.log('Hitting Google Translate API... prepare for £££!');
+			translateData.q = req.query.q;
+			request.get(
+				'https://www.googleapis.com/language/translate/v2?' + querystring.stringify(translateData),
+				function(err, response, body) {
+					if(err) { throw err; }
+
+					// Cache response and return it
+					translateCache[translateData.q] = params.response = body;
+					res.render('demos/data/' + req.params.type, params);
+				}
+			);
+
+			return;
+		}
+	}
+
 	res.render('demos/data/' + req.params.type, params);
 }
+
+// Store the translateCache in cache folder every 30 minutes
+new cronJob('1 * * * * *', function() {
+	console.log('Caching translation results... %s', translateCacheFile);
+    fs.writeFile(
+    	translateCacheFile,
+    	JSON.stringify(translateCache) || '{}'
+	);
+}, null, true);
 
 
 /*

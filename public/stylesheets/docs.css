@@ -58,11 +58,6 @@ hr{
 	margin-bottom: 200px;
 }
 
-.category h1 ~ p{
-	margin-left: 200px;
-	font-size: 15px;
-}
-
 #content .section + .category.group{
 	margin-top: 80px;
 }

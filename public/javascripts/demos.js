@@ -20,7 +20,48 @@ var demos = {
 				viewport: $(window)
 			},
 			style: 'wiki'
-		}
+		},
+
+		'iframe': {
+			content: {
+				text: '<iframe src="http://m.reddit.com" />'
+			},
+			hide: {
+				delay: 90,
+				fixed: true
+			},
+			position: {
+				viewport: $(window)
+			}
+		},
+
+		'title': {
+			content: {
+				text: 'Separate content and title text makes extending existing tooltips a breeze.',
+				title: 'Your original title here!'
+			}
+		},
+
+		'button': {
+			content: {
+				text: 'Closing your tooltips just got easier with a handy new <i>style-able</i> button!',
+				title: {
+					button: true
+				}
+			}
+		},
+
+		'titlebutton': {
+			content: {
+				text: 'A great way to show a persistent tooltip with an easy close method',
+				title: {
+					text: 'Combined title and button',
+					button: true
+				}
+			},
+			hide: 'click'
+		},
+
 	},
 
 	positioning: {
@@ -603,6 +644,44 @@ var demos = {
 				});
 			})
 			.click(function(e){ e.preventDefault(); });
+		},
+
+		'translate': function(container) {
+			// Ensure we can only select stuff in the translate div!
+			container.bind('mousedown', function() {
+				container.one('mouseup', function(event) {
+					// Get selection
+					var selection = (window.getSelection && window.getSelection() ||
+						document.selection && document.selection.createRange()).toString();
+					if(!$.trim(selection)) { return; }
+
+					// Show the tooltip
+					tooltip.set({
+						'content.text': 'Translating...',
+						'content.ajax.data': { q: selection }
+					})
+					.show(event);
+				});
+			})
+
+			var tooltip = $('<div/>').qtip({
+				content: {
+					text: 'Translating...',
+					ajax: {
+						url: '/demos/data/translate',
+						success: function(data) {
+							// Set the content to the translated text
+							this.set('content.text', data.data.translations[0].translatedText);
+						}
+					}
+				},
+				position: {
+					target: 'mouse',
+					adjust: { mouse: false }
+				},
+				show: false,
+				hide: 'unfocus'
+			}).qtip('api');
 		}
 	}
 }
@@ -731,8 +810,6 @@ $('#section-styling .examples .qtip').each(function() {
 	});
 });
 
-var globalStyle = 'qtip-default';
-
 // Setup styling shadow/rounded checkboxes
 $('#styling-builtin :checkbox').change(function() {
 	var parent = $(this).parent(),
@@ -753,6 +830,9 @@ $('#styling-builtin :checkbox').change(function() {
 		globalStyle = globalStyle.replace(new RegExp(cls, 'g'), '') + (state ? ' '+cls : '');
 	}
 	$('#header .qtip').attr('class', 'qtip qtip-default ' + globalStyle);
+
+	// Store it in the cookie
+	$.cookie('qtip2_global_style', globalStyle, { path: '/' });
 })
 
 // Allow the pages tooltip theme to be changed via it's selector
@@ -771,18 +851,10 @@ $('#section-styling .qtip-container').click(function() {
 	else { globalStyle = style; }
 
 	$('#header .qtip').attr('class', 'qtip qtip-default ' + globalStyle);
-});
-$('body').bind('tooltipshow', function(event, api) {
-	if(!api.elements.target.hasClass('qtip') && !api.options.style.widget) {
-		if(!api.origStyle) {
-			api.origStyle = api.options.style.classes + ' qtip-default ';
-		}
-		var newStyle = api.origStyle + ' ' + globalStyle;
 
-		if(api.options.style.classes !== newStyle) {
-			api.set('style.classes', newStyle);
-		}
-	}
+	// Store it in the cookie
+	$.cookie('qtip2_global_style', globalStyle, { path: '/' });
+
 });
 
 // Setup themeroller themeswitcher

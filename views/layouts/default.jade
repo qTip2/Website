@@ -26,7 +26,7 @@ html
 		a.source(href='http://jsfiddle.net/craga89/'+fiddle, target="_blank") view source
 
 	mixin logo()
-		strong qTip<sup>2</sup>&nbsp;
+		strong qTip<sup>2</sup> 
 
 	mixin nav(path, title, name)
 		- var active = path === '/'+page || path === '/' && page === 'index' ? ' active' : ''
@@ -36,12 +36,11 @@ html
 		#master
 			#header(class="#{page}")
 				ul#nav
-					-if(page == 'demos')
-						li.style
-							a(href="#styling", title='Choose a global tooltip style')
-								span.qtip.qtip-default
-									span.qtip-titlebar
-									span.qtip-content
+					li.style
+						a(href="/demos#styling", title='Choose a global tooltip style')
+							span(class="qtip qtip-default " + globalStyle)
+								span.qtip-titlebar
+								span.qtip-content
 
 					li.logo
 						a(href='/')
@@ -63,6 +62,7 @@ html
 
 		// Javascript
 		script(type='text/javascript', src='http://code.jquery.com/ui/1.10.0/jquery-ui.min.js')
+		script(type='text/javascript', src='#{url('/static/javascripts/jquery.cookie.js')}')
 		script(type='text/javascript', src='http://theflat.dyndns-home.com/projects/qtip/2.x/trunk/dist/jquery.qtip.js')
 		script(type='text/javascript', src='#{url('/static/javascripts/base.js')}')
 		block javascript

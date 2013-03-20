@@ -12,6 +12,12 @@ block content
 		h1 Donate
 			font show your love for the project
 
+		p
+			| The cash is used to keep the hosting company happy with regular payments, and help to keep me on my feet while I continue to
+			| develop the plugin! So if you really enjoy using 
+			mixin logo() 
+			| , please consider donating.
+
 		form(action="https://www.paypal.com/uk/cgi-bin/webscr", data-paypal="https://www.paypal.com/uk/cgi-bin/webscr", data-moneybookers="https://www.moneybookers.com/app/payment.pl")
 			input(type="hidden", name="cmd", value="_donations")
 			input(type="hidden", name="business", value="craig@craigsworks.com")

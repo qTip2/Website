@@ -5,6 +5,19 @@ mixin demoblock(text, fiddle)
 	- if(fiddle)
 		mixin sourcelink(fiddle)
 
+mixin style(name, title, titlebar)
+	styleName = name.toLowerCase()
+	defClass = styleName === 'ui' ? '' : 'qtip-default '
+	classes = defClass+'qtip qtip qtip qtip-'+styleName
+	activeClass = globalStyle.indexOf('qtip-'+styleName) > -1 ? 'active' : ''
+	if styleName === 'ui'
+		classes = classes+' ui-helper-reset ui-widget ui-tooltip'
+
+	div(class='qtip-container ' + activeClass)
+		div(id="#styling-type-"+styleName, class=classes, title=title, data-title=name, data-titlebar=titlebar, data-style='qtip-'+styleName)
+			div.qtip-titlebar(class=(styleName === 'ui' ? 'ui-widget-header ui-tooltip-title' : ''))
+			div.qtip-content(class=(styleName === 'ui' ? 'ui-widget-content ui-tooltip-content' : ''))
+
 append title
 	| - Demos
 
@@ -14,7 +27,7 @@ block stylesheets
 block javascript
 	script(type='text/javascript', src="http://www.youtube.com/player_api")
 	script(type='text/javascript', src="http://a.vimeocdn.com/js/froogaloop2.min.js")
-	script(type='text/javascript', src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCMuMk-DLITXimlZj2SZPW0HZjSBBK2WnQ&sensor=false")
+	script(type='text/javascript', src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDNj8scAic--9Uc0GfU5aN7i32AC_ClP5A&sensor=false")
 	script(type='text/javascript', src="http://www.websnapr.com/js/websnapr.js")
 	script(type='text/javascript', src='#{url('/static/javascripts/libs/jquery.themeswitcher.min.js')}')
 	script(type='text/javascript', src='#{url('/static/javascripts/demos.js')}')
@@ -36,7 +49,8 @@ block content
 				| allows you to use not only regular textual content, but also complex
 				| HTML from other elements on the page. It can even pull content in from other pages via
 				| the optional 
-				a(href='/docs#plugins-ajax') AJAX plugin
+				a(href='plugins#ajax') AJAX plugin 
+				| , and supports in-built titles and close button.
 
 			.examples
 				ul.blocks
@@ -44,9 +58,16 @@ block content
 						mixin demoblock("Simple text", "fdavn")
 					li#contents-html
 						mixin demoblock("Inline HTML", "G2sqU")
+					li#contents-button
+						mixin demoblock("Close buttons")
+					li#contents-title
+						mixin demoblock("Add a title")
+					li#contents-titlebutton
+						mixin demoblock("Combined title and button")
 					li#contents-ajax
 						mixin demoblock("AJAX'd HTML", "L6yq3")
-
+					li#contents-iframe
+						mixin demoblock("Embedded &lt;iframe&gt;")
 
 		a(name="styling")
 		#section-styling.section
@@ -58,34 +79,22 @@ block content
 				| libraries. And with custom themes creatable with just a few lines of CSS, you'll be up and running in no time!
 
 			p Choose a style from below to <b>change the styling of every qTip on the page!</b>
-
-			mixin style(name, title, titlebar, active)
-				styleName = name.toLowerCase()
-				defClass = styleName === 'ui' ? '' : 'qtip-default '
-				classes = defClass+'qtip qtip qtip qtip-'+styleName
-				if styleName === 'ui'
-					classes = classes+' ui-helper-reset ui-widget ui-tooltip'
-
-				div(class='qtip-container ' + (active ? 'active' : ''))
-					div(id="#styling-type-"+styleName, class=classes, title=title, data-title=name, data-titlebar=titlebar, data-style='qtip-'+styleName)
-						div.qtip-titlebar(class=(styleName === 'ui' ? 'ui-widget-header ui-tooltip-title' : ''))
-						div.qtip-content(class=(styleName === 'ui' ? 'ui-widget-content ui-tooltip-content' : ''))
 				
 			.examples
 				a(name="styling-builtin")
 				#styling-builtin.styles(data-type='Basic style')
 					h3 Basic
-					mixin style('Default', 'Default yellow style', 'true', true)
+					mixin style('Default', 'Default yellow style', 'true')
 					mixin style('Light', 'Light style, for the minimalists', 'true')
 					mixin style('Dark', 'An opposing dark style', 'true')
 					mixin style('Red', 'Great for error related messages', 'true')
 					mixin style('Blue', 'Placid blue, for those informative messages', 'true')
 					mixin style('Green', 'A generic but tasteful green style', 'true')
 
-					input(id="styling-rounded", type="checkbox", data-class="qtip-rounded")
+					input(id="styling-rounded", type="checkbox", data-class="qtip-rounded", checked=globalStyle.indexOf('qtip-rounded') > -1)
 					label(for="styling-rounded") Rounded
 
-					input(id="styling-shadow", type="checkbox", data-class="qtip-shadow")
+					input(id="styling-shadow", type="checkbox", data-class="qtip-shadow", checked=globalStyle.indexOf('qtip-shadow') > -1)
 					label(for="styling-shadow") Shadow
 
 					
@@ -118,8 +127,6 @@ block content
 				| themselves when the viewport sizes changes!
 
 			.examples
-				img.corners.right(src='#{cdn("corners.jpg")}', width='390')
-				
 				ul.blocks
 					li#positioning-corner
 						mixin demoblock("Using a corner", "dahrg")
@@ -141,71 +148,33 @@ block content
 			p
 				mixin logo()
 				| also supports corner positioning on <i>&lt;map&gt;</i>, <i>&lt;area&gt;</i> and
-				| most <i>&lt;svg&gt;</i> elements via the
+				| most <i>&lt;svg&gt;</i> elements via the 
 				b optional 
-				a(href="/docs#plugins-imagemap") Image map 
+				a(href="plugins#imagemap") Image map 
 				| and 
-				a(href="/docs#plugins-svg") SVG 
-				| plugins
+				a(href="plugins#svg") SVG 
+				| plugins! Even 
+				i complex polygons 
+				| are supported.
 
 			.examples
 				a(name="positioning")
 				#section-positioning-imgmap
-					img(width='485', height='315', border='0', usemap='#statesmap', src='#{cdn("demos/usa.gif")}')
-					map#statesmap(name='statesmap')
-						area(alt='Alabama', coords='319,197,321,247,329,247,328,240,351,240,340,195', shape='poly')
-						area(alt='Arizona', coords='84,165,71,211,102,232,119,234,124,171', shape='poly')
-						area(alt='Arkansas', coords='261,184,261,214,266,221,290,221,301,183', shape='poly')
-						area(alt='California', coords='9,91,42,98,35,131,71,186,67,209,44,208,20,179,6,117', shape='poly')
-						area(alt='Colorado', coords='134,127,130,170,190,175,191,131', shape='poly')
-						area(alt='Connecticut', coords='432,96,436,110,479,116,478,108,448,105,445,96', shape='poly')
-						area(alt='Delaware', coords='422,125,430,127,467,129,466,138,426,136', shape='poly')
-						area(alt='District of Columbia', coords='412,144,420,147,425,161,462,163,461,152,429,149,419,145', shape='poly')
-						area(alt='Florida', coords='330,242,332,248,364,248,380,262,377,273,402,299,407,297,409,280,387,240,353,243', shape='poly')
-						area(alt='Georgia', coords='342,195,354,241,386,237,388,223,358,193', shape='poly')
-						area(alt='Idaho', coords='85,29,71,100,117,110,118,84,105,83', shape='poly')
-						area(alt='Illinois', coords='292,113,294,119,285,140,305,172,311,171,317,152,312,113', shape='poly')
-						area(alt='Indiana', coords='317,115,319,153,317,163,342,148,336,116', shape='poly')
-						area(alt='Iowa', coords='242,105,248,134,283,134,292,118,280,104', shape='poly')
-						area(alt='Kansas', coords='194,144,194,174,256,176,254,155,249,145', shape='poly')
-						area(alt='Kentucky', coords='307,176,314,173,319,163,345,151,360,151,365,162,358,172', shape='poly')
-						area(alt='Louisiana', coords='264,223,268,258,309,263,303,245,287,245,290,223', shape='poly')
-						area(alt='Maine', coords='442,52,445,46,447,28,460,25,477,49,453,73', shape='poly')
-						area(alt='Maryland', coords='406,131,418,129,423,140,463,140,463,150,425,146', shape='poly')
-						area(alt='Massachusetts', coords='431,87,441,86,452,83,482,75,481,91,448,92,432,94', shape='poly')
-						area(alt='Michigan', coords='291,66,315,77,317,114,351,114,355,101,338,70,328,60,303,58', shape='poly')
-						area(alt='Minnesota', coords='236,41,242,75,242,102,280,101,269,85,269,71,288,50', shape='poly')
-						area(alt='Mississippi', coords='300,199,293,221,290,243,306,243,310,251,319,249,317,199', shape='poly')
-						area(alt='Missouri', coords='249,138,258,154,260,181,300,181,302,173,280,140', shape='poly')
-						area(alt='Montana', coords='94,28,92,42,107,80,120,82,119,75,179,82,180,39', shape='poly')
-						area(alt='Nebraska', coords='179,109,179,128,194,129,195,141,245,142,235,114', shape='poly')
-						area(alt='Nevada', coords='46,99,39,129,74,179,90,108', shape='poly')
-						area(alt='New Hampshire', coords='442,35,422,33,422,45,427,46,436,57,439,84,452,79,441,54', shape='poly')
-						area(alt='New Jersey', coords='423,108,432,112,470,119,467,127,435,125,423,123,427,120', shape='poly')
-						area(alt='New Mexico', coords='128,174,123,226,177,231,179,178', shape='poly')
-						area(alt='New York', coords='380,102,386,96,384,90,406,84,408,67,422,64,430,105,416,98', shape='poly')
-						area(alt='North Carolina', coords='375,173,354,192,381,187,395,188,409,196,431,171,425,163', shape='poly')
-						area(alt='North Dakota', coords='183,40,181,71,238,74,231,41', shape='poly')
-						area(alt='Ohio', coords='339,117,346,147,363,149,375,131,371,109', shape='poly')
-						area(alt='Oklahoma', coords='183,176,183,182,208,183,209,204,257,213,255,178', shape='poly')
-						area(alt='Oregon', coords='25,47,77,62,65,96,11,86,25,47', shape='poly')
-						area(alt='Pennsylvania', coords='374,106,378,131,398,130,419,124,423,119,420,114,421,105,414,99', shape='poly')
-						area(alt='Rhode Island', coords='448,94,450,100,481,104,480,93', shape='poly')
-						area(alt='South Carolina', coords='362,193,382,188,393,190,406,198,388,221', shape='poly')
-						area(alt='South Dakota', coords='182,74,180,106,238,111,237,77', shape='poly')
-						area(alt='Tennesee', coords='306,181,300,198,351,192,371,173', shape='poly')
-						area(alt='Texas', coords='183,184,181,234,146,232,173,264,184,256,232,303,264,260,261,218,209,208,206,185', shape='poly')
-						area(alt='Utah', coords='94,110,115,112,115,124,130,127,126,168,85,162', shape='poly')
-						area(alt='Vermont', coords='408,47,425,47,434,59,436,69,437,85,430,85,425,61,408,61', shape='poly')
-						area(alt='Virginia', coords='369,163,364,170,423,161,419,148,411,145,409,138,400,133,389,158', shape='poly')
-						area(alt='Washington', coords='28,13,25,41,78,57,84,25', shape='poly')
-						area(alt='West Virginia', coords='377,133,362,151,372,163,384,159,399,133', shape='poly')
-						area(alt='Wisconsin', coords='283,64,271,73,271,86,290,111,313,111,312,80', shape='poly')
-						area(alt='Wyoming', coords='124,78,117,120,174,127,178,84', shape='poly')
-
-					p.attribution
-						| imagemap courtesy of 
-						a(href='http://www.americanbanker.com/state/state.html', target='_blank') American Banker
+					img(border='0', usemap='#cornermap', src='#{cdn("corners.jpg")}', width='500', height='178')
+					map#cornermap(name='cornermap')
+						area(shape="rect", coords="96,30,109,42", alt="Top left", title="Top left")
+						area(shape="rect", coords="87,40,100,52", alt="Left top", title="Left top")
+						area(shape="rect", coords="86,81,99,93", alt="Left center", title="Left center")
+						area(shape="rect", coords="88,115,101,127", alt="Left bottom", title="Left bottom")
+						area(shape="rect", coords="98,125,111,137", alt="Bottom left", title="Bottom left")
+						area(shape="rect", coords="237,125,250,137", alt="Bottom center", title="Bottom center")
+						area(shape="rect", coords="373,125,386,137", alt="Bottom right", title="Bottom right")
+						area(shape="rect", coords="386,116,400,128", alt="Bottom right", title="Right bottom")
+						area(shape="rect", coords="385,80,398,92", alt="Right center", title="Right center")
+						area(shape="rect", coords="386,41,399,53", alt="Right top", title="Right top")
+						area(shape="rect", coords="376,32,389,44", alt="Top right", title="Top right")
+						area(shape="rect", coords="236,30,249,42", alt="Top center", title="Top center")
+						area(shape="rect", coords="222,78,264,92", alt="Center", title="Center")
 
 
 		a(name="events")
@@ -268,7 +237,7 @@ block content
 				div.demogroup.left
 					h4 Dialogs 
 						small (Utilising the 
-							a(href="#plugins-modal") Modal plugin
+							a(href="plugins#modal") Modal plugin
 							| )
 						mixin sourcelink("ZJpLH")
 
@@ -281,7 +250,7 @@ block content
 							mixin demoblock("Prompt")
 
 				div.demogroup.left
-					h4 &nbsp;
+					h4 Specialised dialogs
 					ul.blocks
 						li#apicallbacks-jgrowl.clickable
 							mixin demoblock("jGrowl", "YCfx4")
@@ -295,6 +264,13 @@ block content
 							mixin demoblock('<a href="http://vimeo.com/1949449#"><b>Vimeo</b> - Eagle Owl</a>', 'UvABX')
 
 				div.demogroup.left
+					h4 Google translate
+
+					#apicallbacks-translate.translatable
+						| Highlight some of these word(s). A tooltip will appear with the <i>Spanish</i> translation!
+
+				br
+				div.demogroup.left
 					h4 Geolocation
 						mixin sourcelink("hh2y2")
 
@@ -304,9 +280,8 @@ block content
 						li.clickable
 							mixin demoblock('<a data-ip="'+hostip+'">Server IP: ' + hostip + '</a>')
 
-				br
 				div.demogroup.left
-					h4 Google maps: 
+					h4 Google maps
 						mixin sourcelink("CSYcQ")
 
 					ul.blocks#apicallbacks-maps

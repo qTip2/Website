@@ -10,7 +10,19 @@
 		margin: 0 0 5px 0;
 	}
 
-#qtip-ajax{
+.translatable{
+	display: block;
+	height: 73px;
+	width: 359px;
+	padding: 15px;
+	margin: 0 0 20px;
+
+	background: #eee;
+	border-bottom: 3px solid #ccc;
+	text-align: center;
+}
+
+#qtip-ajax, #qtip-iframe{
 	max-width: 385px;
 }
 
@@ -23,7 +35,7 @@
 }
 
 #qtip-ajax img{
-	margin: 10px 10px 10px 0;
+	margin: 7px 10px 10px 0;
 }
 
 #qtip-ajax .info{
@@ -32,6 +44,21 @@
 
 #qtip-ajax p.note{
 	font-weight: 700;
+}
+
+#qtip-iframe .qtip-content{
+	padding: 0;
+}
+
+#qtip-iframe iframe{
+	display: block;
+	width: 365px;
+	height: 205px;
+
+}
+
+#positioning-track{
+	width: 263px !important;
 }
 
 #qtip-themeroller{

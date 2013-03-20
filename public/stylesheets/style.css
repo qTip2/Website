@@ -248,6 +248,11 @@ body.dragging *{
 		margin: 0 0 100px;
 	}
 
+	#content .category h1 ~ p{
+		margin-left: 200px;
+		font-size: 15px;
+	}
+	
 	#content .section{
 		position: relative;
 		margin: 0 0 30px 200px;

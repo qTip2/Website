@@ -15,6 +15,9 @@ $('a[name*="."]').each(function() {
 		name = name.replace('global', '$.fn.qtip');
 	}
 
+	// Remove any HTML in the name and truncate
+	name = name.replace(/<(?:[A-Z][A-Z0-9]*)\b[^>]*>(.*?)<\/(?:[A-Z][A-Z0-9]*)>/gi, '$1');
+
 	// Create new legend sub-item
 	item = $('<a/>', {
 		'href': '#'+parts.join('.'),
@@ -63,8 +66,8 @@ function closest() {
 }
 
 $(document).scroll(function() {
-	// Don't do it when we're animating
-	if( $('body').is(':animated') ) { return; }
+	// Don't do it when we're scrolling via animation
+	if(window.SCROLLING) { return; }
 
 	var h = closest(), a;
 	if(!h) return;

@@ -4,7 +4,7 @@ append title
 	| - Guides
 
 block legend
-	- var items = { 'gettingstarted': 'Getting Started', 'content': 'Content Guide', 'style': 'Style Guide' }
+	- var items = { 'gettingstarted': 'Getting Started', 'content': 'Content', 'style': 'Style', 'events': 'Events', 'integration': 'Integration', 'custom-build': 'Custom builds' }
 
 append content
 	a(name="gettingstarted")
@@ -15,3 +15,12 @@ append content
 
 	a(name="style")
 	!{wikipage('Style-Guide')}
+
+	a(name="events")
+	!{wikipage('Events-Guide')}
+
+	a(name="integration")
+	!{wikipage('Integration')}
+
+	a(name="custom-build")
+	!{wikipage('Custom-build')}

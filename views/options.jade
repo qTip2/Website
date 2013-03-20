@@ -4,10 +4,10 @@ append title
 	| - Options
 
 block legend
-	- var items = { core: 'Core', content: 'Content', position: 'Position', show: 'Show', hide: 'Hide', style: 'Style' }
+	- var items = { 'shorthand-options': 'Shorthand', core: 'Core', content: 'Content', position: 'Position', show: 'Show', hide: 'Hide', style: 'Style' }
 
 append content
-	- var options = ['Core', 'Content', 'Position', 'Show', 'Hide', 'Style']
+	- var options = ['Shorthand-options', 'Core', 'Content', 'Position', 'Show', 'Hide', 'Style']
 	each option in options
 		a(name=option.toLowerCase())
 		!{wikipage(option)}
