@@ -4,11 +4,15 @@ var legend = $('#legend');
 $('a[name*="."]').each(function() {
 	var elem = $(this),
 		type = elem.data('type'),
-		name = elem.next('h1,h2,h3').html(),
+		name = elem.next('h1,h2,h3'),
 		parts = elem.attr('name').split('.'),
 		link = $('a[href="#'+parts[0]+'"]', legend),
 		menu = link.next('ul'),
 		item;
+
+	// Grab name
+	name = name.text().replace(name.children().text().replace(/qTip2/g, ''), '')
+		.replace('qTip2', ' qTip<sup>2</sup> ');
 
 	// Global translate to $.fn.qtip
 	if(parts[0] === 'global') {
@@ -16,7 +20,7 @@ $('a[name*="."]').each(function() {
 	}
 
 	// Remove any HTML in the name and truncate
-	name = name.replace(/<(?:[A-Z][A-Z0-9]*)\b[^>]*>(.*?)<\/(?:[A-Z][A-Z0-9]*)>/gi, '$1');
+	//name = name.replace(/<(?:[A-Z][A-Z0-9]*)\b[^>]*>(.*?)<\/(?:[A-Z][A-Z0-9]*)>/gi, '$1');
 
 	// Create new legend sub-item
 	item = $('<a/>', {

@@ -1,7 +1,7 @@
 extends layouts/default
 
-mixin featureblock(text, classes)
-	span(class=classes) !{text}
+mixin featureblock(href, text, classes)
+	a(href=href, class=classes) !{text}
 
 block content
 	a(name="intro")
@@ -41,19 +41,19 @@ block content
 
 			ul.blocks.subnav
 				li#features-tips
-					mixin featureblock("Speech bubble tips")
+					mixin featureblock("/plugins#tips", "Speech bubble tips")
 				li#features-ajax
-					mixin featureblock("Integrated AJAX")
+					mixin featureblock("/plugins#ajax", "Integrated AJAX")
 				li#features-viewport
-					mixin featureblock("Viewport repositioning")
+					mixin featureblock("plugins#viewport", "Viewport repositioning")
 				li#features-stacking
-					mixin featureblock("z-index stacking")
+					mixin featureblock("/demos#positioning-zindex", "z-index stacking")
 				li#features-modal
-					mixin featureblock("Modal tooltips")
+					mixin featureblock("/plugins#modal", "Modal tooltips")
 				li#features-imgsvg
-					mixin featureblock("Imagemap &amp; SVG support")
+					mixin featureblock("/plugins#imagemap", "Imagemap &amp; SVG support")
 				li#features-ie6
-					mixin featureblock("IE6 support (BGIframe)")
+					mixin featureblock("/plugins#ie6", "IE6 support (BGIframe)")
 			| &hellip;and lots more!
 
 		a(name="showcase")

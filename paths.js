@@ -15,5 +15,6 @@ module.exports = {
 		stable: path.resolve('./build/stable')
 	},
 	wiki: path.resolve('./build/wiki'),
+	cdnjs: path.resolve('./build/cdnjs'),
 	donators: path.resolve('./public') + '/donators.txt'
 }

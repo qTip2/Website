@@ -3,6 +3,9 @@ extends layouts/default
 append title
 	| - Donate
 
+block stylesheets
+	link(rel="stylesheet", type='text/css', href="#{url('/static/stylesheets/donate.css')}")
+
 block javascript
 	script(type='text/javascript', src='#{url('/static/javascripts/donate.js')}')
 

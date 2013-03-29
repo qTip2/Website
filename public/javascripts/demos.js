@@ -59,7 +59,10 @@ var demos = {
 					button: true
 				}
 			},
-			hide: 'click'
+			hide: { 
+				event: 'click',
+				inactive: 1500
+			}
 		},
 
 	},
@@ -897,8 +900,8 @@ $('#themeswitcher').themeswitcher({
 	show: { ready: true },
 	hide: false,
 	position: {
-		at: 'left center',
-		my: 'right top',
+		at: 'right center',
+		my: 'left top',
 		container: $('#styling-ui')
 	},
 	style: {
@@ -929,4 +932,137 @@ $('.draggable').draggable({
 	stop: function(event, ui) {
 		ui.helper.qtip('hide').qtip('option', 'hide.event', 'mouseleave')
 	}
+});
+
+// Setup FullCalendar
+(function() {
+	var date = new Date();
+	var d = date.getDate();
+	var m = date.getMonth();
+	var y = date.getFullYear();
+
+	var tooltip = $('<div/>').qtip({
+		id: 'fullcalendar',
+		prerender: true,
+		content: {
+			text: ' ',
+			title: {
+				button: true
+			}
+		},
+		position: {
+			my: 'bottom center',
+			at: 'top center',
+			target: 'mouse',
+			viewport: $(window),
+			adjust: {
+				mouse: false,
+				scroll: false
+			}
+		},
+		show: false,
+		hide: false,
+		style: 'qtip-light'
+	}).qtip('api');
+
+	$('#fullcalendar').fullCalendar({
+		editable: true,
+		height: 300,
+		header: {
+			left: 'title',
+			center: '',
+			right: 'today prev,next'
+		},
+		eventClick: function(data, event, view) {
+			var content = '<h3>'+data.title+'</h3>' + 
+				'<p><b>Start:</b> '+data.start+'<br />' + 
+				(data.end && '<p><b>End:</b> '+data.end+'</p>' || '');
+
+			tooltip.set({
+				'content.text': content
+			})
+			.reposition(event).show(event);
+		},
+		dayClick: tooltip.hide,
+		eventResizeStart: tooltip.hide,
+		eventDragStart: tooltip.hide,
+		viewDisplay: tooltip.hide,
+		events: [
+			{
+				title: 'All Day Event',
+				start: new Date(y, m, 1)
+			},
+			{
+				title: 'Long Event',
+				start: new Date(y, m, d-5),
+				end: new Date(y, m, d-2)
+			},
+			{
+				id: 999,
+				title: 'Repeating Event',
+				start: new Date(y, m, d+4, 16, 0),
+				allDay: false
+			},
+			{
+				title: 'Meeting',
+				start: new Date(y, m, d, 10, 30),
+				allDay: false
+			},
+			{
+				title: 'Birthday Party',
+				start: new Date(y, m, d+1, 19, 0),
+				end: new Date(y, m, d+1, 22, 30),
+				allDay: false
+			}
+		]
+	});
+}());
+
+// Setup jQuery UI elements
+(function(){
+	var slider = $('#jqueryui-slider').slider({
+		slide: function(event, ui) {
+			handle.qtip('option', 'content.text', '' + ui.value);
+		}
+	}),
+	handle = $('.ui-slider-handle', slider);
+
+	handle.qtip({
+		id: 'uislider',
+		content: '' + slider.slider('option', 'value'),
+		position: {
+			my: 'bottom center',
+			at: 'top center',
+			container: handle 
+		},
+		hide: {
+			delay: 1000
+		},
+		style: {
+			widget: true
+		}
+	});
+}());
+
+
+// Setup data Tables
+$('#datatables').dataTable().on('mouseenter', 'tr[data-browser]', function(event) {
+	var browser = $(this).data('browser');
+
+	$(this).qtip({
+		overwrite: false,
+		content: '<img src="http://media1.juggledesign.com/qtip2/images/browsers/64-'+browser+'.png" alt="'+browser+'"/>',
+		position: {
+			my: 'center',
+			at: 'center',
+			target: $('td:eq(1)', this)
+		},
+		show: {
+			event: event.type,
+			ready: true
+		},
+		hide: {
+			fixed: true
+		}
+	});
 });

@@ -61,12 +61,6 @@
 	width: 263px !important;
 }
 
-#qtip-themeroller{
-	position: relative !important;
-	width: auto !important;
-	height: auto !important;
-}
-
 .qtip.googlemap{ max-width: none; }
 
 .qtip.geolocation .loading{
@@ -98,3 +92,205 @@
     padding: 5px 5px 5px 40px;
     background: url(http://media2.juggledesign.com/qtip2/images/demos/imdb_logo.png) no-repeat 5px 50%;
 }​
+
+area{ cursor: pointer; }
+
+
+}
+
+.demogroup{
+	margin: 0 12px 20px 0;
+}
+
+h4 a.source{
+	display: inline-block;
+	float: right;
+	margin-right: 10px;
+	opacity: 0.15;
+}
+
+.demogroup:hover h4 a.source{
+	opacity: 1;
+}
+
+li a.source{
+	position: absolute;
+	bottom: -19px; left: 0;
+	width: 100%;
+	z-index: 10;
+
+	font-size: 85%;
+	line-height: 19px;
+
+	color: #2B4001 !important;
+	background-color: #CCC;
+}
+
+li:hover a.source{
+	bottom: 0;
+	background-color: #62B000;
+}
+
+/* Positioning */
+#section-positioning li select{
+	position: absolute;
+	bottom: 15px; left: 50%;
+	width: 100px;
+	margin: 0 0 0 -50px;
+	z-index: 1;
+}
+
+#positioning-viewport span{
+	margin-top: -25px;
+}
+
+/* Styling */
+#section-styling .styles{
+	margin-bottom: 10px;
+}
+
+#section-styling .styles h3{
+	display: inline-block;
+	width: 50px;
+	margin: 0 20px 0 0;
+}
+
+#section-styling .qtip-container{
+	display: inline-block;
+	margin: 0 10px 0 0;
+	padding: 5px;
+
+	vertical-align: middle;
+	cursor: pointer;
+	border: 1px solid transparent;
+	border-radius: 5px;
+}
+
+#section-styling .qtip-container.active{
+	border-color: #ddd;
+}
+
+#section-styling .qtip{
+	position: relative;
+	top: 0 !important;
+	left: 0 !important;
+	display: block;
+	width: 35px; height: 35px;
+	min-width: 0; min-height: 0;
+}
+
+#section-styling .qtip-titlebar{
+	padding-right: 0;
+}
+
+#section-styling-ui{
+	margin-top: -10px;
+}
+
+	#section-styling-ui .qtip{
+		width: 275px;
+		height: auto;
+		float: left;
+		margin: 8px 8px 0 0;
+	}
+
+#section-styling .examples + p{
+	margin-top: 30px;
+}
+
+#themeswitcher{
+	float: left;
+	display: inline-block;
+	margin-right: 8px;
+}
+
+#qtip-themeroller{
+	float: left;
+	position: relative !important;
+	width: 280px !important;
+	height: auto !important;
+	margin-top: 8px;
+}
+
+#themeswitcher .jquery-ui-switcher-link{
+	line-height: 17px !important;
+}
+
+#themeswitcher .blocks li,
+#themeswitcher .blocks li:hover{
+	width: auto;
+	margin: 0;
+	border: 0;
+	background: transparent;
+	line-height: 1;
+	display: block;
+}
+
+/* API and Callbacks */
+#section-apicallbacks .blocks li{
+	/*width: 110px;*/
+}
+
+/* Show/Hide */
+#section-showhide li input[type="text"]{
+	display: inline-block;
+	vertical-align: middle;
+}
+
+/* Plugins section */
+#category-plugins{}
+
+	#category-plugins .plugin{
+		padding-left: 15px;
+	}
+
+	#category-plugins h3{
+		margin-left: -15px;
+	}
+
+	#category-plugins .plugin ~ .plugin{
+		margin: 35px 0 0;
+	}
+
+	#category-plugins .element{
+		width: 45%;
+		margin: 0 25px 10px 0;
+	}
+
+	#category-plugins .ui-slider{
+		margin: 0 10px;
+	}
+
+	#category-plugins h3{
+		margin: 0 0 10px;
+	}
+
+/* FullCalendar */
+#fullcalendar .fc-header-title h2{
+	position: static;
+	display: inline-block;
+
+	vertical-align: bottom;
+	text-align: left;
+	font-size: 19px;
+	line-height: 19px;
+	color: #444;
+}
+
+#qtip-fullcalendar{
+	max-width: 300px;
+	width: 300px;
+}
+
+#qtip-fullcalendar h3{
+	margin: 0 0 10px;
+}
+
+#qtip-fullcalendar p{
+	margin: 5px 0;
+}
+
+/* jQuery UI elements */
+#qtip-uislider .qtip-content{
+	text-align: center;
+}

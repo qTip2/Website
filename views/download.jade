@@ -3,6 +3,9 @@ extends layouts/default
 append title
 	| - Download
 
+block stylesheets
+	link(rel="stylesheet", type='text/css', href="#{url('/static/stylesheets/download.css')}")
+
 block javascript
 	script(type='text/javascript', src='#{url('/static/javascripts/download.js')}')
 

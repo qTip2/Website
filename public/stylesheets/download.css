@@ -1,0 +1,23 @@
+#section-cdn .cdnlinks{
+	margin: 5px 0 10px;
+}
+
+#section-cdn h4{
+	margin: 5px 0 3px;
+}
+
+#section-cdn .cdnlinks{
+	margin: 0 0 20px 5px;
+}
+
+#section-cdn .cdnlinks a{
+	line-height: 1.6;
+}
+
+#section-builder .blocks li{
+	width: 245px;
+}
+
+#section-git .badge{
+	display: inline-block;
+}

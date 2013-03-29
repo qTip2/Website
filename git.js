@@ -88,7 +88,8 @@ function wiki() {
 	return exec('git pull', paths.wiki, 'Updating wiki files...')()
 
 	// Update wiki files in Registry
-	.fin(function() {
+	.then(function() {
+		var pages = [];
 		glob.glob( fileGlob ).forEach(function(file) {
 			var name = path.basename(file, '.md');
 
@@ -96,14 +97,37 @@ function wiki() {
 			Registry.markdown[ name ] = processMarkdown(name,
 				fs.readFileSync(file).toString()
 			);
+			pages.push(name);
 		});
+		console.log('Wiki pages updated: ' + pages.join(', ').green);
+	}, 
+	function(reason) {
+		console.log('Unable to update CDNJS... ' + reason.red);
 	})
+}
 
-	// Determine if the update failed or not
-	.then(
-		function() { console.log('Wiki updated successfully.'); },
-		function(reason) { console.log('Unable to update wiki... ' + reason); }
-	);
+function cdnjs() {
+	var fileGlob = path.join(paths.cdnjs, 'ajax/libs/qtip2/*');
+
+	// Update the wiki repo first
+	return exec('git pull', paths.cdnjs, 'Updating CDNJS files...')()
+
+	// Update wiki files in Registry
+	.then(function() {
+		var versions = [];
+		glob.glob( fileGlob ).forEach(function(file) {
+			var name = path.basename(file);
+			if(!path.extname(name)) {
+				name = name.replace(path.sep, '');
+				Registry.cdnjs[name] = true;
+				versions.push(name);
+			}
+		});
+		console.log('CDNJS versions: ' + versions.join(', ').green);
+	}, 
+	function(reason) {
+		console.log('Unable to update CDNJS... ' + reason.red);
+	})
 }
 
 /*
@@ -230,5 +254,6 @@ module.exports = {
 	ips: githubIPs,
 	hookAuth: hookAuth,
 	repos: repos,
-	wiki: wiki
+	wiki: wiki,
+	cdnjs: cdnjs
 } 

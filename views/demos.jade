@@ -23,13 +23,18 @@ append title
 
 block stylesheets
 	link(rel="stylesheet", type='text/css', href="#{url('/static/stylesheets/demos.css')}")
+	link(rel="stylesheet", type='text/css', href="#{url('/static/stylesheets/libs/jquery.fullcalendar.css')}")
+	link(rel="stylesheet", type='text/css', href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/css/jquery.dataTables.css")
 
 block javascript
-	script(type='text/javascript', src="http://www.youtube.com/player_api")
-	script(type='text/javascript', src="http://a.vimeocdn.com/js/froogaloop2.min.js")
-	script(type='text/javascript', src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDNj8scAic--9Uc0GfU5aN7i32AC_ClP5A&sensor=false")
-	script(type='text/javascript', src="http://www.websnapr.com/js/websnapr.js")
+	script(type='text/javascript', src="//www.youtube.com/player_api")
+	script(type='text/javascript', src="//a.vimeocdn.com/js/froogaloop2.min.js")
+	script(type='text/javascript', src="//maps.googleapis.com/maps/api/js?key=AIzaSyDNj8scAic--9Uc0GfU5aN7i32AC_ClP5A&sensor=false")
+	script(type='text/javascript', src='//cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/jquery.dataTables.min.js')
+	script(type='text/javascript', src="//cdnjs.cloudflare.com/ajax/libs/flot/0.7/jquery.flot.min.js")
+	script(type='text/javascript', src="//www.websnapr.com/js/websnapr.js")
 	script(type='text/javascript', src='#{url('/static/javascripts/libs/jquery.themeswitcher.min.js')}')
+	script(type='text/javascript', src='#{url('/static/javascripts/libs/jquery.fullcalendar.min.js')}')
 	script(type='text/javascript', src='#{url('/static/javascripts/demos.js')}')
 
 block content
@@ -233,7 +238,7 @@ block content
 				| your tooltips. We can use these features and callbacks to integrate with other 3rd party plugins
 				| and products too.
 
-			.examples
+			.examples.group
 				div.demogroup.left
 					h4 Dialogs 
 						small (Utilising the 
@@ -319,3 +324,65 @@ block content
 							mixin demoblock('<a href="http://facebook.com">Facebook</a>')
 						li
 							mixin demoblock('<a href="http://youtube.com">YouTube</a>')
+
+		a(name="delegation")
+		#section-delegation.section.group
+			h2 Event delegation
+			p
+				| Large data sets? Complex pages with dynamicly added element?
+				mixin logo()
+				| has you covered! Utilising jQuery's 
+				a(href="http://api.jquery.com/on/") event delegation
+				|   capabilities, it can lighten the initial page load, with the added
+				| bonus of 
+				b applying tooltips to dynamically created elements
+				| , making integration with dynamic AJAX pages a breeze.
+
+			
+
+
+	a(name="plugins")
+	#category-plugins.category.group
+		h1 Plugin integration
+			font
+				mixin logo()
+				| can also be integrated with various other jQuery plugins!
+
+		a(name="fullcalendar")
+		#section-fullcalendar.section.group
+			h2
+				a(href="http://arshaw.com/fullcalendar/") FullCalendar
+				font full-sized, drag &amp; drop calendar
+
+			#fullcalendar
+
+		a(name="jqueryui")
+		#section-jqueryui.section.group
+			h2
+				a(href="http://jqueryui.com/") jQuery UI
+				font user interface elements
+
+			.element.left
+				h3 Slider value
+					font Show the slider value above the handle
+
+				#jqueryui-slider
+
+		a(name="datatables")
+		#section-datatables.section.group
+			h2
+				a(href="http://www.datatables.net") DataTables
+				font Dynamic HTML table interaction
+
+			include demos/datatables
+
+		a(name="yours")
+		#section-jqueryui.section.group
+			h2
+				| &lt;your plugin here&gt;
+				font get your plugin featured
+			
+			p
+				| If you're developing a plugin and think it'd be a perfect fit for 
+				mixin logo()
+				| , get in touch and get it featured here!

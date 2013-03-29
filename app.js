@@ -12,8 +12,7 @@ var Registry = require('./registry')
 	, fs = require('fs')
 	, moment = require('moment')
 	, highlight = require('highlight').Highlight
-	, marked = require('marked')
-	, cdnVersions = ['2.0.0'];
+	, marked = require('marked');
 
 // Setup the server
 var app = express();
@@ -40,7 +39,7 @@ app.configure(function(){
 	// CDNJs Redirects
 	app.use(function(req, res, next) {
 		var matches = /^\/v\/([0-9\.]+)\/(.+\.(?:css|js))$/.exec(req.url),
-			isCDNd = matches && cdnVersions.indexOf(matches[1]) > -1;
+			isCDNd = matches && Registry.cdnjs[ matches[1] ];
 
 		// Continue if not CDN'd
 		if(!isCDNd) { return next(); }
@@ -64,10 +63,10 @@ app.configure(function(){
 		stream: fs.createWriteStream( path.join(paths.logs, 'http.log'), { flags: 'a' })
 	}));
 
-	// Setup IP checks
+	// Redirect people to the main site for now
 	app.use(function(req, res, next) {
 		if(!git.ips.test(req.ip)) {
-			res.send('Under construction'); return;
+			return res.redirect(302, 'http://craigsworks.com/projects/qtip2');
 		}
 		next();
 	});
@@ -79,9 +78,6 @@ app.configure(function(){
 		res.header('Access-Control-Allow-Headers', 'Content-Type');
 		next();
     });
-
-    // Attach Git hook-specific middleware
-    app.use('/git', git.hookAuth);
 
 	// Setup blog vhost
 	//app.use(express.vhost(
@@ -195,6 +191,7 @@ app.post('/download/build', routes.build);
 // "Private" hooks
 app.post('/git/update/wiki', git.hookAuth, git.wiki);
 app.post('/git/update/repos', git.hookAuth, git.repos);
+app.post('/git/update/cdnjs', git.hookAuth, git.cdnjs);
 
 // Setup the server
 app.listen(app.get('port'), function() {
@@ -203,4 +200,5 @@ app.listen(app.get('port'), function() {
 
 // Update our repos and upon completion, start the server
 git.wiki();
+git.cdnjs();
 git.repos();

@@ -40,6 +40,14 @@ h1,h2,h3,h4,h5{
 	font-weight: normal;
 }
 
+h1 font, h2 font, h3 font{
+	display: inline-block;
+	margin-left: 10px;
+
+	font-size: 65%;
+	color: #888;
+}
+
 h1{
 	margin: 50px 0 15px 200px;
 
@@ -47,13 +55,6 @@ h1{
 	font-family: 'Average Sans';
 }
 
-	h1 font{
-		display: inline-block;
-		margin-left: 10px;
-
-		font-size: 65%;
-		color: #888;
-	}
 
 h2{
 	font-family: 'Average Sans';
@@ -70,6 +71,10 @@ h2{
 h3{
 	font-size: 16px;
 }
+	
+	h3 font{
+		font-size: 75%;
+	}
 
 h4{
 	margin: 5px 0 10px;
@@ -368,216 +373,53 @@ body.dragging *{
 	}
 
 
-#category-demos{}
+#footer{
+	width: 1000px;
+	margin: 0 auto;
+}
 
-	#category-demos .demogroup{
-		margin: 0 12px 20px 0;
+	#footer h4{
+		margin: 0 0 6px;
 	}
 
-	#category-demos h4 a.source{
-		display: inline-block;
-		float: right;
-		margin-right: 10px;
-		opacity: 0.15;
+
+	#footer h4 ~ h4{
+		margin-top: 20px;
 	}
 
-	#category-demos .demogroup:hover h4 a.source{
-		opacity: 1;
-	}
-
-	#category-demos li a.source{
-		position: absolute;
-		bottom: -19px; left: 0;
-		width: 100%;
-		z-index: 10;
-
-		font-size: 85%;
-		line-height: 19px;
-
-		color: #2B4001 !important;
-		background-color: #CCC;
-	}
-
-	#category-demos li:hover a.source{
-		bottom: 0;
-		background-color: #62B000;
-	}
-
-	/* Positioning */
-	#section-positioning li select{
-		position: absolute;
-		bottom: 15px; left: 50%;
-		width: 100px;
-		margin: 0 0 0 -50px;
-		z-index: 1;
-	}
-
-	#positioning-viewport span{
-		margin-top: -25px;
-	}
-
-	/* Styling */
-	#section-styling .styles{
-		margin-bottom: 10px;
-	}
-
-	#section-styling .styles h3{
-		display: inline-block;
-		width: 50px;
-		margin: 0 20px 0 0;
-	}
-
-	#section-styling .qtip-container{
-		display: inline-block;
-		margin: 0 10px 0 0;
-		padding: 5px;
-
-		vertical-align: middle;
-		cursor: pointer;
-		border: 1px solid transparent;
-		border-radius: 5px;
-	}
-	
-	#section-styling .qtip-container.active{
-		border-color: #ddd;
-	}
-
-	#section-styling .qtip{
-		position: relative;
-		top: 0 !important;
-		left: 0 !important;
-		display: block;
-		width: 35px; height: 35px;
-		min-width: 0; min-height: 0;
-	}
-
-	#section-styling .qtip-titlebar{
-		padding-right: 0;
-	}
-
-	#section-styling-ui{
-		margin-top: -10px;
-	}
-
-		#section-styling-ui .qtip{
-			width: 275px;
-			height: auto;
-			float: left;
-			margin: 8px 8px 0 0;
-		}
-
-	#section-styling .examples + p{
-		margin-top: 30px;
-	}
-
-	#themeswitcher{
-		float: right;
-		display: inline-block;
-	}
-
-	#themeswitcher .jquery-ui-switcher-link{
-		line-height: 17px !important;
-	}
-
-	#themeswitcher .blocks li,
-	#themeswitcher .blocks li:hover{
-		width: auto;
+	#footer ul{
+		list-style: none;
+		padding: 0;
 		margin: 0;
-		border: 0;
-		background: transparent;
-		line-height: 1;
-		display: block;
 	}
 
-	/* API and Callbacks */
-	#section-apicallbacks .blocks li{
-		/*width: 110px;*/
+	#footer .part{
+		padding: 20px 0 20px;
+
+		border-top: 2px solid #eee;
 	}
 
-	/* Show/Hide */
-	#section-showhide li input[type="text"]{
+	#footer .copyright{
+		text-align: center;
+	}
+
+
+	#footer .links{
+		white-space: nowrap;
+		font-size: 0px;
+		text-align: center;
+	}
+
+	#footer .column{
 		display: inline-block;
-		vertical-align: middle;
+		width: 20%;
+		font-size: 12px;
+
+		vertical-align: top;
+		text-align: left;
 	}
 
 
-
-#category-download{}
-
-	#section-cdn .cdnlinks{
-		margin: 5px 0 10px;
+	#footer .links .left{
+		margin-right: 30px;
 	}
-
-	#section-cdn h4{
-		margin: 5px 0 3px;
-	}
-
-	#section-cdn .cdnlinks{
-		margin: 0 0 20px 5px;
-	}
-
-	#section-cdn .cdnlinks a{
-		line-height: 1.6;
-	}
-
-	#section-builder .blocks li{
-		width: 245px;
-	}
-
-	#section-git .badge{
-		display: inline-block;
-	}
-
-#category-docs{}
-
-	#category-docs li a{
-		display: block;
-	}
-
-#category-donate{}
-
-	#section-name input{
-		padding: 5px 10px;
-		font-size: 150%;
-		line-height: 1.1;
-	}
-
-	#section-amount input[type="number"]{
-		width: 60px;
-		display: inline-block;
-	}
-
-	#section-service p{
-		margin: 15px 0 0;
-	}
-
-	#section-service p + p{
-		margin: 5px 0 0;
-	}
-
-	#section-service a[data-external],
-	#section-service button{
-		vertical-align: middle;
-		margin: 0 15px 0 0;
-	}
-
-	#section-service a[data-external]{
-		display: inline-block;
-	}
-
-	#section-service a img{
-		display: block;
-	}
-
-	#section-donators{
-		padding-right: 30px;
-		text-align: justify;
-	}
-
-		#section-donators span{
-			margin: 0 10px 5px 0;
-		}
-
-		#section-donators span:hover{
-			color: #62B000 !important;
-		}
