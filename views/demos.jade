@@ -55,10 +55,8 @@ block content
 			p
 				mixin logo()
 				| allows you to use not only regular textual content, but also complex
-				| HTML from other elements on the page. It can even pull content in from other pages via
-				| the optional 
-				a(href='plugins#ajax') AJAX plugin 
-				| , and supports in-built titles and close button.
+				| HTML from other elements on the site. It can even pull content in from other pages via
+				| jQuery's <code>.ajax()</code> functionality, and supports in-built titles and close button.
 
 			.examples
 				ul.blocks
@@ -203,20 +201,20 @@ block content
 			p
 				mixin logo()
 				| also supports corner positioning on <i>&lt;map&gt;</i>, <i>&lt;area&gt;</i> and
-				| most <i>&lt;svg&gt;</i> elements via the 
+				| all standard <i>&lt;svg&gt;</i> shapes (&plus;transforms!) via the 
 				b optional 
 				a(href="plugins#imagemap") Image map 
 				| and 
 				a(href="plugins#svg") SVG 
 				| plugins! Even 
-				i complex <i>&lt;area&gt;</i> polygons 
-				| are supported, with SVG support coming soon!
+				i complex polygons and circles 
+				| are supported!
 
 			a(name="imagemapsvg")
 			.svgmap.examples
 				#positioning-imgmap.col
 					h3 Image map
-						font Complex positioning even on polygon types
+						font <i>rect, poly</i> and <i>circle</i> supported
 
 					img(border='0', usemap='#owlmap', src='#{url("static/images/owl.png")}', width='395', height='190')
 					map#owlmap(name='owlmap')
@@ -229,13 +227,18 @@ block content
 
 				#positioning-svg.col
 					h3 SVG
-						font Simplistic bounding box positioning
+						font
+							i all 
+							a(href="http://www.w3.org/TR/SVG/shapes.html") SVG 1.1 shapes
+							|  supported
 
 					svg(xmlns="http://www.w3.org/2000/svg", version="1.1")
 						circle(cx="32", cy="32", r="30", style="stroke:#62B000; stroke-width: 3; fill: #82C201", title="SVG Circle")
-						line(x1="0", y1="100", xy="100", y2="80", style="stroke:#62B000; stroke-width: 3; fill: #82C201", title="SVG Circle")
 						rect(x="82", y="0", width="60", height="60", style="stroke:#F9E88C; stroke-width: 3; fill: #FAF7AA", title="SVG Square")
-						polygon(points="40,140 100,140 70,80", style="stroke:#DDDDDD; stroke-width: 3; fill: #EEEEEE", title="SVG Polygon")
+						polygon(points="160,60 210,60 185,0", style="stroke:#DDDDDD; stroke-width: 3; fill: #EEEEEE", title="SVG Polygon")
+						line(x1="0", y1="100", x1="210", y2="80", style="stroke:#62B000; stroke-width: 6; fill: #82C201", title="SVG Line")
+						ellipse(cx="32", cy="132", rx="20", ry="32", style="stroke:#F9E88C; stroke-width: 3; fill: #FAF7AA", title="SVG Ellipse")
+						polyline(transform="translate(70 122) scale(0.125)", style="stroke:#CCC; stroke-width: 20; fill: #EEE", title="SVG Polyline", points="50,375 150,375 150,325 250,325 250,375 350,375 350,250 450,250 450,375 550,375 550,175 650,175 650,375 750,375 750,100 850,100 850,375 950,375 950,25 1050,25 1050,375 1150,375")
 
 			.examples
 				a(name="zindex")
@@ -438,8 +441,10 @@ block content
 				font user interface elements
 
 			.element.left
-				h3 Slider value
+				h3
+					mixin sourcelink('w6pnE', 'Slider value')
 					font Show the slider value above the handle
+					
 
 				#jqueryui-slider
 
@@ -448,6 +453,7 @@ block content
 			h2
 				a(href="http://arshaw.com/fullcalendar/") FullCalendar
 				font full-sized, drag &amp; drop calendar
+				mixin sourcelink('N78hs')
 
 			#fullcalendar
 
@@ -456,6 +462,7 @@ block content
 			h2
 				a(href="http://www.datatables.net") DataTables
 				font Dynamic HTML table interaction
+				mixin sourcelink('T9GHJ')
 
 			include demos/datatables
 
@@ -464,11 +471,12 @@ block content
 			h2
 				a(href="http://www.flotcharts.org/") flot
 				font Attractive JavaScript plotting
+				mixin sourcelink('8mRvG')
 
 			#flot
 
 		a(name="yours")
-		#section-jqueryui.section.group
+		#section-yours.section.group
 			h2
 				| &lt;your plugin here&gt;
 				font get your plugin featured

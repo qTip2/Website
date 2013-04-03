@@ -39,7 +39,7 @@ $('a[name*="."]').each(function() {
 		item;
 
 	// Grab name
-	name = name.text().replace(name.children().text().replace(/qTip2/g, ''), '')
+	name = name.text().replace(name.children().not('i, b, u, em').text().replace(/qTip2/g, ''), '')
 		.replace('qTip2', ' qTip<sup>2</sup> ');
 
 	// Global translate to $.fn.qtip
@@ -74,6 +74,7 @@ var win = $(window),
 	winHeight = win.height(),
 	headings;
 
+
 headings = $('a', legend).map(function(i) {
 	var anchor = $('a[name="'+this.hash.substr(1)+'"]'),
 		parent = anchor.parents('.category, .section');
@@ -96,6 +97,8 @@ function closest() {
 		} 
 	}
 }
+
+win.resize(function() { winHeight = win.height(); });
 
 $(document).scroll(function() {
 	// Don't do it when we're scrolling via animation
@@ -136,7 +139,7 @@ $('pre:has(code)').bind('mouseenter mouseleave', function(event) {
 
 	if(win > inner) {
 		elem.css('width',
-			event.type === 'mouseenter' && outer < inner && win > inner ? inner + 14 : ''
+			event.type === 'mouseenter' && outer < inner && win > inner ? inner + 32 : ''
 		);
 	}
 	else {

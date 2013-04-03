@@ -196,14 +196,14 @@ li:hover a.source{
 }
 
 #section-positioning .svgmap .col ~ .col{
-	margin-left: 45px;
+	margin-left: 65px;
 }
 
 #section-positioning .svgmap svg{
 	display: block;
-	width: 145px;
-	height: 140px;
-	margin: 30px auto 0;
+	width: 220px;
+	height: 180px;
+	margin: 22px auto 0;
 }
 
 /* Styling */

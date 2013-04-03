@@ -74,9 +74,13 @@ function processMarkdown(name, text) {
 		var anchor = (type + (attr ? '.'+attr : '')).toLowerCase();
 		return '<a href="/options#'+anchor+'">';
 	})
+	.replace(/<a href="\.\.?\/(Content-Guide)(?:#([^"]+))?">/gi, function(match, type, attr) {
+		var anchor = (type.replace('-Guide', '') + (attr ? '.'+attr : '')).toLowerCase();
+		return '<a href="/guides#'+anchor+'">';
+	})
 
 	// Replace qTip2 with proper HTML formatting to keep it inline with the rest of the page
-	.replace(/([^\/])qTip\s*(<sup>)?2\s*(<\/sup>)?(?!\.com)/gi, '$1<strong>qTip<sup>2</sup>&nbsp;</strong>')
+	.replace(/([^\/])qTip(<sup>)?2\s*(<\/sup>)?(?!\.com)/gi, '$1<strong>qTip<sup>2</sup>&nbsp;</strong>')
 
 	+ '</div></div>';
 }

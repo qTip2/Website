@@ -22,8 +22,8 @@ html
 		// Google Analytics
 		include ../includes/analytics
 
-	mixin sourcelink(fiddle)
-		a.source(href='http://jsfiddle.net/craga89/'+fiddle, target="_blank") view source
+	mixin sourcelink(fiddle, text)
+		a.source(href='http://jsfiddle.net/craga89/'+fiddle, target="_blank") #{text || "view source"}
 
 	mixin logo()
 		strong qTip<sup>2</sup> 

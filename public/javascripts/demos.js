@@ -10,10 +10,19 @@ var demos = {
 
 		'ajax': {
 			content: {
-				text: 'Loading...',
-				ajax: {
-					url: '/demos/data/snowyowl',
-					loading: false
+				text: function(event, api) {
+					$.ajax({
+						url: '/demos/data/snowyowl',
+					})
+					.then(function(content){
+						api.set('content.text', content);
+					},
+					function(xhr, status, error) {
+						// Upon failure... set the tooltip content to the status and error value
+						api.set('content.text', status + ': ' + error);
+					});
+
+					return 'Loading...';
 				}
 			},
 			position: {
@@ -150,7 +159,7 @@ var demos = {
 			$('area', elem).qtip({
 				position: {
 					my: 'bottom center',
-					at: 'top center'
+					at: 'top right'
 				},
 				hide: { 
 					fiexed: true
@@ -169,7 +178,12 @@ var demos = {
 		},
 
 		'svg': function(elem) {
-			$('circle, square, polygon', elem).qtip();
+			$('circle, rect, polygon, polyline, ellipse, line', elem).qtip({
+				position: {
+					my: 'bottom center',
+					at: 'top right'
+				}
+			});
 		}
 	},
 
@@ -527,11 +541,13 @@ var demos = {
 				{
 					content: {
 						text: 'Rating...',
-						ajax: {
-							url: googleURL.replace('[id]', id[0]),
-							loading: false,
-							dataType: 'jsonp',
-							success: function(json) {
+						text: function(event, api) {
+							$.ajax({
+								url: googleURL.replace('[id]', id[0]),
+								loading: false,
+								dataType: 'jsonp',
+							})
+							.then(function(json){
 								// Parse rating from results
 								var rating;
 								$.each(json.responseData.results, function(i, data) {
@@ -540,10 +556,15 @@ var demos = {
 								});
 
 								// If we got a rating, perfect. If not, destroy it!
-								if(rating) { this.set('content.text', rating); }
-								else { this.destroy(); }
+								if(rating) { api.set('content.text', rating); }
+								else { api.destroy(); }
 							},
-							error: function() { this.destroy(true); }
+							function(xhr, status, error) {
+								// Upon failure... set the tooltip content to the status and error value
+								api.destroy(true); 
+							});
+							
+							return 'Rating...';
 						}
 					},
 					position: {
@@ -606,16 +627,22 @@ var demos = {
 
 				$(this).qtip({
 					content: {
-						text: 'Loading Twitter feed...',
-						ajax: {
-							url: 'http://api.twitter.com/1/statuses/user_timeline/'+username+'.json?callback=?',
-							data: { count: 1 },
-							dataType: 'jsonp',
-							success: function(tweet) {
+						text: function(event, api) {
+							$.ajax({
+								url: 'http://api.twitter.com/1/statuses/user_timeline/'+username+'.json?callback=?',
+								data: { count: 1 },
+								dataType: 'jsonp',
+							})
+							.then(function(tweet){
 								var content = tweet[0].text;
 								content = content.replace(/(http:\/\/[^\s]+)/gi, '<a href="$1">$1</a>')
-								this.set('content.text', '<b>'+username+':</b> ' + content);
-							}
+								api.set('content.text', '<b>'+username+':</b> ' + content);
+							},
+							function(xhr, status, error) {
+								api.destroy(true);
+							});
+
+							return 'Loading Twitter feed...';
 						}
 					},
 					position: {
@@ -654,19 +681,20 @@ var demos = {
 
 				elem.qtip({
 					content: {
-						text: '<div class="loading">Geolocating...</div>',
-						ajax: {
-							url: 'http://api.ipinfodb.com/v2/ip_query.php?callback=?',
-							type: 'GET',
-							dataType: 'jsonp',
-							data: {
-								ip: elem.data('ip'),
-								key: '3d26e08735f33e0cbc88e9841d51e1062f33f84aa77de3c27be83601891fa2c9',
-								timezone: false,
-								output: 'json'
-							},
-							success: function(json) {
-								var api = this, container, latlong, options, map, marker;
+						text: function(event, api) {
+							$.ajax({
+								url: 'http://api.ipinfodb.com/v2/ip_query.php?callback=?',
+								type: 'GET',
+								dataType: 'jsonp',
+								data: {
+									ip: elem.data('ip'),
+									key: '3d26e08735f33e0cbc88e9841d51e1062f33f84aa77de3c27be83601891fa2c9',
+									timezone: false,
+									output: 'json'
+								}
+							})
+							.then(function(json){
+								var container, latlong, options, map, marker;
 		 
 								container = $('<div style="width:290px; height:210px;" />')
 									.appendTo(api.elements.content.empty());
@@ -687,7 +715,12 @@ var demos = {
 								});
 
 								api.reposition();
-							}
+							},
+							function(xhr, status, error) {
+								api.set('Unable to geo locate the given IP Address!');
+							});
+
+							return '<div class="loading">Geolocating...</div>';
 						}
 					},
 					position: {
@@ -723,23 +756,25 @@ var demos = {
 					if(!$.trim(selection)) { return; }
 
 					// Show the tooltip
-					tooltip.set({
-						'content.text': 'Translating...',
-						'content.ajax.data': { q: selection }
-					})
-					.show(event);
+					tooltip.cache.query = selection;
+					tooltip.set('content.text', tooltip.get('content.text')).show(event);
 				});
 			})
 
 			var tooltip = $('<div/>').qtip({
 				content: {
-					text: 'Translating...',
-					ajax: {
-						url: '/demos/data/translate',
-						success: function(data) {
+					text: function(event, api) {
+						return $.ajax({
+							url: '/demos/data/translate',
+							data: { q: api.cache.query }
+						})
+						.then(function(json){
 							// Set the content to the translated text
-							this.set('content.text', data.data.translations[0].translatedText);
-						}
+							return json.data.translations[0].translatedText;
+						},
+						function(xhr, status, error) {
+							api.destroy(true);
+						});
 					}
 				},
 				position: {

@@ -68,6 +68,10 @@ h2{
 		color: #888;
 	}
 
+	h2 font + a{
+		font-size: 75%;
+	}
+	
 h3{
 	font-size: 16px;
 }
