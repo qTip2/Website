@@ -109,15 +109,16 @@ p.note{
 #content .blocks li i,
 #section-donators span,
 #section-styling .qtip,
+pre,
 .animated{
 	-webkit-transition: 200ms ease-in-out;
 	-moz-transition: 200ms ease-in-out;
 	-o-transition: 200ms ease-in-out;
 	transition: 200ms ease-in-out;
-	-webkit-transition-property: border-bottom-color, background-color, color, bottom, opacity, border-radius, box-shadow;
-	-moz-transition-property: border-bottom-color, background-color, color, bottom, opacity, border-radius, box-shadow;
-	-o-transition-property: border-bottom-color, background-color, color, bottom, opacity, border-radius, box-shadow;
-	transition-property: border-bottom-color, background-color, color, bottom, opacity, border-radius, box-shadow;
+	-webkit-transition-property: border-bottom-color, background-color, color, bottom, opacity, border-radius, box-shadow, width;
+	-moz-transition-property: border-bottom-color, background-color, color, bottom, opacity, border-radius, box-shadow, width;
+	-o-transition-property: border-bottom-color, background-color, color, bottom, opacity, border-radius, box-shadow, width;
+	transition-property: border-bottom-color, background-color, color, bottom, opacity, border-radius, box-shadow, width;
 }
 
 .immediate, .immediate *{

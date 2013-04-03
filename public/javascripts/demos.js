@@ -68,12 +68,37 @@ var demos = {
 	},
 
 	positioning: {
-		'corner': {
-			content: 'Choose from 9 corners to anchor both the tooltip and target',
-			position: {
-				my: 'bottom left',
-				at: 'top left'
+		'corners': function(elem) {
+			function get(c) {
+				var arr = [ $('#corner-'+c+'-y').val(), $('#corner-'+c+'-x').val() ];
+				return ($('#corner-'+c+'-swap').is(':checked') ? arr.reverse() : arr).join(' ');
 			}
+
+			var tooltip = $('.block', elem).qtip({
+				content: 'Move me around using the dropdowns',
+				position: {
+					my: get('my'),
+					at: get('at'),
+					viewport: elem,
+					adjust: { method: $('#corner-adjust').val() }
+				},
+				show: true,
+				hide: false
+			}).qtip('api');
+
+			elem.on('change', 'select', function() {
+				tooltip.set({
+					'position.my': get('my'),
+					'position.at': get('at'),
+					'position.adjust.method': $('#corner-adjust').val()
+				});
+			})
+			.on('change', 'input', function() {
+				$('#corner-my-y')[ this.checked ? 'insertAfter': 'insertBefore' ](
+					$('#corner-my-x')[0]
+				)
+				.trigger('change');
+			});
 		},
 
 		'adjust': {
@@ -123,10 +148,28 @@ var demos = {
 
 		'imgmap': function(elem) {
 			$('area', elem).qtip({
-				content: {
-					attr: 'alt'
+				position: {
+					my: 'bottom center',
+					at: 'top center'
+				},
+				hide: { 
+					fiexed: true
 				}
+			})
+			.parent().prev().maphilight({
+				alwaysOn: true,
+				stroke: false,
+				fillColor: 'FFFFFF',
+				fillOpacity: 0.35,
+				stroke: true,
+				strokeColor: 'BBBBBB',
+				strokeOpacity: 0.3,
+				strokeWidth: 2
 			});
+		},
+
+		'svg': function(elem) {
+			$('circle, square, polygon', elem).qtip();
 		}
 	},
 
@@ -255,6 +298,27 @@ var demos = {
 					$(this).slideUp();
 				},
 			}
+		}
+	},
+
+	stacking: {
+		'block': function(elem) {
+			$('a', elem).qtip({
+				position: {
+					my: 'bottom center',
+					at: 'top center'
+				},
+				show: true,
+				hide: false,
+				events: {
+					focus: function(event, api) {
+						api.set('position.adjust.y', -5);
+					},
+					blur: function(event, api) {
+						api.set('position.adjust.y', 0);	
+					}
+				}
+			})
 		}
 	},
 
@@ -524,7 +588,7 @@ var demos = {
 					show: { target: li },
 					hide: { target: li },
 					style: {
-						classes: 'websnapr qtip-blue'
+						classes: 'websnapr'
 					}
 				});
 			});
@@ -834,6 +898,12 @@ $('#styling-builtin :checkbox').change(function() {
 	}
 	$('#header .qtip').attr('class', 'qtip qtip-default ' + globalStyle);
 
+	// Update currently visible tooltips
+	$('.qtip:visible').each(function() {
+		var api = $.data(this, 'qtip');
+		api && updateStyle(api);
+	});
+	
 	// Store it in the cookie
 	$.cookie('qtip2_global_style', globalStyle, { path: '/' });
 })
@@ -853,7 +923,14 @@ $('#section-styling .qtip-container').click(function() {
 	}
 	else { globalStyle = style; }
 
+	// Update header tooltip style
 	$('#header .qtip').attr('class', 'qtip qtip-default ' + globalStyle);
+
+	// Update currently visible tooltips
+	$('.qtip:visible').each(function() {
+		var api = $.data(this, 'qtip');
+		api && updateStyle(api);
+	});
 
 	// Store it in the cookie
 	$.cookie('qtip2_global_style', globalStyle, { path: '/' });
@@ -954,7 +1031,7 @@ $('.draggable').draggable({
 			my: 'bottom center',
 			at: 'top center',
 			target: 'mouse',
-			viewport: $(window),
+			viewport: $('#fullcalendar'),
 			adjust: {
 				mouse: false,
 				scroll: false
@@ -1046,16 +1123,21 @@ $('.draggable').draggable({
 
 
 // Setup data Tables
-$('#datatables').dataTable().on('mouseenter', 'tr[data-browser]', function(event) {
+$('#datatables').dataTable({
+	bLengthChange: false,
+	bFilter: false
+})
+.on('mouseenter', 'tr[data-browser]', function(event) {
 	var browser = $(this).data('browser');
 
 	$(this).qtip({
 		overwrite: false,
 		content: '<img src="http://media1.juggledesign.com/qtip2/images/browsers/64-'+browser+'.png" alt="'+browser+'"/>',
 		position: {
-			my: 'center',
-			at: 'center',
-			target: $('td:eq(1)', this)
+			my: 'right center',
+			at: 'left center',
+			target: $('td:eq(1)', this),
+			viewport: $('#datatables')
 		},
 		show: {
 			event: event.type,
@@ -1066,3 +1148,69 @@ $('#datatables').dataTable().on('mouseenter', 'tr[data-browser]', function(event
 		}
 	});
 });
+
+// Setup flot
+(function() {
+	var sin = [], cos = [];
+	for (var i = 0; i < 14; i += 0.5) {
+		sin.push([i, Math.sin(i)]);
+		cos.push([i, Math.cos(i)]);
+	}
+
+	var plot = $.plot("#flot", [
+		{ data: sin, label: "sin(x)"},
+		{ data: cos, label: "cos(x)"}
+	], {
+		series: {
+			lines: { show: true },
+			points: { show: true }
+		},
+		grid: {
+			hoverable: true,
+			clickable: true
+		},
+		yaxis: { min: -1.2, max: 1.2 }
+	});
+
+	var tooltip = $('#flot').qtip({
+		id: 'flot',
+		prerender: true,
+		content: ' ',
+		position: {
+			target: 'mouse',
+			viewport: $('#flot'),
+			adjust: { x: 5 }
+		},
+		show: false,
+		hide: {
+			event: false,
+			fixed: true
+		}
+	});
+
+	var previousPoint = null;
+	$("#flot").bind("plothover", function (event, coords, item) {
+		// Grab the API reference
+		var graph = $(this),
+			api = graph.qtip(),
+			previousPoint;
+ 
+		// If we weren't passed the item object, hide the tooltip and remove cached point data
+		if(!item) {
+			api.cache.point = false;
+			return api.hide(item);
+		}
+ 
+		previousPoint = api.cache.point;
+		if(previousPoint !== item.dataIndex) {
+			api.cache.point = item.dataIndex;
+ 
+			api.set('content.text', 
+				item.series.label + " of " + item.datapoint[0].toFixed(2) + " = " + item.datapoint[1].toFixed(2)
+			);
+ 
+			api.elements.tooltip.stop(1, 1);
+			api.show(item);
+		}
+	});
+}());

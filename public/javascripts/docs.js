@@ -1,5 +1,33 @@
 var legend = $('#legend');
 
+// Add class/tooltip to /path/to strings
+$('.string').filter('span:contains("/path/to")').qtip({
+	content: 'Replace this with a valid URL!',
+	position: {
+		my: 'bottom center',
+		at: 'top center',
+		viewport: $(window)
+	},
+	style: 'qtip-red invalidpath'
+})
+.addClass('invalidpath');
+
+// Add class/tooltip to .selector strings
+$('.string').filter('span:contains(".selector")').qtip({
+	content: 'Replace this with a valid <a href="http://api.jquery.com/category/selectors/">jQuery selector</a>!',
+	position: {
+		my: 'bottom center',
+		at: 'top center',
+		viewport: $(window)
+	},
+	hide: {
+		delay: 100,
+		fixed: true
+	},
+	style: 'qtip-red invalidselector'
+})
+.addClass('invalidselector');
+
 // Populate legend sub-entries
 $('a[name*="."]').each(function() {
 	var elem = $(this),
@@ -98,3 +126,29 @@ $(window).hashchange(function() {
 	).addClass('active');
 })
 .hashchange();
+
+// Expand code blocks on hover
+$('pre:has(code)').bind('mouseenter mouseleave', function(event) {
+	var elem = $(this),
+		outer = elem.outerWidth(),
+		inner = elem.children('code')[0].scrollWidth,
+		win = $(window).width() - 400;
+
+	if(win > inner) {
+		elem.css('width',
+			event.type === 'mouseenter' && outer < inner && win > inner ? inner + 14 : ''
+		);
+	}
+	else {
+		elem.css('overflow-x',
+			event.type === 'mouseenter' && outer < inner ? 'auto' : 'hidden'
+		);
+	}
+})
+.each(function(i, cur) {
+	var elem = $(this);
+	elem.css({
+		width: elem.outerWidth(),
+		height: elem.outerHeight()
+	});
+})

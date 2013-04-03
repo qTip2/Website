@@ -1,147 +1,106 @@
-code,pre {
-    padding: 0 3px 2px;
-    font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
-    font-size: 12px;
-    color: #333;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-}
-
-code {
-    padding: 2px 4px;
-    color: #408817;
-    background-color: #f7f7f9;
-    border: 1px solid #e1e1e8;
-    white-space: nowrap;
-}
-
 pre {
-    display: block;
-    padding: 9.5px;
-    margin: 0 0 10px;
-    font-size: 13px;
-    line-height: 20px;
-    word-break: break-all;
-    word-wrap: break-word;
-    white-space: pre;
-    white-space: pre-wrap;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border: 1px solid rgba(0,0,0,0.15);
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
+	min-width: 767px;
+	display: block;
+	padding: 0;
+	margin: 0 0 10px;
+	font-size: 13px;
+	line-height: 20px;
+	overflow: hidden;
+	
+	background: #333;
+	color: #f8f8f8;
+
+	border: 1px solid #e1e1e8;
     border-radius: 4px;
-}
 
-pre.prettyprint {
-    margin-bottom: 20px;
-}
-
-pre code {
-    padding: 0;
-    color: inherit;
-    white-space: pre;
-    white-space: pre-wrap;
-    background-color: transparent;
-    border: 0;
+	font-size: 14px;
+	font-family: Monaco, Menlo, Consolas, "Lucida Console", monospace;
 }
 
 pre code {
-    display: block;
-    padding: .5em;
-    background: #3f3f3f;
-    color: #dcdcdc;
+	display: block;
+	padding: 1em;
+	white-space: pre;
 }
 
 pre .keyword,pre .tag,pre .css .class,pre .css .id,pre .lisp .title,pre .nginx .title,pre .request,pre .status,pre .clojure .attribute {
-    color: #e3ceab;
-}
-
-pre .django .template_tag,pre .django .variable,pre .django .filter .argument {
-    color: #dcdcdc;
+	color: #e3ceab;
 }
 
 pre .number,pre .date {
-    color: #8cd0d3;
+	color: #8cd0d3;
 }
 
 pre .dos .envvar,pre .dos .stream,pre .variable,pre .apache .sqbracket {
-    color: #efdcbc;
+	color: #efdcbc;
 }
 
 pre .dos .flow,pre .diff .change,pre .python .exception,pre .python .built_in,pre .literal,pre .tex .special {
-    color: #efefaf;
+	color: #efefaf;
 }
 
 pre .diff .chunk,pre .subst {
-    color: #8f8f8f;
+	color: #8f8f8f;
 }
 
 pre .dos .keyword,pre .python .decorator,pre .title,pre .haskell .type,pre .diff .header,pre .ruby .class .parent,pre .apache .tag,pre .nginx .built_in,pre .tex .command,pre .prompt {
-    color: #efef8f;
+	color: #efef8f;
 }
 
 pre .dos .winutils,pre .ruby .symbol,pre .ruby .symbol .string,pre .ruby .string {
-    color: #dca3a3;
+	color: #dca3a3;
 }
 
 pre .diff .deletion,pre .string,pre .tag .value,pre .preprocessor,pre .built_in,pre .sql .aggregate,pre .javadoc,pre .smalltalk .class,pre .smalltalk .localvars,pre .smalltalk .array,pre .css .rules .value,pre .attr_selector,pre .pseudo,pre .apache .cbracket,pre .tex .formula {
-    color: #cc9393;
+	color: #cc9393;
 }
 
 pre .shebang,pre .diff .addition,pre .comment,pre .java .annotation,pre .template_comment,pre .pi,pre .doctype {
-    color: #7f9f7f;
+	color: #7f9f7f;
 }
 
 pre .coffeescript .javascript,pre .javascript .xml,pre .tex .formula,pre .xml .javascript,pre .xml .vbscript,pre .xml .css,pre .xml .cdata {
-    opacity: .5;
-}
-
-code,pre {
-    font-size: 13px;
-    font-family: Monaco,Consolas,"Lucida Console",monospace;
-}
-
-pre {
-    padding: 0;
-}
-
-pre code {
-    font-size: 14px;
-    padding: 1em;
-    color: #f8f8f8;
-    background: #333;
+	opacity: .5;
 }
 
 pre .comment {
-    color: #7e7680;
+	color: #7e7680;
 }
 
 pre .keyword {
-    color: #e9df8f;
+	color: #e9df8f;
 }
 
 pre .string {
-    color: #82C201;
+	color: #82C201;
 }
 
 pre .regexp {
-    color: #e9c062;
+	color: #e9c062;
 }
 
 pre .number {
-    color: #cf6a4c;
+	color: #cf6a4c;
 }
 
 pre .title {
-    color: #cda869;
+	color: #cda869;
 }
 
 pre .params {
-    color: #7587a6;
+	color: #7587a6;
 }
 
 pre .literal {
-    color: #cda869;
+	color: #cda869;
+}
+
+/* Invalid-type stuff */
+pre .invalidselector{
+	color: red !important;
+	cursor: help;
+}
+pre .invalidpath{
+	color: red !important;
+	cursor: help;
 }

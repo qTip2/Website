@@ -8,7 +8,9 @@ mixin demoblock(text, fiddle)
 mixin style(name, title, titlebar)
 	styleName = name.toLowerCase()
 	defClass = styleName === 'ui' ? '' : 'qtip-default '
-	classes = defClass+'qtip qtip qtip qtip-'+styleName
+	shadow = globalStyle.indexOf('qtip-shadow') > -1 ? 'qtip-shadow' : ''
+	rounded = globalStyle.indexOf('qtip-rounded') > -1 ? 'qtip-rounded' : ''
+	classes = [defClass,'qtip', 'qtip-'+styleName, shadow, rounded].join(' ')
 	activeClass = globalStyle.indexOf('qtip-'+styleName) > -1 ? 'active' : ''
 	if styleName === 'ui'
 		classes = classes+' ui-helper-reset ui-widget ui-tooltip'
@@ -33,6 +35,7 @@ block javascript
 	script(type='text/javascript', src='//cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/jquery.dataTables.min.js')
 	script(type='text/javascript', src="//cdnjs.cloudflare.com/ajax/libs/flot/0.7/jquery.flot.min.js")
 	script(type='text/javascript', src="//www.websnapr.com/js/websnapr.js")
+	script(type='text/javascript', src="//davidlynch.org/js/maphilight/jquery.maphilight.min.js")
 	script(type='text/javascript', src='#{url('/static/javascripts/libs/jquery.themeswitcher.min.js')}')
 	script(type='text/javascript', src='#{url('/static/javascripts/libs/jquery.fullcalendar.min.js')}')
 	script(type='text/javascript', src='#{url('/static/javascripts/demos.js')}')
@@ -126,29 +129,76 @@ block content
 		#section-positioning.section
 			h2 Positioning
 			p
-				| Featuring a fully configurable, human-readable positioning system, 
+				| Featuring a fully configurable, 
+				i human-readable 
+				| positioning system, 
 				mixin logo()
 				| allows you to easily position your tooltips using element corners, and even reposition
-				| themselves when the viewport sizes changes!
+				| themselves when the viewport sizes changes! Have a play around below.
+
+			#positioning-corners.examples.animated
+				.block
+					fieldset
+						legend(title="Which tooltip corner should be positioned?") position.my
+						select(id="corner-my-y", autocomplete="off")
+							option(value="top", selected="selected") Top
+							option(value="center") Center
+							option(value="bottom") Bottom
+						select(id="corner-my-x", autocomplete="off")
+							option(value="left") Left
+							option(value="center") Center
+							option(value="right", selected="selected") Right
+
+						label(for="corner-my-swap") Swap
+						input(id="corner-my-swap", type="checkbox", autocomplete="off")
+					
+					fieldset
+						legend(title="Which corner of the target should I display at?") position.at
+						select(id="corner-at-y", autocomplete="off")
+							option(value="top") Top
+							option(value="center") Center
+							option(value="bottom", selected="selected") Bottom
+						select(id="corner-at-x", autocomplete="off")
+							option(value="left", selected="selected") Left
+							option(value="center") Center
+							option(value="right") Right
+
+					fieldset
+						legend(title="Smart positioning keeps the tooltip within the dashed viewport") position.adjust.method
+						select(id="corner-adjust", autocomplete="off")
+							option(value="none", selected="selected") None
+							option(value="flipinvert") Flip (invert adjust.x/y)
+							option(value="flip") Flip 
+							option(value="shift") Shift
+
+			p
+				| You can even use the mouse pointer as the positioning target
 
 			.examples
 				ul.blocks
-					li#positioning-corner
-						mixin demoblock("Using a corner", "dahrg")
-					li#positioning-adjust
-						mixin demoblock("Adding small adjustments")
-					li#positioning-target
-						mixin demoblock("Using a different target")
 					li#positioning-mouse
 						mixin demoblock("Open at the current mouse position", "qSr8B")
 					li#positioning-track
 						mixin demoblock("Anchor the tooltip to the mouse", "sTGux")
+
+			p
+				| In addition to the smart corner system, there's a plethora (read: a <i>lot</i>) of additional
+				| positioning options readily available, with settings for everything from pixel-size adjustments to adjust criteria,
+				| including:
+
+			.examples
+				ul.blocks
+					li#positioning-adjust
+						mixin demoblock("Adding small adjustments")
+					li#positioning-target
+						mixin demoblock("Using a different target")
 					li#positioning-viewport.draggable
 						mixin demoblock("Viewport repositioning")
 						select
 							option(value="flipinvert") Flip invert
 							option(value="flip") Flip
 							option(value="shift") Shift
+
 
 			p
 				mixin logo()
@@ -159,27 +209,39 @@ block content
 				| and 
 				a(href="plugins#svg") SVG 
 				| plugins! Even 
-				i complex polygons 
-				| are supported.
+				i complex <i>&lt;area&gt;</i> polygons 
+				| are supported, with SVG support coming soon!
+
+			a(name="imagemapsvg")
+			.svgmap.examples
+				#positioning-imgmap.col
+					h3 Image map
+						font Complex positioning even on polygon types
+
+					img(border='0', usemap='#owlmap', src='#{url("static/images/owl.png")}', width='395', height='190')
+					map#owlmap(name='owlmap')
+						area(shape="poly", coords="171, 58, 192, 54, 211, 45, 216, 57, 180, 69", title="Lesser wing covets")
+						area(shape="circle", coords="348, 127, 23", title="Tail feathers")
+						area(shape="circle", coords="343, 35, 28", title="Primary wing feathers")
+						area(shape="circle", coords="200, 161, 14", title="Talon(s)")
+						area(shape="circle", coords="136, 73, 7", title="Eye(s)")
+						area(shape="poly", coords="62, 99, 73, 89, 94, 84, 112, 81, 113, 87", title="Mantle")
+
+				#positioning-svg.col
+					h3 SVG
+						font Simplistic bounding box positioning
+
+					svg(xmlns="http://www.w3.org/2000/svg", version="1.1")
+						circle(cx="32", cy="32", r="30", style="stroke:#62B000; stroke-width: 3; fill: #82C201", title="SVG Circle")
+						line(x1="0", y1="100", xy="100", y2="80", style="stroke:#62B000; stroke-width: 3; fill: #82C201", title="SVG Circle")
+						rect(x="82", y="0", width="60", height="60", style="stroke:#F9E88C; stroke-width: 3; fill: #FAF7AA", title="SVG Square")
+						polygon(points="40,140 100,140 70,80", style="stroke:#DDDDDD; stroke-width: 3; fill: #EEEEEE", title="SVG Polygon")
 
 			.examples
-				a(name="positioning")
-				#section-positioning-imgmap
-					img(border='0', usemap='#cornermap', src='#{cdn("corners.jpg")}', width='500', height='178')
-					map#cornermap(name='cornermap')
-						area(shape="rect", coords="96,30,109,42", alt="Top left", title="Top left")
-						area(shape="rect", coords="87,40,100,52", alt="Left top", title="Left top")
-						area(shape="rect", coords="86,81,99,93", alt="Left center", title="Left center")
-						area(shape="rect", coords="88,115,101,127", alt="Left bottom", title="Left bottom")
-						area(shape="rect", coords="98,125,111,137", alt="Bottom left", title="Bottom left")
-						area(shape="rect", coords="237,125,250,137", alt="Bottom center", title="Bottom center")
-						area(shape="rect", coords="373,125,386,137", alt="Bottom right", title="Bottom right")
-						area(shape="rect", coords="386,116,400,128", alt="Bottom right", title="Right bottom")
-						area(shape="rect", coords="385,80,398,92", alt="Right center", title="Right center")
-						area(shape="rect", coords="386,41,399,53", alt="Right top", title="Right top")
-						area(shape="rect", coords="376,32,389,44", alt="Top right", title="Top right")
-						area(shape="rect", coords="236,30,249,42", alt="Top center", title="Top center")
-						area(shape="rect", coords="222,78,264,92", alt="Center", title="Center")
+				a(name="zindex")
+				#section-positioning-zindex
+
+					.zindex
 
 
 		a(name="events")
@@ -226,6 +288,27 @@ block content
 					li#showhide-custom
 						mixin demoblock("Customised .animate()")
 
+
+		a(name="stacking")
+		#section-stacking.section
+			h2 Stacking properties
+			p
+				| Ocassionally you'll want multiple tooltips visible within close proximity to eachother,
+				| but this can cause some headaches with z-index priority. Again, 
+				mixin logo() 
+				| has you covered, with in-built stacking functionality! Hover the tooltips below to see
+				| it in action.
+
+			#stacking-block
+				a(title="Mouse over these tooltips&hellip;") These links&hellip;
+				a(title="You'll hopefully see a change&hellip;") &hellip;have tooltips&hellip;
+				a(title="&hellip;as their z-index properties update&hellip;") &hellip;that are very&hellip;
+				a(title="&hellip;and allow you to see their content up front!") &hellip;close together!
+
+			p
+				mixin logo() 
+				| provides event hooks to detect the <i>focus</i> and <i>blur</i> as a tooltip gains and loses focus respectively.
+				| This llets you do nifty things, like <b>animate it's position on focus</b> like above!
 
 		a(name="apicallbacks")
 		#section-apicallbacks.section.group
@@ -348,14 +431,6 @@ block content
 				mixin logo()
 				| can also be integrated with various other jQuery plugins!
 
-		a(name="fullcalendar")
-		#section-fullcalendar.section.group
-			h2
-				a(href="http://arshaw.com/fullcalendar/") FullCalendar
-				font full-sized, drag &amp; drop calendar
-
-			#fullcalendar
-
 		a(name="jqueryui")
 		#section-jqueryui.section.group
 			h2
@@ -368,6 +443,14 @@ block content
 
 				#jqueryui-slider
 
+		a(name="fullcalendar")
+		#section-fullcalendar.section.group
+			h2
+				a(href="http://arshaw.com/fullcalendar/") FullCalendar
+				font full-sized, drag &amp; drop calendar
+
+			#fullcalendar
+
 		a(name="datatables")
 		#section-datatables.section.group
 			h2
@@ -375,6 +458,14 @@ block content
 				font Dynamic HTML table interaction
 
 			include demos/datatables
+
+		a(name="flot")
+		#section-flot.section.group
+			h2
+				a(href="http://www.flotcharts.org/") flot
+				font Attractive JavaScript plotting
+
+			#flot
 
 		a(name="yours")
 		#section-jqueryui.section.group

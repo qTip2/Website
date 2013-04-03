@@ -1,8 +1,8 @@
 // Grab the global tooltip style from the cookie
-var globalStyle = $.fn.qtip.defaults.style.classes = $.cookie('qtip2_global_style') || '';
+var globalStyle = $.cookie('qtip2_global_style') || '';
 !globalStyle && $.cookie('qtip2_global_style', (globalStyle = 'qtip-shadow'));
 
-$('body').bind('tooltipshow', function(event, api) {
+function updateStyle(api) {
 	if(!api.elements.target.hasClass('qtip') && !api.options.style.widget) {
 		if(!api.origStyle) {
 			api.origStyle = api.options.style.classes + ' qtip-default ';
@@ -13,6 +13,10 @@ $('body').bind('tooltipshow', function(event, api) {
 			api.set('style.classes', newStyle);
 		}
 	}
+}
+
+$('body').bind('tooltipshow', function(event, api) {
+	updateStyle(api);
 });
 
 $(function() {

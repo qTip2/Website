@@ -167,7 +167,7 @@ function repos() {
 
 			// Ensure the package archive has this tag....
 			var q = exec('mkdir ' + dir)().fail(function() { })
-				.then(exec('grunt dev', null, 'Generate '+version+' archive files'))
+				.then(exec('grunt all || grunt dev', null, 'Generate '+version+' archive files'))
 				.then(exec('cp -r dist/* ' + dir, null, 'Copying generated files'));
 
 			// Create stable latest link files

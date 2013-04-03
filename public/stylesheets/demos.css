@@ -138,10 +138,72 @@ li:hover a.source{
 	width: 100px;
 	margin: 0 0 0 -50px;
 	z-index: 1;
+
+	text-align: center;
 }
+
+#positioning-corners{
+	margin: 10px 0 20px;
+	border: 3px dashed #eee;
+}
+
+#positioning-corners .block{
+	width: 60%;
+	margin: 45px auto;
+	padding: 5px 0 0;
+	background-color: #eee;
+	border-bottom: 3px solid #ddd;
+}
+
+#positioning-corners fieldset{
+	display: block;
+	padding: 5px 0 12px;
+	margin: 10px 0 0;
+
+	text-align: center;
+}
+
+#positioning-corners legend{
+	display: inline-block;
+	font-weight: bold;
+	line-height: 8px;
+}
+
 
 #positioning-viewport span{
 	margin-top: -25px;
+}
+
+#section-positioning .zindex{
+
+}
+
+
+#section-positioning .svgmap{
+	font-size: 0;
+	white-space: nowrap;
+}
+
+#section-positioning .svgmap .col{
+	display: inline-block;
+
+	vertical-align: top;
+	font-size: 12px;
+}
+
+#section-positioning .svgmap h3{
+	margin: 0 0 10px;
+}
+
+#section-positioning .svgmap .col ~ .col{
+	margin-left: 45px;
+}
+
+#section-positioning .svgmap svg{
+	display: block;
+	width: 145px;
+	height: 140px;
+	margin: 30px auto 0;
 }
 
 /* Styling */
@@ -237,6 +299,18 @@ li:hover a.source{
 	vertical-align: middle;
 }
 
+/* Stacking */
+#stacking-block{
+	padding: 45px 0 15px;
+	text-align: center;
+}
+
+#stacking-block a{
+	display: inline-block;
+	margin: 0 65px 0 0;
+	line-height: 15px;
+}
+
 /* Plugins section */
 #category-plugins{}
 
@@ -293,4 +367,10 @@ li:hover a.source{
 /* jQuery UI elements */
 #qtip-uislider .qtip-content{
 	text-align: center;
+}
+
+/* Flot */
+#flot{
+	height: 350px;
+	padding: 20px 15px 15px 15px;
 }
