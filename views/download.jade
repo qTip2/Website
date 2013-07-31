@@ -18,6 +18,25 @@ block content
 				mixin logo()
 				| for free!
 
+		a(name="license")
+		#section-license.section
+			h2 Licensing
+			p
+				mixin logo()
+				| is dual-licensed under the open source 
+				b MIT
+				| and 
+				b GPLv2 
+				| licenses. In short:
+				i you can use 
+				mixin logo()
+				| in any project, commerical or non-commerical.
+			p
+				b Note: 
+				| Licenses must be distributed with all scripts.
+				i This is already done for you in the scripts comment headers
+				| , so if you're not too familiar with licensing don't worry about it!
+
 		a(name="cdn")
 		#section-cdn.section
 			h2 CDN <small>(recommended)</small>
@@ -34,10 +53,18 @@ block content
 			p.cdnlinks
 				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.min.js", target="_blank")
 					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.min.js
-				br
-
+				|  (also 
 				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.js", target="_blank")
-					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.js
+					| non-minified
+				| )
+
+				br
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.min.css", target="_blank")
+					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.min.css
+				|  (also 
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.css", target="_blank")
+					| non-minified
+				| )
 
 			h4 Basic features 
 				small (no 
@@ -49,16 +76,32 @@ block content
 			p.cdnlinks
 				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.min.js", target="_blank")
 					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.min.js
-				br
-
+				|  (also 
 				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.js", target="_blank")
-					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.js
+					| non-minified
+				| )
 
+				br
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.min.css", target="_blank")
+					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.min.css
+				|  (also 
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.css", target="_blank")
+					| non-minified
+				| )
+
+
+	- if(!build.nightly.commitdate)
+		a(name="building")
+		#section-building.section
+			h2 Updating our repos...
+			p
+				Please wait a few moments and refresh the page!
+	- else
 		a(name="builder")
 		#section-builder.section
 			h2 Build your own
 
-			form(action='#{url("/download/build")}', method='post')
+			form(action='#{url("/download")}', method='post')
 				h4
 					| Which version of 
 					mixin logo()
@@ -122,19 +165,24 @@ block content
 							span SVG support
 								i add SVG support to the positioning system
 					li
+						input(id="download-plugins-modal", name="plugins[modal]", type="checkbox")
+						label(for="download-plugins-modal") 
+							span Modal backdrop
+								i
+									| Add Modal functionality / backdrops
+					li
 						input(id="download-plugins-ie6", name="plugins[ie6]", type="checkbox")
 						label(for="download-plugins-ie6") 
 							span IE6 support
 								i
 									| Add IE6 compatibility
-
 				a(name="builder-libraries")
 				h4 Choose additional <i>libraries</i>
 				ul.blocks
 					li
-						input(id="download-jquery", name="jquery", value="1.9.1", type="checkbox")
+						input(id="download-jquery", name="extras[jquery]", value="1.8.3", type="checkbox")
 						label(for="download-jquery") 
-							span jQuery 1.9.1
+							span jQuery 1.8.3
 								i latest tested and verified jQuery version
 
 				button Build &amp; Download
@@ -143,12 +191,13 @@ block content
 					b 49KB (19KB minified / 10KB gzipped)
 					small <sup>*</sup> Excludes jQuery library
 
-				script
+				script.
 					fileSizes = {
 						stable: !{JSON.stringify(build.nightly.filesizes)},
 						nightly: !{JSON.stringify(build.nightly.filesizes)}
 					}
 
+	
 		a(name="git")
 		#section-git.section
 			h2 GitHub development
@@ -173,12 +222,18 @@ block content
 				.badge
 					iframe(src='http://ghbtns.com/github-btn.html?user=craga89&type=follow&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='152px', height='20px')
 
-		a(name="license")
-		#section-license.section
-			h2 Licensing
+		a(name="changelog")
+		#section-changelog.section
+			h2 Changelog
 			p
-				mixin logo()
-				| is dual-licensed under the open source MIT and GPLv2 licenses. These licenses must be 
-				| distributed with all scripts falling under their terms, either in file form, or a link to a 
-				| copy in the header of the files. This is already done for you in the scripts headers, so if
-				| you're not too familiar with licensing don't worry about it!
+				| View the Changelogs 
+				a(href="#{url('/changelog')}") here
+				| .
+
+		a(name="archive")
+		#section-archive.section
+			h2 Previous versions
+			p
+				| Previous releases can be found in the 
+				a(href="#{url('/v/')}") release archive
+				| .

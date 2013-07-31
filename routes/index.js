@@ -1,22 +1,7 @@
 var Registry = require('../registry')
 	, build = require('../build').build
 	, paths = require('../paths')
-	, path = require('path')
-	, fs = require('fs')
-	, request = require('request')
-	, querystring = require('querystring')
-	, cronJob = require('cron').CronJob
-
-	// Translation specific	
-	, translateCacheFile = path.join(paths.cache, 'translate.json')
-	, translateCache = JSON.parse(fs.readFileSync(translateCacheFile).toString() || '{}')
-	, translateText = 'Highlight some of these word(s). A tooltip will appear with the Spanish translation!'
-	, translateData = {
-		key: 'AIzaSyD2NSl8IH_fEDEJyVFkpkvD9RK7LoYMv64',
-		source: 'en',
-		target: 'es'
-	};
-
+	, demoData = require('./demodata');
 
 /*
  * Home page
@@ -40,61 +25,15 @@ exports.demos = function(req, res) {
 
 exports.demoData = function(req, res) {
 	var page = req.params.type,
-		body = req.body,
-		params = {},
-		state;
+		f = demoData[page];
+		params = {};
 
-	// Form login
-	if(page === 'login') {
-		res.header('Content-Type', 'application/json');
-
-		// un:qtip, pw:qtip for demo purposes
-		state = body.username === 'qtip' && body.password === 'qtip';
-		params.json = JSON.stringify({
-			status: state ? 'success' : 'error',
-			message: state ? 'Successfully logged in!' : 'Invalid username or password'
-		});
+	if(f && (params = f.apply(this, arguments))) {
+		return res.render('demos/data/' + page, params);
 	}
 
-	// Translate
-	else if(page === 'translate') {
-		res.header('Content-Type', 'application/json');
-
-		// Ensure there's no funny business!
-		/*if(translateText.indexOf(req.params.q) < 0 || req.get('Referrer').indexOf('http://qtip.com') < 0) {
-			return res.send(500, 'No using my API key for your own translations please! Play nice and pay :)');
-		}*/
-
-		// No cached response...? gah. We'll have to use the API.
-		if( !(params.response = translateCache[req.query.q]) ) {
-			console.log('Hitting Google Translate API... prepare for £££!');
-			translateData.q = req.query.q;
-			request.get(
-				'https://www.googleapis.com/language/translate/v2?' + querystring.stringify(translateData),
-				function(err, response, body) {
-					if(err) { throw err; }
-
-					// Cache response and return it
-					translateCache[translateData.q] = params.response = body;
-					res.render('demos/data/' + req.params.type, params);
-				}
-			);
-
-			return;
-		}
-	}
-
-	res.render('demos/data/' + req.params.type, params);
+	res.send(404);
 }
-
-// Store the translateCache in cache folder every 30 minutes
-new cronJob('1 * * * * *', function() {
-	console.log('Caching translation results... %s', translateCacheFile);
-    fs.writeFile(
-    	translateCacheFile,
-    	JSON.stringify(translateCache) || '{}'
-	);
-}, null, true);
 
 
 /*
@@ -147,6 +86,12 @@ exports.plugins = function(req, res) {
 exports.guides = function(req, res) {
 	res.render('guides', {
 		page: 'guides'
+	});
+}
+
+exports.changelog = function(req, res) {
+	res.render('changelog', {
+		page: 'changelog'
 	});
 }
 

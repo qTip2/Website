@@ -1,3 +1,8 @@
+var at = [
+	'bottom left', 'bottom right', 'bottom center',
+	'top left', 'top right', 'top center'
+];
+
 var demos = {
 	contents: {
 		'text': {
@@ -12,7 +17,7 @@ var demos = {
 			content: {
 				text: function(event, api) {
 					$.ajax({
-						url: '/demos/data/snowyowl',
+						url: '/demos/data/owl',
 					})
 					.then(function(content){
 						api.set('content.text', content);
@@ -27,6 +32,10 @@ var demos = {
 			},
 			position: {
 				viewport: $(window)
+			},
+			hide: {
+				fixed: true,
+				delay: 300
 			},
 			style: 'wiki'
 		},
@@ -156,16 +165,41 @@ var demos = {
 		},
 
 		'imgmap': function(elem) {
-			$('area', elem).qtip({
+			$('circle, rect, polygon, polyline, ellipse, line, area', elem).qtip({
+				content: {
+					title: 'At: ' + at[4]
+				},
 				position: {
 					my: 'bottom center',
 					at: 'top right'
 				},
 				hide: { 
-					fiexed: true
+					fixed: true
+				},
+				events: {
+					render: function(event, api) {
+						api.elements.target.add(this).click(function() {
+							var i = api.cache.curI || 0,
+								curAt = api.get('position.at'),
+								newAt = at[ i++ ],
+								newMy = new api.reposition.Corner(newAt);
+
+							newMy.invert('x'); newMy.invert('y');
+
+							api.set({
+								'position.at': newAt,
+								'position.my': newMy.string(),
+								'content.title': 'At: ' + newAt
+							});
+
+							api.cache.curI = i % at.length;
+						})
+						.mousedown(function(e) { e.preventDefault(); });
+					}
 				}
 			})
-			.parent().prev().maphilight({
+			
+			$(' area', elem).parent().prev().maphilight({
 				alwaysOn: true,
 				stroke: false,
 				fillColor: 'FFFFFF',
@@ -178,12 +212,7 @@ var demos = {
 		},
 
 		'svg': function(elem) {
-			$('circle, rect, polygon, polyline, ellipse, line', elem).qtip({
-				position: {
-					my: 'bottom center',
-					at: 'top right'
-				}
-			});
+			demos.positioning.imgmap(elem);
 		}
 	},
 
@@ -810,7 +839,9 @@ function dialogue(content, title) {
 		style: 'dialogue',
 		events: {
 			render: function(event, api) {
-				$('button', api.elements.content).click(api.hide);
+				$('button', api.elements.content).click(function() {
+					api.hide();
+				});
 			},
 			hide: function(event, api) { api.destroy(); }
 		}
@@ -861,7 +892,7 @@ window.createGrowl = function(persistent) {
 
 						clearTimeout(api.timer);
 						if (e.type !== 'mouseover') {
-							api.timer = setTimeout(api.hide, lifespan);
+							api.timer = setTimeout(function() { api.hide(e) }, lifespan);
 						}
 					})
 					.triggerHandler('mouseout');
@@ -1095,10 +1126,10 @@ $('.draggable').draggable({
 			})
 			.reposition(event).show(event);
 		},
-		dayClick: tooltip.hide,
-		eventResizeStart: tooltip.hide,
-		eventDragStart: tooltip.hide,
-		viewDisplay: tooltip.hide,
+		dayClick: function() { tooltip.hide() },
+		eventResizeStart: function() { tooltip.hide() },
+		eventDragStart: function() { tooltip.hide() },
+		viewDisplay: function() { tooltip.hide() },
 		events: [
 			{
 				title: 'All Day Event',
@@ -1249,3 +1280,20 @@ $('#datatables').dataTable({
 		}
 	});
 }());
+
+// Event delegation
+$('#addmore').click(function() {
+	$('<li />', {
+		html: '<a title="Lorem ipsum: Added after page load!"><b>New</b> link!</a>'
+	})
+	.appendTo( $('#more') );
+});
+$('#more').on('mouseenter', 'a[title]', function(event) {
+	$(this).qtip({
+		overwrite: false,
+		show: {
+			event: event.type,
+			ready: true
+		}
+	});
+});

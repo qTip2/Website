@@ -169,34 +169,6 @@ block content
 							option(value="flip") Flip 
 							option(value="shift") Shift
 
-			p
-				| You can even use the mouse pointer as the positioning target
-
-			.examples
-				ul.blocks
-					li#positioning-mouse
-						mixin demoblock("Open at the current mouse position", "qSr8B")
-					li#positioning-track
-						mixin demoblock("Anchor the tooltip to the mouse", "sTGux")
-
-			p
-				| In addition to the smart corner system, there's a plethora (read: a <i>lot</i>) of additional
-				| positioning options readily available, with settings for everything from pixel-size adjustments to adjust criteria,
-				| including:
-
-			.examples
-				ul.blocks
-					li#positioning-adjust
-						mixin demoblock("Adding small adjustments")
-					li#positioning-target
-						mixin demoblock("Using a different target")
-					li#positioning-viewport.draggable
-						mixin demoblock("Viewport repositioning")
-						select
-							option(value="flipinvert") Flip invert
-							option(value="flip") Flip
-							option(value="shift") Shift
-
 
 			p
 				mixin logo()
@@ -225,6 +197,13 @@ block content
 						area(shape="circle", coords="136, 73, 7", title="Eye(s)")
 						area(shape="poly", coords="62, 99, 73, 89, 94, 84, 112, 81, 113, 87", title="Mantle")
 
+					p.attribution
+						| Photo by 
+						a(href="http://commons.wikimedia.org/wiki/File:A_Snowy_Owl_in_Flight_David_Hemmings.jpg") NaturesPhotoAdventures
+						|  under 
+						a(href="http://creativecommons.org/licenses/by-sa/3.0/deed.en") CC Share Alike 3.0 Unported
+						|  license.
+
 				#positioning-svg.col
 					h3 SVG
 						font
@@ -240,11 +219,34 @@ block content
 						ellipse(cx="32", cy="132", rx="20", ry="32", style="stroke:#F9E88C; stroke-width: 3; fill: #FAF7AA", title="SVG Ellipse")
 						polyline(transform="translate(70 122) scale(0.125)", style="stroke:#CCC; stroke-width: 20; fill: #EEE", title="SVG Polyline", points="50,375 150,375 150,325 250,325 250,375 350,375 350,250 450,250 450,375 550,375 550,175 650,175 650,375 750,375 750,100 850,100 850,375 950,375 950,25 1050,25 1050,375 1150,375")
 
-			.examples
-				a(name="zindex")
-				#section-positioning-zindex
 
-					.zindex
+			p
+				| You can even use the mouse pointer as the positioning target
+
+			.examples
+				ul.blocks
+					li#positioning-mouse
+						mixin demoblock("Open at the current mouse position", "qSr8B")
+					li#positioning-track
+						mixin demoblock("Anchor the tooltip to the mouse", "sTGux")
+
+			p
+				| In addition to the smart corner system, there's a plethora (read: a <i>lot</i>) of additional
+				| positioning options readily available, with settings for everything from pixel-size adjustments to adjust criteria,
+				| including:
+
+			.examples
+				ul.blocks
+					li#positioning-adjust
+						mixin demoblock("Adding small adjustments")
+					li#positioning-target
+						mixin demoblock("Using a different target")
+					li#positioning-viewport.draggable
+						mixin demoblock("Viewport repositioning")
+						select
+							option(value="flipinvert") Flip invert
+							option(value="flip") Flip
+							option(value="shift") Shift
 
 
 		a(name="events")
@@ -414,8 +416,11 @@ block content
 		a(name="delegation")
 		#section-delegation.section.group
 			h2 Event delegation
+				font Automatically bind new elements
+				mixin sourcelink("qcwV4")
+				
 			p
-				| Large data sets? Complex pages with dynamicly added element?
+				| Large data sets? Complex pages with dynamicly added element? 
 				mixin logo()
 				| has you covered! Utilising jQuery's 
 				a(href="http://api.jquery.com/on/") event delegation
@@ -424,7 +429,15 @@ block content
 				b applying tooltips to dynamically created elements
 				| , making integration with dynamic AJAX pages a breeze.
 
-			
+			ul#more
+				li: a(title="Elit adipisicing elit. Eligendi, repellendus!") Link
+				li: a(title="Sit amet, Nemo blanditiis elit, dolorum temporibus ducimus alias dolores blanditiis.") Link
+				li: a(title="Ipsum dolor sit amet, consectetur adipisicing elit. Maxime corporis facere at.") Link
+				li: a(title="Lorem ipsum dolor sit amet.") Link
+				li: a(title="Elit adipisicing elit. Eligendi, repellendus!") Link
+
+			button(id="addmore") Add more elements
+				
 
 
 	a(name="plugins")

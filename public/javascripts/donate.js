@@ -10,7 +10,8 @@ $(function() {
 			paypal: [
 				'cmd', 'business', 'item_name', 'no_shipping', 'no_note', 'currency_code', 'tax', 'bn', 'firstname', 'amount', 'external'
 			]
-		};
+		},
+		service, currency, value;
 
 	$('input[type="number"]', form).bind('focus', function() {
 		$('.checked', form).removeClass('checked').find('input').removeAttr('checked');
@@ -25,7 +26,7 @@ $(function() {
 	})
 
 	$('button', form).bind('mousedown', function() {
-		var service = $(this).data('external');
+		service = $(this).data('external');
 
 		// Disable everything initially
 		$('input[type="hidden"]', form).attr('disabled', 'disabled');
@@ -36,10 +37,17 @@ $(function() {
 		});
 
 		// Set all amount inputs to the correct amount
-		$('input[name="amount2"]', form).val( $('input[name="amount"]', form).val() );
-		$('input[name="currency_code"]', form).val( $('input[name="currency"]', form).val() );
+		$('input[name="amount2"]', form).val( value = parseInt($('input[name="amount"]', form).val(), 10) );
+		$('input[name="currency_code"]', form).val( currency = $('input[name="currency"]', form).val() );
 
 		// Set the form action URL
 		form.attr('action', function(){ return $(this).data(service); });
+	});
+	
+	form.on('submit', function() {
+		console.log(['_trackEvent', 'Donate', 'Via-'+service, currency, value]);
+
+		// Send Analytics event
+		_gaq.push(['_trackEvent', 'Donate', 'Via-'+service, currency, value]);
 	});
 });

@@ -374,3 +374,33 @@ li:hover a.source{
 	height: 350px;
 	padding: 20px 15px 15px 15px;
 }
+
+/* Image map */
+#owlmap + p.attribution{
+	width: 395px;
+	margin: 2px 0 0;
+	
+	text-align: center;
+	white-space: normal;
+	font-size: 75%;
+}
+
+/* Event delegation */
+#more{
+	display: block;
+	padding-left: 0;
+}
+
+#more li{
+	display: inline-block;
+	width: 20%;
+	text-align: center;
+}
+
+#more li a{
+	
+}
+
+#addmore{
+	display: block;
+}

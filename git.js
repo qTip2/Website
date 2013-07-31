@@ -8,7 +8,8 @@ var Registry = require('./registry')
 	, cp = require('child_process')
 	, glob = require('glob-whatev')
 	, colors = require('colors')
-	, marked = require('marked');
+	, marked = require('marked')
+	, initialised = false;
 
 // File list to generate file sizes for and it's JSON key mapping
 var _files = {
@@ -116,17 +117,22 @@ function cdnjs() {
 	// Update the wiki repo first
 	return exec('git pull', paths.cdnjs, 'Updating CDNJS files...')()
 
-	// Update wiki files in Registry
+	// Update CDNJS references in Registry
 	.then(function() {
-		var versions = [];
+		var versions = [], stableVersion;
 		glob.glob( fileGlob ).forEach(function(file) {
-			var name = path.basename(file);
-			if(!path.extname(name)) {
-				name = name.replace(path.sep, '');
+			var name = path.basename(file, '.json').replace(path.sep, '');
+			if(name !== 'package') {
 				Registry.cdnjs[name] = true;
 				versions.push(name);
+				stableVersion = name;
 			}
 		});
+
+		// Add "stable" folder mapping
+		Registry.cdnjs['stable'] = stableVersion;
+		versions.push('Stable ('+stableVersion+')');
+		
 		console.log('CDNJS versions: ' + versions.join(', ').green);
 	}, 
 	function(reason) {
@@ -148,10 +154,8 @@ function repos() {
 	// For both nightly and stable repos
 	console.log('Updating repos and parsing src file sizes...');
 	['nightly', 'stable'].forEach(function(version) {
-		// Clean up dist/
+		// Clean up dist/ and pull newest commits
 		result = result.then(exec('grunt clean', paths.git[version], 'Cleaning up dist/ dir'));
-
-		// Pull newest commits
 		result = result.then(exec('git pull origin master', null, 'Pulling '+version+' repo '));
 
 		// If stable... check out latest tag
@@ -164,14 +168,13 @@ function repos() {
 				})
 		}
 
-
 		// Generate archive files
 		result = result.then(function() {
 			var dir = path.join(paths.archive, version === 'stable' ? stableVersion : version);
 
 			// Ensure the package archive has this tag....
 			var q = exec('mkdir ' + dir)().fail(function() { })
-				.then(exec('grunt all || grunt dev', null, 'Generate '+version+' archive files'))
+				.then(exec('grunt dev --'+version, null, 'Generate '+version+' archive files'))
 				.then(exec('cp -r dist/* ' + dir, null, 'Copying generated files'));
 
 			// Create stable latest link files
@@ -184,7 +187,7 @@ function repos() {
 		})
 
 		// Generate file size object
-		result = result.then(function() {
+		.then(function() {
 			console.log('Calculating file sizes...');
 			for(pattern in _files) {
 				var filepath = path.join(paths.git[version], 'src', pattern);
@@ -205,12 +208,10 @@ function repos() {
 				});
 			}
 		});
-
-
 	});
 
 	// Generate cached commit message and digest in build folder
-	result = result.then(function() {
+	result.fin(function() {
 		console.log('Caching latest commit message and digest...');
 
 		// Setup git repo object
@@ -227,10 +228,12 @@ function repos() {
 			var pkg = JSON.parse( fs.readFileSync( paths.git.stable + '/package.json' ) );
 			Registry.build.stable.version = pkg.version;
 		});
+
+		initialised = true;
+		console.log('Done.');
 	})
 
 	// Record on complete/failure
-	.fin(function() { console.log('Done.'); })
 	.fail(function(err) {
 		console.error('Error: %s', err);
 	});
@@ -239,7 +242,7 @@ function repos() {
 }
 
 // GitHub Post hook IPs: 207.97.227.253/32, 50.57.128.197/32, 108.171.174.178/32, 50.57.231.61/32, 204.232.175.64/27, 192.30.252.0/22
-var githubIPs = /(207\.97\.227\.253)|(50\.57\.128\.197)|(108\.171\.174\.178)|(50\.57\.231\.61)|(204\.232\.175\.[6-9][0-9])|(192\.30\.25[2-5]\.[0-255])|(78\.105\.190\.31)/;
+var githubIPs = /(207\.97\.227\.253)|(50\.57\.128\.197)|(108\.171\.174\.178)|(50\.57\.231\.61)|(204\.232\.175\.[6-9][0-9])|(192\.30\.25[2-5]\.[0-255])|(78\.105\.190\.31)|(80\.192\.247\.128)/;
 
 function hookAuth(req, res, next) {
 	process.stdout.write('POST hook received... is it GitHub? ');
@@ -259,5 +262,17 @@ module.exports = {
 	hookAuth: hookAuth,
 	repos: repos,
 	wiki: wiki,
-	cdnjs: cdnjs
-} 
+	cdnjs: cdnjs,
+	routes: function(app) {
+		app.post('/git/update/wiki', hookAuth, wiki);
+		app.post('/git/update/repos', hookAuth, repos);
+		app.post('/git/update/cdnjs', hookAuth, cdnjs);
+
+		// Ensure download page isn't accessible until repos have been initialised
+		app.use('/download', function(req, res, next) {
+			if(!initialised) {
+				res.send(500, 'Updating our GitHub repos... please refresh i na few seconds!');
+			}
+		})
+	}
+};

@@ -1,5 +1,5 @@
 var Registry = require('./registry'),
-	zipstream = require('zipstream'),
+	archiver = require('archiver'),
 	cp = require('child_process'),
 	paths = require('./paths'),
 	util = require('util'),
@@ -14,16 +14,14 @@ var jquery = path.resolve('./build/jquery.min.js');
 /* 
  * Init
  */
-function init(res, params) {
+function init(req, res, params) {
 	console.log('Generating download package...');
+	var styles = [], plugins = [], extras = [];
 
-	// Setup styles to include
-	var styles = [];
+	// Setup styles and plugins to include
 	for(style in params.styles) { styles.push(style); }
-
-	// Setup plugins to include
-	var plugins = [];
 	for(plugin in params.plugins) { plugins.push(plugin); }
+	for(extra in params.extras) { extras.push(extra); }
 
 	// Set the response headers
 	res.set({
@@ -36,6 +34,15 @@ function init(res, params) {
 		'Content-Disposition': 'attachment; filename="jquery.qtip.custom.zip"'
 	});
 
+	// Log it
+	fs.appendFile(
+		path.join(paths.logs, 'build.log'),
+		'[' + new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + ']' +
+			(' '+Registry.build[params.version].version) + 
+			' (' + (plugins.join(' ')||'None') + ' / ' + (styles.join(' ')||'None') + ')' + 
+			' + ' + extras + ' [' + req.ip + "]\n"
+	);
+
 	// Check if a cached version is
 	process.stdout.write('Checking cache... ');
 	var cache = generateCacheURI(params), file;
@@ -44,85 +51,82 @@ function init(res, params) {
 	if(fs.existsSync(cache)) {
 		console.log('found! Using: %s', path.relative(paths.buildcache, cache));
 		fs.createReadStream(cache).pipe(res);
-		return;
 	}
-	else { console.log('none found.') }
-	
-	// Create temp directory to build into
-	tmp.dir(function(err, tmpdir) {
-		console.log('Grunting files...');
+	else {
+		console.log('none found.');
+		
+		// Create temp directory to build into
+		tmp.dir(function(err, tmpdir) {
+			//console.log('Grunting files...');
 
-		// Spawn grunt process
-		var grunt = cp.spawn('grunt', [
-			'--dist='+tmpdir,
-			'--plugins='+(plugins.join(' ') || ''),
-			'--styles='+(styles.join(' ') || '')
-		], {
-			cwd: paths.git[params.version],
-			stdio: [0,1,2]
-		});
-
-		// When all grunt-ed...
-		grunt.on('exit', function(code) {
-			// Get tmp directory file listing
-			Q.ninvoke(fs, 'readdir', tmpdir)
-
-			// Convert grunt-ed files to absolute file paths
-			.then(function(files) {
-				files.forEach(function(file, i) {
-					files[i] = path.resolve(tmpdir, file);
-				});
-				return files;
-			})
-
-			// Add additional zip contents based on params
-			.then(function(files) {
-				process.stdout.write('Adding additional files... ');
-
-				// Add jQuery if enabled
-				if(params.jq || params.jquery) {
-					process.stdout.write('jQuery ');
-					files.unshift(jquery);
-				}
-
-				process.stdout.write("\n");
-				return files;
-			})
-
-			// Once grunt-ed, create our zip file
-			.then(function(files) {
-				console.log('Streaming zip file...');
-				return constructZip(res, files, params);
-			})
-
-			// Done. Cleanup temporary files/dir
-			.then(function(files) {
-				var result = Q.resolve();
-
-				console.log('Done! Cleaning up temporary files...');
-
-				// Delete all files within the temp directory
-				files.forEach(function(file) {
-					if( path.relative(tmpdir, file).substr(0,2) !== '..' ) {
-						result = Q.ninvoke(fs, 'unlink', file);
-					}
-					else { result = Q.resolve(); }
+			// Spawn grunt process
+			var grunt = cp.spawn('grunt', [
+					'--dist='+tmpdir,
+					'--plugins='+(plugins.join(' ') || ''),
+					'--styles='+(styles.join(' ') || ''),
+					'--'+params.version
+				], {
+					cwd: paths.git[params.version]
+					//stdio: [0,1,2]
 				});
 
-				// Attempt to remove the temp directory itself
-				result.then(function() {
-					return Q.ninvoke(fs, 'rmdir', tmpdir);
-				});
+			// When all grunt-ed...
+			grunt.on('exit', function(code) {
+				// Get tmp directory file listing
+				Q.ninvoke(fs, 'readdir', tmpdir)
 
-				return result;
-			})
+				// Redirect to download page on error
+				.fail(function(err) {
+					res.redirect('download/error');
+				})
 
-			// Redirect to download page on error
-			.fail(function(err) {
-				res.redirect('download/error');
+				// Convert grunt-ed files to absolute file paths
+				.then(function(files) {
+					files.forEach(function(file, i) {
+						files[i] = path.resolve(tmpdir, file);
+					});
+					return files;
+				})
+
+				// Add additional zip contents based on params
+				.then(function(files) {
+					process.stdout.write('Adding additional files... ');
+
+					// Add any extras
+					extras.forEach(function(extra) {
+						if(extra === 'jquery') {
+							process.stdout.write('jQuery ');
+							files.unshift(jquery);
+						}
+					})
+
+					process.stdout.write("\n");
+					return files;
+				})
+
+				// Once grunt-ed, create our zip file
+				.then(function(files) {
+					console.log('Streaming zip file...');
+					return constructZip(res, files, params);
+				})
+
+				// Done. Cleanup temporary files/dir
+				.then(function(files) {
+					console.log('Done! Cleaning up temporary files...');
+
+					// Delete all files within the temp directory and temp dir
+					files.forEach(function(file) {
+						if(path.relative(tmpdir, file).substr(0,2) !== '..') {
+							fs.unlink(file);
+						}
+					});
+					fs.rmdir(tmpdir);
+
+					return files;
+				})
 			});
 		});
-	});
+	}
 }
 
 /*
@@ -150,35 +154,30 @@ function constructZip(res, files, params) {
 		zip, file, result;
 
 	// Create new zip and file streams
-	zip = zipstream.createZip({ level: 1 });
-	file = fs.createWriteStream(generateCacheURI(params));
+	archive = archiver('zip');
+	file = fs.createWriteStream( generateCacheURI(params) );
 
-	// Pipe output to response and file
-	zip.pipe(res); zip.pipe(file);
+	// Pipe output to response and file, and handle errors
+	archive.pipe(res); archive.pipe(file);
+	archive.on('error', function(err) {
+		console.log('Uhoh... error encountered!', err);
+	})
 
 	// Loop through all other files and add them sequentially using promises
-	result = Q.resolve();
 	files.forEach(function(file) {
-		result = result.then(function() {
-			// If file is found, add it
-			if(fs.existsSync(file)) {
-				//console.log('Adding file: ', file);
-				return Q.ncall(zip.addFile, zip, fs.createReadStream(file), {
-					name: path.basename(file)
-				});
-			}
+		// If file is found, add it
+		if(fs.existsSync(file)) {
+			//console.log('Adding file: ', file);
+			archive.append(fs.createReadStream(file), { name: path.basename(file) })
+		}
 
-			// File wasn't found...
-			else {
-				console.log('Cannot locate file: ', file, '. Skipping...');
-				return Q.resolve();
-			}
-		});
+		// File wasn't found...
+		else { console.log('Cannot locate file: ', file, '. Skipping...'); }
 	});
 
 	// Finalize the zip file when done
-	result.then(function() {
-		zip.finalize();
+	archive.finalize(function(err) {
+		if(err) { throw err; }
 		deferred.resolve(files);
 	});
 
@@ -186,5 +185,5 @@ function constructZip(res, files, params) {
 }
 
 exports.build = function(req, res) {
-	init(res, req.body);
+	init(req, res, req.body);
 };

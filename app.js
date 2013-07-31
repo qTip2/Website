@@ -4,8 +4,9 @@
 var Registry = require('./registry')
 	, paths = require('./paths')
 	, express = require('express')
-	, routes = require('./routes')
+	, routes = require('./routes/main')
 	, git = require('./git')
+	, zip = require('express-zip')
 	, gzip = require('connect-gzip')
 	, http = require('http')
 	, path = require('path')
@@ -36,16 +37,24 @@ app.configure(function(){
 	// Static files first (don't log these)
 	app.use('/static', express.static(path.join(__dirname, 'public')));
 
+	// Log files, private please!
+	app.use('/l', function(req, res, next) {
+		if(req.query.code === 'letmeinplease') { next(); }
+		else { return res.send(404); } 
+	});
+	app.use('/l', express.static(path.join(__dirname, 'log')));
+
 	// CDNJs Redirects
 	app.use(function(req, res, next) {
-		var matches = /^\/v\/([0-9\.]+)\/(.+\.(?:css|js))$/.exec(req.url),
-			isCDNd = matches && Registry.cdnjs[ matches[1] ];
+		var matches = /^\/v\/([0-9\.]+|stable)\/(.+\.(?:css|js))$/.exec(req.url),
+			cdnVersion = matches && Registry.cdnjs[ matches[1] ];
 
 		// Continue if not CDN'd
-		if(!isCDNd) { return next(); }
+		if(!cdnVersion) { return next(); }
 
 		// Redirect to CDNJS files
-		res.redirect(301, '//cdnjs.cloudflare.com/ajax/libs/qtip2/'+matches[1]+'/'+matches[2]);
+		var version = cdnVersion === true ? matches[1] : cdnVersion;
+		res.redirect(301, '//cdnjs.cloudflare.com/ajax/libs/qtip2/'+version+'/'+matches[2]);
 	});
 
 	// Package archive
@@ -64,12 +73,12 @@ app.configure(function(){
 	}));
 
 	// Redirect people to the main site for now
-	app.use(function(req, res, next) {
-		if(!git.ips.test(req.ip)) {
-			return res.redirect(302, 'http://craigsworks.com/projects/qtip2');
-		}
-		next();
-	});
+	//app.use(function(req, res, next) {
+	//	if(!git.ips.test(req.ip)) {
+	//		return res.redirect(302, 'http://craigsworks.com/projects/qtip2');
+	//	}
+	//	next();
+	//});
 
 	// Allow demo data to be accessed by anyone (CORS)
 	app.use('/demos/data', function(req, res, next) {
@@ -78,6 +87,9 @@ app.configure(function(){
 		res.header('Access-Control-Allow-Headers', 'Content-Type');
 		next();
     });
+	
+	// Root files
+	app.use( express.static(path.join(__dirname, 'root')) );
 
 	// Setup blog vhost
 	//app.use(express.vhost(
@@ -87,7 +99,7 @@ app.configure(function(){
 	// Set globalStyle var for each request via the cookie
 	app.use(express.cookieParser());
 	app.use(function(req, res, next) {
-		res.locals.globalStyle = req.cookies['qtip2_global_style'];
+		res.locals.globalStyle = req.cookies['qtip2_global_style'] || '';
 		next();
 	});
 
@@ -108,8 +120,10 @@ app.locals({
 	GIT_URI: 'http://github.com/Craga89/qTip2/',
 
 	// Google Analytics
-	ANALYTICS_ENABLED: false,
+	ANALYTICS_ENABLED: true,
 	ANALYTICS_UA: 'UA-5228245-13',
+	
+	Registry: Registry,
 
 	// CDN
 	cdn: function(file) {
@@ -173,25 +187,8 @@ marked.setOptions({
 });
 
 // Setup routes
-app.get('/', routes.index);
-app.get('/demos', routes.demos);
-app.get('/demos/data/:type', routes.demoData);
-app.get('/api', routes.api);
-app.get('/options', routes.options);
-app.get('/plugins', routes.plugins);
-app.get('/events', routes.events);
-app.get('/guides', routes.guides);
-app.get('/donate', routes.donate);
-app.get('/faq', routes.faq);
-
-// Download hooks
-app.get('/download', routes.download);
-app.post('/download/build', routes.build);
-
-// "Private" hooks
-app.post('/git/update/wiki', git.hookAuth, git.wiki);
-app.post('/git/update/repos', git.hookAuth, git.repos);
-app.post('/git/update/cdnjs', git.hookAuth, git.cdnjs);
+routes(app);
+git.routes(app);
 
 // Setup the server
 app.listen(app.get('port'), function() {
