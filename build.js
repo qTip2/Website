@@ -1,6 +1,7 @@
 var Registry = require('./registry'),
 	archiver = require('archiver'),
 	cp = require('child_process'),
+	ncp = require('ncp'),
 	paths = require('./paths'),
 	util = require('util'),
 	path = require('path'),
@@ -45,7 +46,7 @@ function init(req, res, params) {
 
 	// Check if a cached version is
 	process.stdout.write('Checking cache... ');
-	var cache = generateCacheURI(params), file;
+	var cache = generateCacheURI(params).cache, file;
 
 	// If a cached ZIP was found, send it
 	if(fs.existsSync(cache)) {
@@ -107,7 +108,7 @@ function init(req, res, params) {
 				// Once grunt-ed, create our zip file
 				.then(function(files) {
 					console.log('Streaming zip file...');
-					return constructZip(res, files, params);
+					return constructZip(res, files, params, tmpdir);
 				})
 
 				// Done. Cleanup temporary files/dir
@@ -132,7 +133,7 @@ function init(req, res, params) {
 /*
  * Generates a cache filename (with build path) from passed params
  */
-function generateCacheURI(params) {
+function generateCacheURI(params, tmpdir) {
 	var name = [ Registry.build[params.version].version ];
 
 	for(i in params.plugins) {
@@ -142,20 +143,24 @@ function generateCacheURI(params) {
 		if(params.styles[i] === 'on') { name.push(i); }
 	}
 	if(params.jquery) { name.push('jq'+params.jquery.replace(/\./g, '')) }
-	
-	return path.join(paths.buildcache, params.version, name.join('-') + '.zip');
+
+	return {
+		tmp: tmpdir ? path.join(tmpdir, name.join('-') + '.zip') : null,
+		cache: path.join(paths.buildcache, params.version, name.join('-') + '.zip')
+	}
 }
 
 /*
  * Dynamic zip constructor / caching
  */
-function constructZip(res, files, params) {
+function constructZip(res, files, params, tmpdir) {
 	var deferred = Q.defer(),
-		zip, file, result;
+		zip, file, paths, result;
 
 	// Create new zip and file streams
 	archive = archiver('zip');
-	file = fs.createWriteStream( generateCacheURI(params) );
+	paths = generateCacheURI(params, tmpdir);
+	file = fs.createWriteStream( paths.tmp );
 
 	// Pipe output to response and file, and handle errors
 	archive.pipe(res); archive.pipe(file);
@@ -178,7 +183,13 @@ function constructZip(res, files, params) {
 	// Finalize the zip file when done
 	archive.finalize(function(err) {
 		if(err) { throw err; }
-		deferred.resolve(files);
+
+		// Copy the zip file into the cache directory
+		ncp(paths.tmp, paths.cache, function(err) {
+			// Resolve the deferred
+			deferred.resolve(files);
+			if(err) { console.error(err); }
+		}); 
 	});
 
 	return deferred.promise;
