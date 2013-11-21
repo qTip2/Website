@@ -90,7 +90,7 @@ function wiki() {
 	var fileGlob = path.join(paths.wiki, '**/*.md');
 
 	// Update the wiki repo first
-	return exec('git pull', paths.wiki, 'Updating wiki files...')()
+	return exec('git pull origin master', paths.wiki, 'Updating wiki files...')()
 
 	// Update wiki files in Registry
 	.then(function() {
@@ -107,7 +107,7 @@ function wiki() {
 		console.log('Wiki pages updated: ' + pages.join(', ').green);
 	}, 
 	function(reason) {
-		console.log('Unable to update CDNJS... ' + reason.red);
+		console.log('Unable to update wiki pages... ' + reason.red);
 	})
 }
 
@@ -115,7 +115,7 @@ function cdnjs() {
 	var fileGlob = path.join(paths.cdnjs, 'ajax/libs/qtip2/*');
 
 	// Update the wiki repo first
-	return exec('git pull', paths.cdnjs, 'Updating CDNJS files...')()
+	return exec('git pull origin master', paths.cdnjs, 'Updating CDNJS files...')()
 
 	// Update CDNJS references in Registry
 	.then(function() {
