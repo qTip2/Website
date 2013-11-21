@@ -235,7 +235,7 @@ function repos() {
 
 	// Record on complete/failure
 	.fail(function(err) {
-		console.error('Error: %s', err);
+		console.log('Error: %s', util.inspect(err));
 	});
 
 	return result;
