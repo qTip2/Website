@@ -14,6 +14,7 @@ module.exports = {
 		nightly: path.resolve('./build/nightly/'),
 		stable: path.resolve('./build/stable')
 	},
+	tmp: path.resolve('./build/tmp'),
 	wiki: path.resolve('./build/wiki'),
 	cdnjs: path.resolve('./build/cdnjs'),
 	donators: path.resolve('./public') + '/donators.txt'

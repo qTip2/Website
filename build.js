@@ -57,8 +57,8 @@ function init(req, res, params) {
 		console.log('none found.');
 		
 		// Create temp directory to build into
-		tmp.dir(function(err, tmpdir) {
-			//console.log('Grunting files...');
+		tmp.dir({ dir: paths.tmp  }, function(err, tmpdir) {
+			//console.log('Grunting files into %s...', tmpdir);
 
 			// Spawn grunt process
 			var grunt = cp.spawn('grunt', [
@@ -68,7 +68,7 @@ function init(req, res, params) {
 					'--'+params.version
 				], {
 					cwd: paths.git[params.version]
-					//stdio: [0,1,2]
+					//,stdio: [0,1,2]
 				});
 
 			// When all grunt-ed...
