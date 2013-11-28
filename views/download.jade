@@ -51,18 +51,18 @@ block content
 					a(href="#builder-styles") see below
 					| )
 			p.cdnlinks
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.min.js", target="_blank")
-					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.min.js
+				a(href="#{qtip("jquery.qtip.min.js")}", target="_blank")
+					| #{qtip("jquery.qtip.min.css")}
 				|  (also 
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.js", target="_blank")
+				a(href="#{qtip("jquery.qtip.js")}", target="_blank")
 					| non-minified
 				| )
 
 				br
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.min.css", target="_blank")
-					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.min.css
+				a(href="#{qtip("jquery.qtip.min.css")}", target="_blank")
+					| #{qtip("jquery.qtip.min.css")}
 				|  (also 
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/jquery.qtip.css", target="_blank")
+				a(href="#{qtip("jquery.qtip.css")}", target="_blank")
 					| non-minified
 				| )
 
@@ -74,18 +74,18 @@ block content
 					| )
 
 			p.cdnlinks
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.min.js", target="_blank")
-					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.min.js
+				a(href="#{qtip("basic/jquery.qtip.min.js")}", target="_blank")
+					| #{qtip("basic/jquery.qtip.min.css")}
 				|  (also 
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.js", target="_blank")
+				a(href="#{qtip("basic/jquery.qtip.js")}", target="_blank")
 					| non-minified
 				| )
 
 				br
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.min.css", target="_blank")
-					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.min.css
+				a(href="#{qtip("basic/jquery.qtip.min.css")}", target="_blank")
+					| #{qtip("basic/jquery.qtip.min.css")}
 				|  (also 
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{build.stable.version}/basic/jquery.qtip.css", target="_blank")
+				a(href="#{qtip("basic/jquery.qtip.css")}", target="_blank")
 					| non-minified
 				| )
 
