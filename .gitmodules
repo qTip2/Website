@@ -7,3 +7,6 @@
 [submodule "build/wiki"]
 	path = build/wiki
 	url = git@github.com:Craga89/qTip2.wiki.git
+[submodule "build/cdnjs"]
+	path = build/cdnjs
+	url = git@github.com:qTip2/cdnjs.git
