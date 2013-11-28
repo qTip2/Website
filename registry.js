@@ -1,10 +1,12 @@
 var path = require('path'),
 	paths = require('./paths'),
-	fs = require('fs');
+	fs = require('fs'),
+	pkg = require( path.join(paths.git.nightly, 'package') );
 
 var Registry = {
 	build: {
 		stable: {
+			version: pkg.version,
 			filesizes: {}
 		},
 		nightly: {
