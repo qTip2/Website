@@ -163,7 +163,7 @@ function repos() {
 			result = result.then(exec('git tag -l | tail -1'))
 				.then(function(tag) { return tag[0].trim(); }) // Clean it up
 				.then(function(tag) {
-					stableVersion = tag.substr(1);
+					Registry.cdnjs.stable = stableVersion = tag.substr(1);
 					return exec('git checkout '+tag, null, 'Checking out latest stable ')();
 				})
 		}
