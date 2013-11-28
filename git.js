@@ -23,15 +23,24 @@ var _files = {
 
 
 var cwd = '';
-function exec(cmd, newcwd, message) {
+function exec(cmd, args, newcwd, message) {
 	return function() {
 		if(message) {
 			console.log(message+'...', cmd.green);
 		}
-
-		return Q.ninvoke(cp, 'exec', cmd, {
-			cwd: (cwd = newcwd || cwd)
-		});
+		
+		console.log(cmd, args, cwd);
+		if(args && args.push) {
+			return Q.ninvoke(cp, 'spawn', cmd, args, {
+				cwd: (cwd = newcwd || cwd),
+				stdio: 'inherit'
+			});
+		}
+		else {
+			return Q.ninvoke(cp, 'exec', cmd, {
+				cwd: (cwd = newcwd || cwd)
+			});
+		}
 	}
 }
 
@@ -90,7 +99,7 @@ function wiki() {
 	var fileGlob = path.join(paths.wiki, '**/*.md');
 
 	// Update the wiki repo first
-	return exec('git pull origin master', paths.wiki, 'Updating wiki files...')()
+	return exec('git', ['pull','origin','master'], paths.wiki, 'Updating wiki files...')()
 
 	// Update wiki files in Registry
 	.then(function() {
@@ -115,7 +124,7 @@ function cdnjs() {
 	var fileGlob = path.join(paths.cdnjs, 'ajax/libs/qtip2/*');
 
 	// Update the wiki repo first
-	return exec('git pull origin master', paths.cdnjs, 'Updating CDNJS files...')()
+	return exec('git', ['pull','origin','master'], paths.cdnjs, 'Updating CDNJS files...')()
 
 	// Update CDNJS references in Registry
 	.then(function() {
@@ -155,15 +164,16 @@ function repos() {
 	console.log('Updating repos and parsing src file sizes...');
 	['nightly', 'stable'].forEach(function(version) {
 		// Clean up dist/ and pull newest commits
-		result = result.then(exec('grunt clean', paths.git[version], 'Cleaning up dist/ dir'));
-		result = result.then(exec('git pull origin master', null, 'Pulling '+version+' repo '));
+		result = result.then(exec('grunt', ['clean'], paths.git[version], 'Cleaning up dist/ dir'));
+		result = result.then(exec('git', ['pull','origin','master'], null, 'Pulling '+version+' repo '));
 
 		// If stable... check out latest tag
 		if(version === 'stable') {
 			result = result.then(exec('git tag -l | tail -1'))
 				.then(function(tag) { return tag[0].trim(); }) // Clean it up
 				.then(function(tag) {
-					Registry.cdnjs.stable = stableVersion = tag.substr(1);
+					stableVersion = tag.substr(1);
+					console.log(stableVersion);
 					return exec('git checkout '+tag, null, 'Checking out latest stable ')();
 				})
 		}
@@ -173,14 +183,14 @@ function repos() {
 			var dir = path.join(paths.archive, version === 'stable' ? stableVersion : version);
 
 			// Ensure the package archive has this tag....
-			var q = exec('mkdir ' + dir)().fail(function() { })
-				.then(exec('grunt dev --'+version, null, 'Generate '+version+' archive files'))
-				.then(exec('cp -r dist/* ' + dir, null, 'Copying generated files'));
+			var q = exec('mkdir', [dir])()
+				.then(exec('grunt', ['dev','--'+version], null, 'Generate '+version+' archive files'))
+				.then(exec('cp', ['-r', 'dist/*', dir], null, 'Copying generated files'));
 
 			// Create stable latest link files
 			if(version === 'stable') {			
 				q.then(exec('rm stable &> /dev/null', paths.archive))
-				.then(exec('ln -s '+dir+' stable', paths.archive, 'Linking latest files'));
+				.then(exec('ln', ['-s', dir, 'stable'], paths.archive, 'Linking latest files'));
 			}
 
 			return q;
@@ -208,6 +218,10 @@ function repos() {
 				});
 			}
 		});
+	})
+
+	result.fail(function() {
+		console.log(arguments);
 	});
 
 	// Generate cached commit message and digest in build folder
@@ -225,8 +239,7 @@ function repos() {
 			Registry.build.nightly.commitdate = details.committed_date;
 
 			// Set stable properties
-			var pkg = JSON.parse( fs.readFileSync( paths.git.stable + '/package.json' ) );
-			Registry.build.stable.version = pkg.version;
+			Registry.build.stable.version = Registry.cdnjs.stable = stableVersion;
 		});
 
 		initialised = true;
