@@ -22,30 +22,50 @@ var _files = {
 };
 
 
-var cwd = '';
-function exec(cmd, args, newcwd, message) {
+function exec(command, args, cwd, message) {
+	!cwd && console.log(arguments);
+
 	return function() {
+
+		// Echo message if given
 		if(message) {
-			console.log(message+'...', cmd.green);
+			console.log(('['+path.relative(process.cwd(), cwd)+']').magenta, message, '('+(command+' '+args.join(' ')).green+')');
 		}
-		
-		console.log(cmd, args, cwd);
-		if(args && args.push) {
-			return Q.ninvoke(cp, 'spawn', cmd, args, {
-				cwd: (cwd = newcwd || cwd),
-				stdio: 'inherit'
-			});
+
+		// If no arguments given, just use exec
+		if(!args || !args.push) {
+			return Q.nfcall(cp.exec, command, { cwd: cwd });
 		}
-		else {
-			return Q.ninvoke(cp, 'exec', cmd, {
-				cwd: (cwd = newcwd || cwd)
-			});
-		}
+	
+		var deferred = Q.defer(),
+
+		proc = cp.spawn(command, args, {
+			cwd: cwd,
+			stdio: process.env.DEBUG ? "inherit" : "ignore"
+		});
+
+		proc.on("message", function (message) {
+			deferred.notify( message );
+		});
+
+		proc.on("error", function (error) {
+			deferred.reject(error);
+		});
+
+		proc.on("exit", function(code) {
+			if (code !== 0) {
+				deferred.reject(new Error(("Exited with code " + code).red));
+			} else {
+				deferred.resolve();
+			}
+		});
+
+		return deferred.promise;
 	}
-}
+};
 
 /*
- * Wiki update
+ * Process a given markdown article into proper format needed
  */
 function processMarkdown(name, text) {
 	// Anchor prefix is analogous to URL slug
@@ -95,11 +115,17 @@ function processMarkdown(name, text) {
 	+ '</div></div>';
 }
 
+
+/*
+ * Wiki update method.
+ */
 function wiki() {
 	var fileGlob = path.join(paths.wiki, '**/*.md');
 
+	console.log('======================================= Updating Wiki ======================================='.bold);
+
 	// Update the wiki repo first
-	return exec('git', ['pull','origin','master'], paths.wiki, 'Updating wiki files...')()
+	return exec('git', ['pull','origin','master'], paths.wiki, 'Updating wiki files')()
 
 	// Update wiki files in Registry
 	.then(function() {
@@ -113,18 +139,26 @@ function wiki() {
 			);
 			pages.push(name);
 		});
-		console.log('Wiki pages updated: ' + pages.join(', ').green);
+		console.log('[build/wiki]'.magenta, 'Pages updated: ', pages.join(', ').green, "\n");
 	}, 
 	function(reason) {
-		console.log('Unable to update wiki pages... ' + reason.red);
+		console.log('[build/wiki]'.magenta, 'Unable to update pages...', reason.red, "\n");
 	})
+
+	console.log("\n");
 }
 
+
+/*
+ * CDNJS Update method. Parses various versions 
+ */
 function cdnjs() {
 	var fileGlob = path.join(paths.cdnjs, 'ajax/libs/qtip2/*');
 
+	console.log('======================================= Updating CDNJS Repo ======================================='.bold);
+
 	// Update the wiki repo first
-	return exec('git', ['pull','origin','master'], paths.cdnjs, 'Updating CDNJS files...')()
+	return exec('git', ['pull','origin','master'], paths.cdnjs, 'Updating CDNJS files')()
 
 	// Update CDNJS references in Registry
 	.then(function() {
@@ -132,7 +166,7 @@ function cdnjs() {
 		glob.glob( fileGlob ).forEach(function(file) {
 			var name = path.basename(file, '.json').replace(path.sep, '');
 			if(name !== 'package') {
-				Registry.cdnjs[name] = true;
+				Registry.cdnjs[name] = name;
 				versions.push(name);
 				stableVersion = name;
 			}
@@ -142,11 +176,12 @@ function cdnjs() {
 		Registry.cdnjs['stable'] = stableVersion;
 		versions.push('Stable ('+stableVersion+')');
 		
-		console.log('CDNJS versions: ' + versions.join(', ').green);
+		console.log('[build/cdnjs]'.magenta, 'Versions detected: ' + versions.join(', ').green, "\n");
 	}, 
 	function(reason) {
-		console.log('Unable to update CDNJS... ' + reason.red);
+		console.log('[build/cdnjs]'.magenta, 'Unable to update... ' + reason.red, "\n");
 	})
+
 }
 
 /*
@@ -161,36 +196,46 @@ function repos() {
 		stableVersion;
 
 	// For both nightly and stable repos
-	console.log('Updating repos and parsing src file sizes...');
 	['nightly', 'stable'].forEach(function(version) {
+		var cwd = paths.git[version];
+
+		// Header output
+		result.then(function() {
+			console.log(('======================================= Updating '+version+' repo =======================================').bold);
+		})
+
 		// Clean up dist/ and pull newest commits
-		result = result.then(exec('grunt', ['clean'], paths.git[version], 'Cleaning up dist/ dir'));
-		result = result.then(exec('git', ['pull','origin','master'], null, 'Pulling '+version+' repo '));
+		result = result.then(exec('grunt', ['clean'], cwd, 'Cleaning up dist/ dir'))
+			.then(exec('git', ['pull','origin','master'], cwd, 'Pulling '+version+' repo '));
 
 		// If stable... check out latest tag
 		if(version === 'stable') {
-			result = result.then(exec('git tag -l | tail -1'))
-				.then(function(tag) { return tag[0].trim(); }) // Clean it up
+			result = result.then(exec('git tag -l | tail -1', null, cwd))
 				.then(function(tag) {
+					// Clean it up
+					tag = tag[0].trim();
+
+					// Set stable version
 					stableVersion = tag.substr(1);
-					console.log(stableVersion);
-					return exec('git checkout '+tag, null, 'Checking out latest stable ')();
+
+					return exec('git', ['checkout', tag], cwd, 'Checking out latest stable ')();
 				})
 		}
 
 		// Generate archive files
 		result = result.then(function() {
-			var dir = path.join(paths.archive, version === 'stable' ? stableVersion : version);
+			var dir = path.join(paths.archive, version === 'stable' ? stableVersion : version),
+				basic = path.join(dir, 'basic');
 
-			// Ensure the package archive has this tag....
-			var q = exec('mkdir', [dir])()
-				.then(exec('grunt', ['dev','--'+version], null, 'Generate '+version+' archive files'))
-				.then(exec('cp', ['-r', 'dist/*', dir], null, 'Copying generated files'));
+			// Create archive files
+			var q = exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, 'Generate '+version+' archive')()
 
-			// Create stable latest link files
-			if(version === 'stable') {			
-				q.then(exec('rm stable &> /dev/null', paths.archive))
-				.then(exec('ln', ['-s', dir, 'stable'], paths.archive, 'Linking latest files'));
+			// Also create 'basic' files too if stable
+			if(version === 'stable') {
+				q = q.then(exec('grunt', ['dev', '--force', '--dist='+basic,'--'+version], cwd, 'Generate basic '+version+' archive'))
+					.then(exec('rm stable', ['stable'], paths.archive))
+					.then(exec('ln', ['-s', dir, 'stable'], paths.archive, 'Sym-linking stable dir'))
+					.fail(function() {});
 			}
 
 			return q;
@@ -198,7 +243,7 @@ function repos() {
 
 		// Generate file size object
 		.then(function() {
-			console.log('Calculating file sizes...');
+			console.log('%s %s', ('[build/'+version+']').magenta, "Calculating file sizes...\n");
 			for(pattern in _files) {
 				var filepath = path.join(paths.git[version], 'src', pattern);
 
@@ -220,36 +265,29 @@ function repos() {
 		});
 	})
 
-	result.fail(function() {
-		console.log(arguments);
-	});
-
 	// Generate cached commit message and digest in build folder
-	result.fin(function() {
-		console.log('Caching latest commit message and digest...');
+	result = result.fin(function() {
+		console.log('[FINALISE]'.red.bold, 'Cache latest commit message and digest');
 
 		// Setup git repo object
 		var repo = git( path.resolve(path.join(paths.build, 'nightly')) );
 
 		// Update the Registry build properties
-		return Q.ncall(repo.commits, repo, null, 1, null).then(function(commit) {
+		return Q.ninvoke(repo, 'commits', null, 1, null).then(function(commit) {
 			var details = commit[0];
+
 			Registry.build.nightly.version = details.id.substr(0, 7);
 			Registry.build.nightly.commitmsg = details.message;
 			Registry.build.nightly.commitdate = details.committed_date;
 
 			// Set stable properties
-			Registry.build.stable.version = Registry.cdnjs.stable = stableVersion;
-		});
+			Registry.build.stable.version = stableVersion;
+
+			console.log('[DONE]'.green.bold, 'All ready!');
+		})
 
 		initialised = true;
-		console.log('Done.');
 	})
-
-	// Record on complete/failure
-	.fail(function(err) {
-		console.log('Error: %s', util.inspect(err));
-	});
 
 	return result;
 }

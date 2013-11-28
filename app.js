@@ -13,7 +13,8 @@ var Registry = require('./registry')
 	, fs = require('fs')
 	, moment = require('moment')
 	, highlight = require('highlight').Highlight
-	, marked = require('marked');
+	, marked = require('marked')
+	, Q = require('q');
 
 // Setup the server
 var app = express();
@@ -125,6 +126,9 @@ app.locals({
 	
 	Registry: Registry,
 
+	moment: moment,
+	markdown: marked,
+
 	// CDN
 	cdn: function(file) {
 		var ext = path.extname(file).substr(1),
@@ -133,39 +137,47 @@ app.locals({
 
 		// Use jQuery(UI) code repo
 		if(file === 'jquery') {
-			return 'http://code.jquery.com/jquery.min.js'
+			return '//code.jquery.com/jquery.min.js'
 		}
 		else if(file === 'jqueryui') {
-			return 'http://code.jquery.com/ui/1.8.22/jquery-ui.min.js'
+			return '//code.jquery.com/ui/1.8.22/jquery-ui.min.js'
 		}
 		else if(file === 'jqueryui-css') {
-			return 'http://code.jquery.com/ui/1.8.22/themes/ui-lightness/jquery-ui.css'
+			return '//code.jquery.com/ui/1.8.22/themes/ui-lightness/jquery-ui.css'
 		}
 
-		return 'http://' + path.join('media'+rand+'.juggledesign.com', 'qtip2', type, file);
+		return '//' + path.join('media'+rand+'.juggledesign.com', 'qtip2', type, file);
 	},
 
 	// URL helper
 	url: function(url) {
 		if(url === 'github') {
-			return 'http://github.com/Craga89/qTip2'
+			return '//github.com/Craga89/qTip2'
 		}
 
 		return path.join(app.locals.WEB_DIR, url);
 	},
 
 	// qTip packages helper
-	qtip: function(ext, minified) {
-		var min = minified !== false ? 'min.' : ''
-		return 'http://qtip2.com/v/nightly/jquery.qtip.'+min+ext;
+	qtip: function(filename, version) {
+		// Assume stable if not given
+		if(!version) { version = 'stable'; }
+
+		// Check for a CDNJS Version
+		var cdnVersion = Registry.cdnjs[ version ];
+
+		// Return CDNJS url if valid, otherwise use the qTip2 archive links
+		return cdnVersion ? 
+			'//cdnjs.cloudflare.com/ajax/libs/qtip2/'+cdnVersion+'/'+filename :
+			'//qtip2.com/v/'+version+'/'+filename;
 	},
 
-	// Helpers
-	moment: moment,
-	markdown: marked,
+	// Code highlighter
 	highlight: function(code, lang) {
 		return highlight(code, null, null, lang);
 	},
+
+	// Wiki page formatter
 	wikipage: function(name) {
 		if(!Registry.markdown[name]) {
 			return 'Uhoh... no such page!'
@@ -195,7 +207,5 @@ app.listen(app.get('port'), function() {
 	console.log("Express server listening on port " + app.get('port'));
 });
 
-// Update our repos and upon completion, start the server
-git.wiki();
-git.cdnjs();
-git.repos();
+// Update our various repos
+[ git.wiki, git.cdnjs, git.repos ].reduce(Q.when, Q());
