@@ -48,14 +48,16 @@ app.configure(function(){
 	// CDNJs Redirects
 	app.use(function(req, res, next) {
 		var matches = /^\/v\/([0-9\.]+|stable)\/(.+\.(?:css|js))$/.exec(req.url),
-			cdnVersion = matches && Registry.cdnjs[ matches[1] ];
+			version = matches && matches[1];
 
-		// Continue if not CDN'd
+		// Redirect to correct stable
+		if(version === 'stable') {
+			version = Registry.build.stable.version;
+		}
+
+		// Check for a CDNJS Version
+		var cdnVersion = Registry.cdnjs[ version ];
 		if(!cdnVersion) { return next(); }
-
-		// Redirect to CDNJS files
-		var version = cdnVersion === true ? matches[1] : cdnVersion;
-		res.redirect(301, '//cdnjs.cloudflare.com/ajax/libs/qtip2/'+version+'/'+matches[2]);
 	});
 
 	// Package archive
@@ -72,14 +74,6 @@ app.configure(function(){
 		format: 'default',
 		stream: fs.createWriteStream( path.join(paths.logs, 'http.log'), { flags: 'a' })
 	}));
-
-	// Redirect people to the main site for now
-	//app.use(function(req, res, next) {
-	//	if(!git.ips.test(req.ip)) {
-	//		return res.redirect(302, 'http://craigsworks.com/projects/qtip2');
-	//	}
-	//	next();
-	//});
 
 	// Allow demo data to be accessed by anyone (CORS)
 	app.use('/demos/data', function(req, res, next) {
