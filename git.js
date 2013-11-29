@@ -228,7 +228,7 @@ function repos() {
 					// Set stable version
 					stableVersion = tag.substr(1);
 
-					return exec('git', ['checkout', tag], cwd, 'Checking out latest stable ')();
+					return exec('git', ['checkout', tag], cwd, 'Checking out latest stable')();
 				})
 		}
 
@@ -248,7 +248,7 @@ function repos() {
 				}
 
 				// Symlink stable directory top latest stable version directory
-				q = q.then(exec('ln', ['-fs', dir, 'stable'], paths.archive, 'Sym-linking stable dir'));
+				q = q.then(exec('ln', ['-fs', dir, path.join(paths.archive, 'stable')], paths.archive, 'Sym-linking stable dir'));
 			}
 
 			// Always create nightly files
@@ -284,7 +284,7 @@ function repos() {
 	})
 
 	// Generate cached commit message and digest in build folder
-	result = result.fin(function() {
+	result = result.then(function() {
 		console.log('[FINALISE]\t'.red.bold, 'Caching latest commit message and digest');
 
 		// Setup git repo object
@@ -299,7 +299,7 @@ function repos() {
 			Registry.build.nightly.commitdate = details.committed_date;
 
 			// Set stable properties
-			Registry.build.stable.version = stableVersion;
+			stableVersion && Registry.build.stable.version = stableVersion;
 
 			console.log('[DONE]\t'.green.bold, 'All ready!', ('(Latest stable: '+stableVersion+')').bold);
 		})
