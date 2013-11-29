@@ -58,6 +58,9 @@ app.configure(function(){
 		// Check for a CDNJS Version
 		var cdnVersion = Registry.cdnjs[ version ];
 		if(!cdnVersion) { return next(); }
+
+		// Redirect to CDNJS files
+		res.redirect(301, '//cdnjs.cloudflare.com/ajax/libs/qtip2/'+version+'/'+matches[2]);
 	});
 
 	// Package archive
