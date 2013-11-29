@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo forever start -w -a -o /var/www/log/express.log -e /var/www/log/error.log -l /var/www/log/forever.log app.js
+supervisor --restart-on-error -i public,cache,build,log,root app.js
