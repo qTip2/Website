@@ -1,0 +1,5 @@
+#!/bin/bash
+
+git submodule update --init --recursive
+git submodule foreach --recursive 'npm install'
+git submodule foreach --recursive 'bower install'
