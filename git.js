@@ -29,7 +29,7 @@ function exec(command, args, cwd, message) {
 
 		// Echo message if given
 		if(message) {
-			console.log(('['+path.relative(process.cwd(), cwd)+']').magenta, message, '('+(command+' '+args.join(' ')).green+')');
+			console.log(('['+path.relative(process.cwd(), cwd)+']').magenta, message, '('+(command+' '+(args || []).join(' ')).green+')');
 		}
 
 		// If no arguments given, just use exec
@@ -186,7 +186,7 @@ function cdnjs() {
 	})
 
 	// Generate archive files
-	.then( exec('find '+paths.cdnjs+'/ajax/libs/qtip2/ -type d -maxdepth 1 -exec ln -fs {} \;', null, paths.archive, 'Generating archive links') );
+	.then( exec('find '+paths.cdnjs+'/ajax/libs/qtip2/ -maxdepth 1 -type d -exec ln -fs {} \\;', null, paths.archive, "Generating archive links\n") );
 }
 
 /*
