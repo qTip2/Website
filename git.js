@@ -242,7 +242,7 @@ function repos() {
 			if(version === 'stable') {
 				// If CDNJS doesn't have latest stable... generate it instead
 				if(Registry.cdnjs.stable !== stableVersion) {
-					console.log(('[build/'+version+']\t').magenta, (stableVersion + '(latest stable) not available in CDNJS! Generating manually...').bold);
+					console.log(('[build/'+version+']\t').magenta, (stableVersion + ' (latest stable) not available in CDNJS! Generating manually...').bold);
 					q = q.then(exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, '\tGenerating '+version+' archive'))
 						.then(exec('grunt', ['dev', '--force', '--dist='+path.join(dir, 'basic'),'--'+version], cwd, '\tGenerating basic '+version+' archive'))
 				}
@@ -301,7 +301,7 @@ function repos() {
 			// Set stable properties
 			Registry.build.stable.version = stableVersion;
 
-			console.log('[DONE]\t'.green.bold, 'All ready!');
+			console.log('[DONE]\t'.green.bold, 'All ready!', ('(Latest stable: '+stableVersion+')').bold);
 		})
 
 		initialised = true;
