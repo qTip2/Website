@@ -29,7 +29,7 @@ function exec(command, args, cwd, message) {
 
 		// Echo message if given
 		if(message) {
-			console.log(('['+path.relative(process.cwd(), cwd)+']').magenta, message, '('+(command+' '+(args || []).join(' ')).green+')');
+			console.log(('['+path.relative(process.cwd(), cwd)+']\t').magenta, message, '('+(command+' '+(args || []).join(' ')).green+')');
 		}
 
 		// If no arguments given, just use exec
@@ -139,10 +139,10 @@ function wiki() {
 			);
 			pages.push(name);
 		});
-		console.log('[build/wiki]'.magenta, 'Pages updated: ', pages.join(', ').green, "\n");
+		console.log('[build/wiki]\t'.magenta, 'Pages updated: ', pages.join(', ').grey, "\n");
 	}, 
 	function(reason) {
-		console.log('[build/wiki]'.magenta, 'Unable to update pages...', reason.red, "\n");
+		console.log('[build/wiki]\t'.magenta, 'Unable to update pages...', reason.red, "\n");
 	})
 
 	console.log("\n");
@@ -177,16 +177,21 @@ function cdnjs() {
 		versions.push('Stable ('+stableVersion+')');
 
 		// Log out
-		console.log('[build/cdnjs]'.magenta, 'Versions detected: ' + versions.join(', ').green, "\n");
+		console.log('[build/cdnjs]\t'.magenta, 'Versions detected: ' + versions.join(', ').grey);
 
 		return versions;
-	}, 
-	function(reason) {
-		console.log('[build/cdnjs]'.magenta, 'Unable to update... ' + reason.red, "\n");
 	})
 
 	// Generate archive files
-	.then( exec('find '+paths.cdnjs+'/ajax/libs/qtip2/* -maxdepth 0 -type d -exec ln -fs {} \\;', null, paths.archive, "Generating archive links\n") );
+	.then( exec('find '+paths.cdnjs+'/ajax/libs/qtip2/* -maxdepth 0 -type d -exec ln -fs {} \\;', null, paths.archive, "Generating archive links") )
+
+	// New line
+	.then( function() { console.log("\n") })
+
+	// Fail handler
+	.fail(function(reason) {
+		console.log('[build/cdnjs]\t'.magenta, 'Unable to update... ' + reason.red, "\n");
+	})
 }
 
 /*
@@ -234,12 +239,12 @@ function repos() {
 				q = Q();
 
 			// If stable...
-			console.log(Registry.cdnjs.stable, stableVersion)
 			if(version === 'stable') {
 				// If CDNJS doesn't have latest stable... generate it instead
 				if(Registry.cdnjs.stable !== stableVersion) {
-					q = q.then(exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, 'Generate '+version+' archive'))
-						.then(exec('grunt', ['dev', '--force', '--dist='+path.join(dir, 'basic'),'--'+version], cwd, 'Generate basic '+version+' archive'))
+					console.log(('[build/'+version+']\t').magenta, (stableVersion + '(latest stable) not available in CDNJS! Generating manually...').bold);
+					q = q.then(exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, '\tGenerating '+version+' archive'))
+						.then(exec('grunt', ['dev', '--force', '--dist='+path.join(dir, 'basic'),'--'+version], cwd, '\tGenerating basic '+version+' archive'))
 				}
 
 				// Symlink stable directory top latest stable version directory
@@ -256,7 +261,7 @@ function repos() {
 
 		// Generate file size object
 		.then(function() {
-			console.log('%s %s', ('[build/'+version+']').magenta, "Calculating file sizes...\n");
+			console.log('%s %s', ('[build/'+version+']\t').magenta, "Calculating file sizes\n");
 			for(pattern in _files) {
 				var filepath = path.join(paths.git[version], 'src', pattern);
 
@@ -280,7 +285,7 @@ function repos() {
 
 	// Generate cached commit message and digest in build folder
 	result = result.fin(function() {
-		console.log('[FINALISE]'.red.bold, 'Cache latest commit message and digest');
+		console.log('[FINALISE]\t'.red.bold, 'Caching latest commit message and digest');
 
 		// Setup git repo object
 		var repo = git( path.resolve(path.join(paths.build, 'nightly')) );
@@ -296,7 +301,7 @@ function repos() {
 			// Set stable properties
 			Registry.build.stable.version = stableVersion;
 
-			console.log('[DONE]'.green.bold, 'All ready!');
+			console.log('[DONE]\t'.green.bold, 'All ready!');
 		})
 
 		initialised = true;
@@ -335,7 +340,7 @@ module.exports = {
 		// Ensure download page isn't accessible until repos have been initialised
 		app.use('/download', function(req, res, next) {
 			if(!initialised) {
-				res.send(500, 'Updating our GitHub repos... please refresh i na few seconds!');
+				res.send(500, 'Updating our GitHub repos... please refresh in a few seconds!');
 			}
 		})
 	}
