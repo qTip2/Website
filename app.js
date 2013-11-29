@@ -162,7 +162,7 @@ app.locals({
 	// qTip packages helper
 	qtip: function(filename, version) {
 		// Assume stable if not given
-		if(!version) { version = 'stable'; }
+		if(!version) { version = Registry.build.stable.version; }
 
 		// Check for a CDNJS Version
 		var cdnVersion = Registry.cdnjs[ version ];
