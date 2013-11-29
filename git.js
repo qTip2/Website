@@ -186,7 +186,7 @@ function cdnjs() {
 	})
 
 	// Generate archive files
-	.then( exec('find '+paths.cdnjs+'/ajax/libs/qtip2/ -maxdepth 1 -type d -exec ln -fs {} \\;', null, paths.archive, "Generating archive links\n") );
+	.then( exec('find '+paths.cdnjs+'/ajax/libs/qtip2/* -maxdepth 0 -type d -exec ln -fs {} \\;', null, paths.archive, "Generating archive links\n") );
 }
 
 /*
