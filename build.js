@@ -1,6 +1,7 @@
 var Registry = require('./registry'),
 	archiver = require('archiver'),
 	cp = require('child_process'),
+	rmdir = require('rmdir'),
 	ncp = require('ncp'),
 	paths = require('./paths'),
 	util = require('util'),
@@ -57,7 +58,7 @@ function init(req, res, params) {
 		console.log('none found.');
 		
 		// Create temp directory to build into
-		tmp.dir({ dir: paths.tmp  }, function(err, tmpdir) {
+		tmp.dir({ dir: paths.tmp, unsafeCleanup: true }, function(err, tmpdir) {
 			//console.log('Grunting files into %s...', tmpdir);
 
 			// Spawn grunt process
@@ -67,8 +68,8 @@ function init(req, res, params) {
 					'--styles='+(styles.join(' ') || ''),
 					'--'+params.version
 				], {
-					cwd: paths.git[params.version]
-					//,stdio: [0,1,2]
+					cwd: paths.git[params.version],
+					stdio: process.env.DEBUG ? 'inherit' : 'ignore'
 				});
 
 			// When all grunt-ed...
@@ -114,16 +115,7 @@ function init(req, res, params) {
 				// Done. Cleanup temporary files/dir
 				.then(function(files) {
 					console.log('Done! Cleaning up temporary files...');
-
-					// Delete all files within the temp directory and temp dir
-					files.forEach(function(file) {
-						if(path.relative(tmpdir, file).substr(0,2) !== '..') {
-							fs.unlink(file);
-						}
-					});
-					fs.rmdir(tmpdir);
-
-					return files;
+					return Q.nfcall(rmdir, tmpdir);
 				})
 			});
 		});
