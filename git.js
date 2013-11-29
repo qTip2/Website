@@ -175,13 +175,18 @@ function cdnjs() {
 		// Add "stable" folder mapping
 		Registry.cdnjs['stable'] = stableVersion;
 		versions.push('Stable ('+stableVersion+')');
-		
+
+		// Log out
 		console.log('[build/cdnjs]'.magenta, 'Versions detected: ' + versions.join(', ').green, "\n");
+
+		return versions;
 	}, 
 	function(reason) {
 		console.log('[build/cdnjs]'.magenta, 'Unable to update... ' + reason.red, "\n");
 	})
 
+	// Generate archive files
+	.then( exec('find '+paths.cdnjs+'/ajax/libs/qtip2/ -type d -maxdepth 1 -exec ln -fs {} \;', null, paths.archive, 'Generating archive links') );
 }
 
 /*
@@ -227,13 +232,21 @@ function repos() {
 			var dir = path.join(paths.archive, version === 'stable' ? stableVersion : version),
 				basic = path.join(dir, 'basic');
 
-			// Create archive files
-			var q = exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, 'Generate '+version+' archive')()
-
-			// Also create 'basic' files too if stable
+			// If stable...
+			console.log(Registry.cdnjs.stable, stableVersion)
 			if(version === 'stable') {
-				q = q.then(exec('grunt', ['dev', '--force', '--dist='+basic,'--'+version], cwd, 'Generate basic '+version+' archive'))
-					.then(exec('ln', ['-fs', dir, 'stable'], paths.archive, 'Sym-linking stable dir'));
+				// If CDNJS doesn't have latest stable... generate it instead
+				if(Registry.cdnjs.stable !== stableVersion) {
+					q = q.then(exec('grunt', ['dev', '--force', '--dist='+basic,'--'+version], cwd, 'Generate basic '+version+' archive'))
+				}
+
+				// Symlink stable directory top latest stable version directory
+				q = q.then(exec('ln', ['-fs', dir, 'stable'], paths.archive, 'Sym-linking stable dir'));
+			}
+
+			// Always create nightly files
+			else {
+				var q = exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, 'Generate '+version+' archive')()
 			}
 
 			return q;
