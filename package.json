@@ -23,6 +23,7 @@
     "request": "~2.27.0",
     "connect-gzip": "~0.1.6",
     "jade": "~0.31.0",
-    "express": "~3.4.5"
+    "express": "~3.4.5",
+    "rmdir": "~1.0.0"
   }
 }
