@@ -238,7 +238,8 @@ function repos() {
 			if(version === 'stable') {
 				// If CDNJS doesn't have latest stable... generate it instead
 				if(Registry.cdnjs.stable !== stableVersion) {
-					q = q.then(exec('grunt', ['dev', '--force', '--dist='+basic,'--'+version], cwd, 'Generate basic '+version+' archive'))
+					q = q.then(exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, 'Generate '+version+' archive'))
+						.then(exec('grunt', ['dev', '--force', '--dist='+path.join(dir, 'basic'),'--'+version], cwd, 'Generate basic '+version+' archive'))
 				}
 
 				// Symlink stable directory top latest stable version directory
@@ -247,7 +248,7 @@ function repos() {
 
 			// Always create nightly files
 			else {
-				q = exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, 'Generate '+version+' archive')()
+				q = q.then(exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, 'Generate '+version+' archive'));
 			}
 
 			return q;
