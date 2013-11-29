@@ -105,7 +105,8 @@ app.configure(function(){
 	});
 
 	// Use body parser and method override middlewares
-	app.use(express.bodyParser());
+	app.use(express.urlencoded());
+	app.use(express.json());
 	app.use(express.methodOverride());
 });
 

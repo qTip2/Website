@@ -233,9 +233,7 @@ function repos() {
 			// Also create 'basic' files too if stable
 			if(version === 'stable') {
 				q = q.then(exec('grunt', ['dev', '--force', '--dist='+basic,'--'+version], cwd, 'Generate basic '+version+' archive'))
-					.then(exec('rm stable', ['stable'], paths.archive))
-					.then(exec('ln', ['-s', dir, 'stable'], paths.archive, 'Sym-linking stable dir'))
-					.fail(function() {});
+					.then(exec('ln', ['-fs', dir, 'stable'], paths.archive, 'Sym-linking stable dir'));
 			}
 
 			return q;
