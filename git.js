@@ -230,7 +230,8 @@ function repos() {
 		// Generate archive files
 		result = result.then(function() {
 			var dir = path.join(paths.archive, version === 'stable' ? stableVersion : version),
-				basic = path.join(dir, 'basic');
+				basic = path.join(dir, 'basic'),
+				q = Q();
 
 			// If stable...
 			console.log(Registry.cdnjs.stable, stableVersion)
@@ -246,7 +247,7 @@ function repos() {
 
 			// Always create nightly files
 			else {
-				var q = exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, 'Generate '+version+' archive')()
+				q = exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, 'Generate '+version+' archive')()
 			}
 
 			return q;
