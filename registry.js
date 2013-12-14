@@ -16,7 +16,7 @@ var Registry = {
 		}
 	},
 	markdown: { /* See git.js */ },
-	cdnjs: { /* See git.js */ },
+	cdn: { /* See git.js */ },
 	donate: {
 		contributors: fs.readFileSync(path.join(paths.public, 'donators.txt')).toString()
 	}

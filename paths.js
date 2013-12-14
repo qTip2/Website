@@ -16,6 +16,8 @@ module.exports = {
 	},
 	tmp: path.resolve('./build/tmp'),
 	wiki: path.resolve('./build/wiki'),
-	cdnjs: path.resolve('./build/cdnjs'),
+	cdn: path.resolve('./build/jsdelivr'),
+	cdnProject: path.resolve('./build/jsdelivr/files/qtip2'),
+	cdnUrl: '//cdn.jsdelivr.net/qtip2',
 	donators: path.resolve('./public') + '/donators.txt'
 }

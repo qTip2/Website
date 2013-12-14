@@ -56,11 +56,11 @@ app.configure(function(){
 		}
 
 		// Check for a CDNJS Version
-		var cdnVersion = Registry.cdnjs[ version ];
+		var cdnVersion = Registry.cdn[ version ];
 		if(!cdnVersion) { return next(); }
 
 		// Redirect to CDNJS files
-		res.redirect(301, '//cdnjs.cloudflare.com/ajax/libs/qtip2/'+version+'/'+matches[2]);
+		res.redirect(301, paths.cdnUrl+'/'+version+'/'+matches[2]);
 	});
 
 	// Package archive
@@ -162,11 +162,11 @@ app.locals({
 		if(!version) { version = Registry.build.stable.version; }
 
 		// Check for a CDNJS Version
-		var cdnVersion = Registry.cdnjs[ version ];
+		var cdnVersion = Registry.cdn[ version ];
 
 		// Return CDNJS url if valid, otherwise use the qTip2 archive links
 		return cdnVersion ? 
-			'//cdnjs.cloudflare.com/ajax/libs/qtip2/'+cdnVersion+'/'+filename :
+			paths.cdnUrl+'/'+cdnVersion+'/'+filename :
 			'//qtip2.com/v/'+version+'/'+filename;
 	},
 
@@ -206,4 +206,4 @@ app.listen(app.get('port'), function() {
 });
 
 // Update our various repos
-[ git.wiki, git.cdnjs, git.repos ].reduce(Q.when, Q());
+[ git.wiki, git.cdn, git.repos ].reduce(Q.when, Q());

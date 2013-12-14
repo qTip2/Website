@@ -10,3 +10,6 @@
 [submodule "build/cdnjs"]
 	path = build/cdnjs
 	url = https://github.com/cdnjs/cdnjs.git
+[submodule "build/jsdelivr"]
+	path = build/jsdelivr
+	url = https://github.com/jimaek/jsdelivr.git

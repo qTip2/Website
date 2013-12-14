@@ -40,11 +40,14 @@ block content
 		a(name="cdn")
 		#section-cdn.section
 			h2 CDN <small>(recommended)</small>
+
+			h3 jsDelivr 
+				small official
 			p
 				mixin logo()
-				| is distributed through the 
-				a(href="http://cdnjs.com/") cdnjs 
-				| CloudFlare CDN. You can grab the files at the following URLs:
+				| is officially distributed through the 
+				a(href="http://jsdelivr.com/") jsdelivr 
+				| CDN. You can grab the files at the following URLs:
 
 			h4 All features &amp; styles 
 				small (
@@ -89,6 +92,59 @@ block content
 					| non-minified
 				| )
 
+			h3 CDNJS 
+				small unofficial
+			p.cdnjs
+				mixin logo()
+				| is also available though the 
+				a(href="http://cdnjs.com/") cdnjs 
+				| CloudFlare CDN service, but newer relases are 
+				b not available as quickly 
+				| as the official 
+				a(href="http://jsdelivr.com/") jsDelivr 
+				| CDN above.
+
+			h4 All features &amp; styles 
+				small (
+					a(href="#builder-styles") see below
+					| )
+			p.cdnlinks
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.min.js", target="_blank")
+					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.min.js
+				|  (also 
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.js", target="_blank")
+					| non-minified
+				| )
+
+				br
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.min.css", target="_blank")
+					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.min.css
+				|  (also 
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.css", target="_blank")
+					| non-minified
+				| )
+
+			h4 Basic features 
+				small (no 
+					a(href="#builder-styles") additional styles 
+					| or 
+					a(href="#builder-features") features
+					| )
+			p.cdnlinks
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.min.js", target="_blank")
+					| //cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.min.js
+				|  (also 
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.js", target="_blank")
+					| non-minified
+				| )
+
+				br
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.min.css", target="_blank")
+					| //cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.min.css
+				|  (also 
+				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.css", target="_blank")
+					| non-minified
+				| )
 
 	- if(!build.nightly.commitdate)
 		a(name="building")

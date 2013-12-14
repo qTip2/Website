@@ -1,4 +1,5 @@
 var Registry = require('./registry')
+	, express = require('express')
 	, paths = require('./paths')
 	, Q = require('q')
 	, util = require('util')
@@ -150,47 +151,45 @@ function wiki() {
 
 
 /*
- * CDNJS Update method. Parses various versions 
+ * CDN Update method. Parses various versions 
  */
-function cdnjs() {
-	var fileGlob = path.join(paths.cdnjs, 'ajax/libs/qtip2/*');
-
-	console.log('======================================= Updating CDNJS Repo ======================================='.bold);
+function cdn() {
+	console.log('======================================= Updating CDN Repo ======================================='.bold);
 
 	// Update the wiki repo first
-	return exec('git', ['pull','origin','master'], paths.cdnjs, 'Updating CDNJS files')()
+	return exec('git', ['pull', 'origin', 'master'], paths.cdn, 'Updating CDN files')()
 
 	// Update CDNJS references in Registry
 	.then(function() {
 		var versions = [], stableVersion;
-		glob.glob( fileGlob ).forEach(function(file) {
+		glob.glob( paths.cdnProject+'/*' ).forEach(function(file) {
 			var name = path.basename(file, '.json').replace(path.sep, '');
-			if(name !== 'package') {
-				Registry.cdnjs[name] = name;
+			if(/[0-9]/.test(name)) {
+				Registry.cdn[name] = name;
 				versions.push(name);
 				stableVersion = name;
 			}
 		});
 
 		// Add "stable" folder mapping
-		Registry.cdnjs['stable'] = stableVersion;
+		Registry.cdn['stable'] = stableVersion;
 		versions.push('Stable ('+stableVersion+')');
 
 		// Log out
-		console.log('[build/cdnjs]\t'.magenta, 'Versions detected: ' + versions.join(', ').grey);
+		console.log('[build/cdn]\t'.magenta, 'Versions detected: ' + versions.join(', ').grey);
 
 		return versions;
 	})
 
 	// Generate archive files
-	.then( exec('find '+paths.cdnjs+'/ajax/libs/qtip2/* -maxdepth 0 -type d -exec ln -fs {} \\;', null, paths.archive, "Generating archive links") )
+	.then( exec('find '+paths.cdnProject+'/* -maxdepth 0 -type d -exec ln -fs {} \\;', null, paths.archive, "Generating archive links") )
 
 	// New line
 	.then( function() { console.log("\n") })
 
 	// Fail handler
 	.fail(function(reason) {
-		console.log('[build/cdnjs]\t'.magenta, 'Unable to update... ' + reason.red, "\n");
+		console.log('[build/cdn]\t'.magenta, 'Unable to update... ' + reason.red, "\n");
 	})
 }
 
@@ -241,7 +240,7 @@ function repos() {
 			// If stable...
 			if(version === 'stable') {
 				// If CDNJS doesn't have latest stable... generate it instead
-				if(Registry.cdnjs.stable !== stableVersion) {
+				if(Registry.cdn.stable !== stableVersion) {
 					console.log(('[build/'+version+']\t').magenta, (stableVersion + ' (latest stable) not available in CDNJS! Generating manually...').bold);
 					q = q.then(exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, '\tGenerating '+version+' archive'))
 						.then(exec('grunt', ['dev', '--force', '--dist='+path.join(dir, 'basic'),'--'+version], cwd, '\tGenerating basic '+version+' archive'))
@@ -310,32 +309,18 @@ function repos() {
 	return result;
 }
 
-// GitHub Post hook IPs: 207.97.227.253/32, 50.57.128.197/32, 108.171.174.178/32, 50.57.231.61/32, 204.232.175.64/27, 192.30.252.0/22
-var githubIPs = /(204\.232\.175\.[64-96])|(192\.30\.252.[1-254])/;
 
-function hookAuth(req, res, next) {
-	process.stdout.write('POST hook received... is it GitHub? ');
-
-	// Only allow GitHub IP's through
-	if(!githubIPs.test(req.ip)) {
-		console.log('Nope... from IP ' + req.ip);
-		return res.send(500, 'Hold up... you\'re not GitHub! Shoo!');
-	}
-
-	console.log('Yep! Updating...');
-	next();
-}
+var hookAuth = express.basicAuth('qtip2', 'qtip2');
 
 module.exports = {
-	ips: githubIPs,
 	hookAuth: hookAuth,
 	repos: repos,
 	wiki: wiki,
-	cdnjs: cdnjs,
+	cdn: cdn,
 	routes: function(app) {
 		app.post('/git/update/wiki', hookAuth, wiki);
 		app.post('/git/update/repos', hookAuth, repos);
-		app.post('/git/update/cdnjs', hookAuth, cdnjs);
+		app.post('/git/update/cdn', hookAuth, cdn);
 
 		// Ensure download page isn't accessible until repos have been initialised
 		app.use('/download', function(req, res, next) {
