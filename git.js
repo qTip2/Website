@@ -115,6 +115,15 @@ function processMarkdown(name, text) {
 	+ '</div></div>';
 }
 
+/*
+ * Website update method.
+ */
+function website() {
+	console.log('======================================= Updating Website ======================================='.bold);
+	return exec('git', ['pull','origin','master'], __dirname, 'Updating files...')()
+		.then(exec('npm', ['install'], __dirname, 'Updating dependancies...'))
+}
+
 
 /*
  * Wiki update method.
@@ -300,10 +309,12 @@ var hookAuth = express.basicAuth('qtip2', 'qtip2');
 
 module.exports = {
 	hookAuth: hookAuth,
+	website: website,
 	repos: repos,
 	wiki: wiki,
 	cdn: cdn,
 	routes: function(app) {
+		app.post('/git/update/website', hookAuth, website);
 		app.post('/git/update/wiki', hookAuth, wiki);
 		app.post('/git/update/repos', hookAuth, repos);
 		app.post('/git/update/cdn', hookAuth, cdn);
