@@ -5,7 +5,6 @@ var Registry = require('./registry')
 	, util = require('util')
 	, fs = require('fs')
 	, path = require('path')
-	, git = require('gift')
 	, cp = require('child_process')
 	, glob = require('glob-whatev')
 	, colors = require('colors')
@@ -23,14 +22,14 @@ var _files = {
 };
 
 
-function exec(command, args, cwd, message) {
+function exec(command, args, cwd, message, namespace) {
 	!cwd && console.log(arguments);
 
 	return function() {
 
 		// Echo message if given
 		if(message) {
-			console.log(('['+path.relative(process.cwd(), cwd)+']\t').magenta, message, '('+(command+' '+(args || []).join(' ')).green+')');
+			console.log(namespace || ('['+path.relative(process.cwd(), cwd)+']\t').magenta, message, '('+(command+' '+(args || []).join(' ')).green+')');
 		}
 
 		// If no arguments given, just use exec
@@ -225,7 +224,7 @@ function repos() {
 					tag = tag[0].trim();
 
 					// Set stable version
-					stableVersion = tag.substr(1);
+					Registry.build.stable.version = stableVersion = tag.substr(1);
 
 					return exec('git', ['checkout', tag], cwd, 'Checking out latest stable')();
 				})
@@ -283,30 +282,17 @@ function repos() {
 	})
 
 	// Generate cached commit message and digest in build folder
-	result = result.then(function() {
-		console.log('[FINALISE]\t'.red.bold, 'Caching latest commit message and digest');
+	return result.then(exec('git log --pretty="format:%h||%s||%ai" -1', null, paths.git.nightly, 'Caching latest commit message and digest', '[FINALISE]'.red.bold))
+		.then(function(result) {
+			result = result[0].split('||');
 
-		// Setup git repo object
-		var repo = git( path.resolve(path.join(paths.build, 'nightly')) );
-
-		// Update the Registry build properties
-		return Q.ninvoke(repo, 'commits', null, 1, null).then(function(commit) {
-			var details = commit[0];
-
-			Registry.build.nightly.version = details.id.substr(0, 7);
-			Registry.build.nightly.commitmsg = details.message;
-			Registry.build.nightly.commitdate = details.committed_date;
-
-			// Set stable properties
-			stableVersion && Registry.build.stable.version = stableVersion;
+			['version', 'commitmsg', 'commitdate'].forEach(function(prop, i) {
+				Registry.build.nightly[prop] = /date/.test(prop) ? new Date(result[i]) : result[i];
+			});
 
 			console.log('[DONE]\t'.green.bold, 'All ready!', ('(Latest stable: '+stableVersion+')').bold);
-		})
-
-		initialised = true;
-	})
-
-	return result;
+			initialised = true;
+		});
 }
 
 

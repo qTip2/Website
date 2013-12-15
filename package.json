@@ -16,7 +16,6 @@
     "node-syntaxhighlighter": "~0.8.1",
     "highlight": "~0.2.3",
     "express-zip": "~1.0.1",
-    "gift": "~0.1.1",
     "moment": "~2.4.0",
     "archiver": "~0.4.10",
     "glob-whatev": "~0.1.8",
