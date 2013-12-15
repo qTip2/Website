@@ -146,150 +146,164 @@ block content
 					| non-minified
 				| )
 
-	- if(!build.nightly.commitdate)
 		a(name="building")
 		#section-building.section
-			h2 Updating our repos...
-			p
-				Please wait a few moments and refresh the page!
-	- else
+
+
 		a(name="builder")
 		#section-builder.section
 			h2 Build your own
 
-			form(action='#{url("/download")}', method='post')
-				h4
-					| Which version of 
-					mixin logo()
-					| would you like to download?
-				ul.blocks
-					li.stable.version.checked(title="Suitable for production and development environments")
-						input(id="download-stable", name="version", type="radio", value="stable", checked="checked")
-						label(for="download-stable") 
-							span
-								| #{build.stable.version}
-								i Stable
-					
-					li.nightly.version(title="Not suitable for production environments", title=build.nightly.commitmsg)
-						input(id="download-nightly", name="version", type="radio", value="nightly")
-						label(for="download-nightly")
-							span
-								| Nightly 
-								small (#{moment(build.nightly.commitdate).fromNow()})
-								i "#{build.nightly.commitmsg.substr(0, 50)+'...'}"
-					
-				a(name="builder-styles")
-				h4 Choose included <i>styles</i>
-				ul.blocks
-					li.checked
-						input(id="download-styles-core", name="styles[core]", type="checkbox", checked="checked", disabled="disabled")
-						label(for="download-styles-core") 
-							span Core styles
-								i the essential library styles and default yellow style
-					li
-						input(id="download-styles-basic", name="styles[basic]", type="checkbox")
-						label(for="download-styles-basic") 
-							span Basic colour styles
-								i basic red, green, blue, dark and light styles
-					li
-						input(id="download-styles-css3", name="styles[css3]", type="checkbox")
-						label(for="download-styles-css3") 
-							span CSS3 styles
-								i shadows, rounded corners, Tipsy, Bootstrap, YouTube, jTools, ClueTip and Tipped styles
+			- if(!build.nightly.commitdate)
+				h3 Updating our repos...
+				p
+					Please wait a few moments and refresh the page!
 
-				a(name="builder-features")
-				h4 Choose additional <i>features</i>
-				ul.blocks
-					li
-						input(id="download-plugins-tips", name="plugins[tips]", type="checkbox")
-						label(for="download-plugins-tips") 
-							span Speech bubble 'tips'
-								i configurable speech bubble pointers for your tooltips
-					li
-						input(id="download-plugins-viewport", name="plugins[viewport]", type="checkbox")
-						label(for="download-plugins-viewport") 
-							span Viewport adjustment
-								i add smart repositioning abilities to your tooltips
-					li
-						input(id="download-plugins-imagemap", name="plugins[imagemap]", type="checkbox")
-						label(for="download-plugins-imagemap") 
-							span Imagemap support
-								i add &lt;map&gt; and &lt;area&gt; support to the positioning system
-					li
-						input(id="download-plugins-svg", name="plugins[svg]", type="checkbox")
-						label(for="download-plugins-svg") 
-							span SVG support
-								i add SVG support to the positioning system
-					li
-						input(id="download-plugins-modal", name="plugins[modal]", type="checkbox")
-						label(for="download-plugins-modal") 
-							span Modal backdrop
-								i
-									| Add Modal functionality / backdrops
-					li
-						input(id="download-plugins-ie6", name="plugins[ie6]", type="checkbox")
-						label(for="download-plugins-ie6") 
-							span IE6 support
-								i
-									| Add IE6 compatibility
-				a(name="builder-libraries")
-				h4 Choose additional <i>libraries</i>
-				ul.blocks
-					li
-						input(id="download-jquery", name="extras[jquery]", value="1.8.3", type="checkbox")
-						label(for="download-jquery") 
-							span jQuery 1.8.3
-								i latest tested and verified jQuery version
+			-else 
 
-				button Build &amp; Download
-				span#filesize
-					| Approximate filesize<sup>*</sup>: 
-					b 49KB (19KB minified / 10KB gzipped)
-					small <sup>*</sup> Excludes jQuery library
+				form(action='#{url("/download")}', method='post')
+					h4
+						| Which version of 
+						mixin logo()
+						| would you like to download?
+					ul.blocks
+						li.stable.version.checked(title="Suitable for production and development environments")
+							input(id="download-stable", name="version", type="radio", value="stable", checked="checked")
+							label(for="download-stable") 
+								span
+									| #{build.stable.version}
+									i Stable
+						
+						li.nightly.version(title="Not suitable for production environments", title=build.nightly.commitmsg)
+							input(id="download-nightly", name="version", type="radio", value="nightly")
+							label(for="download-nightly")
+								span
+									| Nightly 
+									small (#{moment(build.nightly.commitdate).fromNow()})
+									i "#{build.nightly.commitmsg.substr(0, 50)+'...'}"
+						
+					a(name="builder-styles")
+					h4 Choose included <i>styles</i>
+					ul.blocks
+						li.checked
+							input(id="download-styles-core", name="styles[core]", type="checkbox", checked="checked", disabled="disabled")
+							label(for="download-styles-core") 
+								span Core styles
+									i the essential library styles and default yellow style
+						li
+							input(id="download-styles-basic", name="styles[basic]", type="checkbox")
+							label(for="download-styles-basic") 
+								span Basic colour styles
+									i basic red, green, blue, dark and light styles
+						li
+							input(id="download-styles-css3", name="styles[css3]", type="checkbox")
+							label(for="download-styles-css3") 
+								span CSS3 styles
+									i shadows, rounded corners, Tipsy, Bootstrap, YouTube, jTools, ClueTip and Tipped styles
 
-				script.
-					fileSizes = {
-						stable: !{JSON.stringify(build.nightly.filesizes)},
-						nightly: !{JSON.stringify(build.nightly.filesizes)}
-					}
+					a(name="builder-features")
+					h4 Choose additional <i>features</i>
+					ul.blocks
+						li
+							input(id="download-plugins-tips", name="plugins[tips]", type="checkbox")
+							label(for="download-plugins-tips") 
+								span Speech bubble 'tips'
+									i configurable speech bubble pointers for your tooltips
+						li
+							input(id="download-plugins-viewport", name="plugins[viewport]", type="checkbox")
+							label(for="download-plugins-viewport") 
+								span Viewport adjustment
+									i add smart repositioning abilities to your tooltips
+						li
+							input(id="download-plugins-imagemap", name="plugins[imagemap]", type="checkbox")
+							label(for="download-plugins-imagemap") 
+								span Imagemap support
+									i add &lt;map&gt; and &lt;area&gt; support to the positioning system
+						li
+							input(id="download-plugins-svg", name="plugins[svg]", type="checkbox")
+							label(for="download-plugins-svg") 
+								span SVG support
+									i add SVG support to the positioning system
+						li
+							input(id="download-plugins-modal", name="plugins[modal]", type="checkbox")
+							label(for="download-plugins-modal") 
+								span Modal backdrop
+									i
+										| Add Modal functionality / backdrops
+						li
+							input(id="download-plugins-ie6", name="plugins[ie6]", type="checkbox")
+							label(for="download-plugins-ie6") 
+								span IE6 support
+									i
+										| Add IE6 compatibility
+					a(name="builder-libraries")
+					h4 Choose additional <i>libraries</i>
+					ul.blocks
+						li
+							input(id="download-jquery-no", name="extras[jquery]", value="", type="radio", checked)
+							label(for="download-jquery-no") 
+								span No libraries
+									i Already using jQuery on a CDN? No problem!
+						li
+							input(id="download-jquery-1", name="extras[jquery]", value="1.10.2", type="radio")
+							label(for="download-jquery-1") 
+								span jQuery 1.10.2
+									i Best version of general use (IE6&gt;)!
+						li
+							input(id="download-jquery-2", name="extras[jquery]", value="2.0.3", type="radio")
+							label(for="download-jquery-2") 
+								span jQuery 2.0.3
+									i: b For IE&gt;8 projects only!
 
-	
-		a(name="git")
-		#section-git.section
-			h2 GitHub development
-			p
-				mixin logo()
-				| is actively developed over at 
-				a(href="http://github.com/craga89/qtip2") GitHub 
-				| and updated frequently with the latest bug fixes and new features. If you wish to
-				| contribute to the projects efforts, don't be afraid to 
-				a(href="http://github.com/craga89/qtip2/fork") fork the repo
-				|  and submit some 
-				a(href="http://github.com/craga89/qtip2/pull") pull requests
-				| , <i>and make sure to 
-				a(href="http://github.com/craga89/qtip2/issues") report any bugs 
-				| you find!</i>
+					button Build &amp; Download
+					span#filesize
+						| Approximate filesize<sup>*</sup>: 
+						b 49KB (19KB minified / 10KB gzipped)
+						small <sup>*</sup> Excludes jQuery library
 
-			.badges
-				.badge
-					iframe(src='http://ghbtns.com/github-btn.html?user=craga89&repo=qTip2&type=watch&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='80px', height='20px')
-				.badge
-					iframe(src='http://ghbtns.com/github-btn.html?user=craga89&repo=qTip2&type=fork&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='80px', height='20px')
-				.badge
-					iframe(src='http://ghbtns.com/github-btn.html?user=craga89&type=follow&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='152px', height='20px')
+					script.
+						fileSizes = {
+							stable: !{JSON.stringify(build.nightly.filesizes)},
+							nightly: !{JSON.stringify(build.nightly.filesizes)}
+						}
 
-		a(name="changelog")
-		#section-changelog.section
-			h2 Changelog
-			p
-				| View the Changelogs 
-				a(href="#{url('/changelog')}") here
-				| .
 
-		a(name="archive")
-		#section-archive.section
-			h2 Previous versions
-			p
-				| Previous releases can be found in the 
-				a(href="#{url('/v/')}") release archive
-				| .
+	a(name="git")
+	#section-git.section
+		h2 GitHub development
+		p
+			mixin logo()
+			| is actively developed over at 
+			a(href="http://github.com/craga89/qtip2") GitHub 
+			| and updated frequently with the latest bug fixes and new features. If you wish to
+			| contribute to the projects efforts, don't be afraid to 
+			a(href="http://github.com/craga89/qtip2/fork") fork the repo
+			|  and submit some 
+			a(href="http://github.com/craga89/qtip2/pull") pull requests
+			| , <i>and make sure to 
+			a(href="http://github.com/craga89/qtip2/issues") report any bugs 
+			| you find!</i>
+
+		.badges
+			.badge
+				iframe(src='http://ghbtns.com/github-btn.html?user=craga89&repo=qTip2&type=watch&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='80px', height='20px')
+			.badge
+				iframe(src='http://ghbtns.com/github-btn.html?user=craga89&repo=qTip2&type=fork&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='80px', height='20px')
+			.badge
+				iframe(src='http://ghbtns.com/github-btn.html?user=craga89&type=follow&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='152px', height='20px')
+
+	a(name="changelog")
+	#section-changelog.section
+		h2 Changelog
+		p
+			| View the Changelogs 
+			a(href="#{url('/changelog')}") here
+			| .
+
+	a(name="archive")
+	#section-archive.section
+		h2 Previous versions
+		p
+			| Previous releases can be found in the 
+			a(href="#{url('/v/')}") release archive
+			| .

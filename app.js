@@ -89,11 +89,6 @@ app.configure(function(){
 	// Root files
 	app.use( express.static(path.join(__dirname, 'root')) );
 
-	// Setup blog vhost
-	//app.use(express.vhost(
-	//	'blog.qtip2.com', require('./node-blog/app').app
-	//));
-
 	// Set globalStyle var for each request via the cookie
 	app.use(express.cookieParser());
 	app.use(function(req, res, next) {

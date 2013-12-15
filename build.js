@@ -10,9 +10,6 @@ var Registry = require('./registry'),
 	fs = require('fs'),
 	Q = require('q');
 
-// Additional file paths
-var jquery = path.resolve('./build/jquery.min.js');
-
 /* 
  * Init
  */
@@ -96,9 +93,15 @@ function init(req, res, params) {
 
 					// Add any extras
 					extras.forEach(function(extra) {
-						if(extra === 'jquery') {
+						var jQueryPath = path.join(paths.cdnJQuery, params.extras.jquery),
+							min = params.version === 'stable' ? '.min' : '';
+
+						if(extra === 'jquery' && params.extras[extra]) {
 							process.stdout.write('jQuery ');
-							files.unshift(jquery);
+
+							// Get from CDN (use full path and try two variations on the name, just incase)
+							files.unshift( path.resolve( path.join(jQueryPath, 'jquery'+min+'.js')) );
+							files.unshift( path.resolve( path.join(jQueryPath, 'jquery-'+params.extras.jquery+min+'.js')) );
 						}
 					})
 
@@ -126,7 +129,8 @@ function init(req, res, params) {
  * Generates a cache filename (with build path) from passed params
  */
 function generateCacheURI(params, tmpdir) {
-	var name = [ Registry.build[params.version].version ];
+	var name = [ Registry.build[params.version].version ],
+		value;
 
 	for(i in params.plugins) {
 		if(params.plugins[i] === 'on') { name.push(i.substr(0,2)); }
@@ -134,7 +138,11 @@ function generateCacheURI(params, tmpdir) {
 	for(i in params.styles) {
 		if(params.styles[i] === 'on') { name.push(i); }
 	}
-	if(params.jquery) { name.push('jq'+params.jquery.replace(/\./g, '')) }
+	for(i in params.extras) {
+		if((value = params.extras[i])) {
+			name.push(i.substr(0,2)+(value === 'on' ? '' : '-'+value));
+		}
+	}
 
 	return {
 		tmp: tmpdir ? path.join(tmpdir, name.join('-') + '.zip') : null,
