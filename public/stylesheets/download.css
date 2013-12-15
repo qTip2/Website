@@ -1,9 +1,18 @@
-#section-cdn .cdnlinks{
-	margin: 5px 0 10px;
-}
-
 #section-cdn h4{
 	margin: 5px 0 3px;
+}
+
+#section-cdn .cdn + .cdn{
+	padding-top: 10px;
+	clear: both;
+}
+
+#section-cdn .cdn h3 + p{
+	margin-bottom: 10px;
+}
+
+#section-cdn .cdn .left{
+	padding: 0 90px 0 0;
 }
 
 #section-cdn .cdnlinks{

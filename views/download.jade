@@ -38,117 +38,110 @@ block content
 				| , so if you're not too familiar with licensing don't worry about it!
 
 		a(name="cdn")
-		#section-cdn.section
+		#section-cdn.section.clearfix
 			h2 CDN <small>(recommended)</small>
 
-			h3 jsDelivr 
-				small official
-			p
-				mixin logo()
-				| is officially distributed through the 
-				a(href="http://jsdelivr.com/") jsdelivr 
-				| CDN. You can grab the files at the following URLs:
+			.cdn
+				h3 jsDelivr 
+					small preferred
+				p
+					mixin logo()
+					| is officially distributed through the 
+					a(href="http://jsdelivr.com/") jsDelivr 
+					| CDN. You can grab the files at the following URLs:
 
-			h4 All features &amp; styles 
-				small (
-					a(href="#builder-styles") see below
-					| )
-			p.cdnlinks
-				a(href="#{qtip("jquery.qtip.min.js")}", target="_blank")
-					| #{qtip("jquery.qtip.min.js")}
-				|  (also 
-				a(href="#{qtip("jquery.qtip.js")}", target="_blank")
-					| non-minified
-				| )
+				.left
+					h4 All features &amp; styles 
 
-				br
-				a(href="#{qtip("jquery.qtip.min.css")}", target="_blank")
-					| #{qtip("jquery.qtip.min.css")}
-				|  (also 
-				a(href="#{qtip("jquery.qtip.css")}", target="_blank")
-					| non-minified
-				| )
+					p.cdnlinks
+						a(href="#{qtip("jquery.qtip.min.js")}", target="_blank")
+							| jquery.qtip.min.js
+						|  (also 
+						a(href="#{qtip("jquery.qtip.js")}", target="_blank")
+							| non-minified
+						| )
 
-			h4 Basic features 
-				small (no 
-					a(href="#builder-styles") additional styles 
-					| or 
-					a(href="#builder-features") features
-					| )
+						br
+						a(href="#{qtip("jquery.qtip.min.css")}", target="_blank")
+							| jquery.qtip.min.css
+						|  (also 
+						a(href="#{qtip("jquery.qtip.css")}", target="_blank")
+							| non-minified
+						| )
 
-			p.cdnlinks
-				a(href="#{qtip("basic/jquery.qtip.min.js")}", target="_blank")
-					| #{qtip("basic/jquery.qtip.min.js")}
-				|  (also 
-				a(href="#{qtip("basic/jquery.qtip.js")}", target="_blank")
-					| non-minified
-				| )
+				.left
+					h4 Basic features 
+						small (no 
+							a(href="#builder-styles") additional styles 
+							| or 
+							a(href="#builder-features") features
+							| )
 
-				br
-				a(href="#{qtip("basic/jquery.qtip.min.css")}", target="_blank")
-					| #{qtip("basic/jquery.qtip.min.css")}
-				|  (also 
-				a(href="#{qtip("basic/jquery.qtip.css")}", target="_blank")
-					| non-minified
-				| )
+					p.cdnlinks
+						a(href="#{qtip("basic/jquery.qtip.min.js")}", target="_blank")
+							| basic/jquery.qtip.min.js
+						|  (also 
+						a(href="#{qtip("basic/jquery.qtip.js")}", target="_blank")
+							| non-minified
+						| )
 
-			h3 CDNJS 
-				small unofficial
-			p.cdnjs
-				mixin logo()
-				| is also available though the 
-				a(href="http://cdnjs.com/") cdnjs 
-				| CloudFlare CDN service, but newer relases are 
-				b not available as quickly 
-				| as the official 
-				a(href="http://jsdelivr.com/") jsDelivr 
-				| CDN above.
+						br
+						a(href="#{qtip("basic/jquery.qtip.min.css")}", target="_blank")
+							| basic/jquery.qtip.min.css
+						|  (also 
+						a(href="#{qtip("basic/jquery.qtip.css")}", target="_blank")
+							| non-minified
+						| )
 
-			h4 All features &amp; styles 
-				small (
-					a(href="#builder-styles") see below
-					| )
-			p.cdnlinks
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.min.js", target="_blank")
-					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.min.js
-				|  (also 
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.js", target="_blank")
-					| non-minified
-				| )
+			.cdn
+				h3 CDNJS 
+				p
+					mixin logo()
+					| is also available though the 
+					a(href="http://cdnjs.com/") cdnjs 
+					| CloudFlare CDN service:
 
-				br
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.min.css", target="_blank")
-					| //cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.min.css
-				|  (also 
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.css", target="_blank")
-					| non-minified
-				| )
+				.left
+					h4 All features &amp; styles 
 
-			h4 Basic features 
-				small (no 
-					a(href="#builder-styles") additional styles 
-					| or 
-					a(href="#builder-features") features
-					| )
-			p.cdnlinks
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.min.js", target="_blank")
-					| //cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.min.js
-				|  (also 
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.js", target="_blank")
-					| non-minified
-				| )
+					p.cdnlinks
+						a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/", target="_blank")
+							| jquery.qtip.min.js
+						|  (also 
+						a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.js", target="_blank")
+							| non-minified
+						| )
 
-				br
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.min.css", target="_blank")
-					| //cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.min.css
-				|  (also 
-				a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.css", target="_blank")
-					| non-minified
-				| )
+						br
+						a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.min.css", target="_blank")
+							| jquery.qtip.min.css
+						|  (also 
+						a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/#{Registry.build.stable.version}/jquery.qtip.css", target="_blank")
+							| non-minified
+						| )
 
-		a(name="building")
-		#section-building.section
+				.left
+					h4 Basic features 
+						small (no 
+							a(href="#builder-styles") additional styles 
+							| or 
+							a(href="#builder-features") features
+							| )
+					p.cdnlinks
+						a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.min.js", target="_blank")
+							| jquery.qtip.min.js
+						|  (also 
+						a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.js", target="_blank")
+							| non-minified
+						| )
 
+						br
+						a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.min.css", target="_blank")
+							| jquery.qtip.min.css
+						|  (also 
+						a(href="//cdnjs.cloudflare.com/ajax/libs/qtip2/basic/#{Registry.build.stable.version}/jquery.qtip.css", target="_blank")
+							| non-minified
+						| )
 
 		a(name="builder")
 		#section-builder.section
