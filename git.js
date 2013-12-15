@@ -29,7 +29,7 @@ function exec(command, args, cwd, message, namespace) {
 
 		// Echo message if given
 		if(message) {
-			console.log(namespace || ('['+path.relative(process.cwd(), cwd)+']\t').magenta, message, '('+(command+' '+(args || []).join(' ')).green+')');
+			console.log(namespace || ('['+(path.relative(process.cwd(), cwd)+']\t') || 'main').magenta, message, '('+(command+' '+(args || []).join(' ')).green+')');
 		}
 
 		// If no arguments given, just use exec
