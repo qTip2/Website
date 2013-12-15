@@ -1,5 +1,17 @@
 #!/bin/bash
 
+echo 'Grabbing all submodules and their dependancies...'
 git submodule update --init --recursive
 git submodule foreach --recursive 'npm install'
 git submodule foreach --recursive 'bower install'
+
+echo 'Adding fstab entries...'
+sudo cat fstab.additions >> /etc/fstab
+
+echo 'Adding Upstart job (qtip2)...'
+sudo cp upstart.conf /etc/init/
+
+echo 'Adding start/stop permissions for qTip2 Upstart service to www-data user...'
+sudo echo 'www-data  ALL=(root) NOPASSWD: /var/www/qtip2/service start, /var/www/qtip2/service stop' | sudo tee -a /etc/sudoers
+
+echo 'Done.'
