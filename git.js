@@ -9,6 +9,7 @@ var Registry = require('./registry')
 	, glob = require('glob-whatev')
 	, colors = require('colors')
 	, marked = require('marked')
+	, debugLog = fs.openSync( path.join(paths.logs, 'debug.log'), 'a' )
 	, initialised = false;
 
 // File list to generate file sizes for and it's JSON key mapping
@@ -41,7 +42,7 @@ function exec(command, args, cwd, message, namespace) {
 
 		proc = cp.spawn(command, args, {
 			cwd: cwd,
-			stdio: process.env.DEBUG ? "inherit" : "ignore"
+			stdio: [ 'ignore', debugLog, debugLog ]
 		});
 
 		proc.on("message", function (message) {
