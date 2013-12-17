@@ -4,8 +4,8 @@ append title
 	| - Changelog
 
 block legend
-    - var items = {};
-    - Object.keys(Registry.cdn).reverse().forEach(function(v) { /[0-9]/.test(v) && (items[v] = '' + v); });
+	- var items = {};
+	- Object.keys(Registry.cdn).reverse().forEach(function(v) { /[0-9]/.test(v) && (items[v] = '' + v); });
 
 append content
 	!{wikipage('Changelog')}
