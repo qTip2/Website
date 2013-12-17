@@ -81,6 +81,7 @@ hr{
 
 .section p + pre{
 	margin-top: -15px;
+	margin-bottom: 25px;
 }
 
 .section pre + p{
