@@ -93,7 +93,11 @@ hr{
 }
 
 .section a[name] + h3{
-	margin-top: 15px;
+	margin-top: 25px;
+}
+
+.section a[name] + h3:first-of-type{
+	margin-top: 0;
 }
 
 .section h2 + a[name] + h3{
