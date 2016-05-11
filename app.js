@@ -55,10 +55,6 @@ app.configure(function(){
 			version = Registry.build.stable.version;
 		}
 
-		// Check for a CDNJS Version
-		var cdnVersion = Registry.cdn[ version ];
-		if(!cdnVersion) { return next(); }
-
 		// Redirect to CDNJS files
 		res.redirect(301, paths.cdnUrl+'/'+version+'/'+matches[2]);
 	});
@@ -156,7 +152,6 @@ app.locals({
 		// Assume stable if not given
 		if(!version) { version = Registry.build.stable.version; }
 
-		// Return CDNJS url if valid, otherwise use the qTip2 archive links
 		return '//qtip2.com/v/'+version+'/'+filename;
 	},
 
@@ -196,4 +191,4 @@ app.listen(app.get('port'), function() {
 });
 
 // Update our various repos
-[ git.wiki, git.cdn, git.repos ].reduce(Q.when, Q());
+[ git.wiki, git.repos ].reduce(Q.when, Q());
