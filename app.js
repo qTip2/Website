@@ -55,6 +55,11 @@ app.configure(function(){
 			version = Registry.build.stable.version;
 		}
 
+		if (!version) {
+			next();
+		}	return;
+		
+
 		// Redirect to CDNJS files
 		res.redirect(301, '//cdn.jsdelivr.net/qtip2/'+version+'/'+matches[2]);
 	});
