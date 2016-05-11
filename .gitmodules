@@ -7,9 +7,3 @@
 [submodule "build/wiki"]
 	path = build/wiki
 	url = https://github.com/qTip2/qTip2.wiki.git
-[submodule "build/cdnjs"]
-	path = build/cdnjs
-	url = https://github.com/cdnjs/cdnjs.git
-[submodule "build/jsdelivr"]
-	path = build/jsdelivr
-	url = https://github.com/jimaek/jsdelivr.git
