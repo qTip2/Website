@@ -15,12 +15,11 @@ var Registry = require('./registry'),
  */
 function init(req, res, params) {
 	console.log('Generating download package...');
-	var styles = [], plugins = [], extras = [];
+	var styles = [], plugins = [];
 
 	// Setup styles and plugins to include
 	for(style in params.styles) { styles.push(style); }
 	for(plugin in params.plugins) { plugins.push(plugin); }
-	for(extra in params.extras) { extras.push(extra); }
 
 	// Set the response headers
 	res.set({
@@ -38,8 +37,7 @@ function init(req, res, params) {
 		path.join(paths.logs, 'build.log'),
 		'[' + new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + ']' +
 			(' '+Registry.build[params.version].version) + 
-			' (' + (plugins.join(' ')||'None') + ' / ' + (styles.join(' ')||'None') + ')' + 
-			' + ' + extras + ' [' + req.ip + "]\n"
+			' (' + (plugins.join(' ')||'None') + ' / ' + (styles.join(' ')||'None') + ')\n'
 	);
 
 	// Check if a cached version is
@@ -87,28 +85,6 @@ function init(req, res, params) {
 					return files;
 				})
 
-				// Add additional zip contents based on params
-				.then(function(files) {
-					process.stdout.write('Adding additional files... ');
-
-					// Add any extras
-					extras.forEach(function(extra) {
-						var jQueryPath = path.join(paths.cdnJQuery, params.extras.jquery),
-							min = params.version === 'stable' ? '.min' : '';
-
-						if(extra === 'jquery' && params.extras[extra]) {
-							process.stdout.write('jQuery ');
-
-							// Get from CDN (use full path and try two variations on the name, just incase)
-							files.unshift( path.resolve( path.join(jQueryPath, 'jquery'+min+'.js')) );
-							files.unshift( path.resolve( path.join(jQueryPath, 'jquery-'+params.extras.jquery+min+'.js')) );
-						}
-					})
-
-					process.stdout.write("\n");
-					return files;
-				})
-
 				// Once grunt-ed, create our zip file
 				.then(function(files) {
 					console.log('Streaming zip file...');
@@ -137,11 +113,6 @@ function generateCacheURI(params, tmpdir) {
 	}
 	for(i in params.styles) {
 		if(params.styles[i] === 'on') { name.push(i); }
-	}
-	for(i in params.extras) {
-		if((value = params.extras[i])) {
-			name.push(i.substr(0,2)+(value === 'on' ? '' : '-'+value));
-		}
 	}
 
 	return {
