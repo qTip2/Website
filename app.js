@@ -152,17 +152,12 @@ app.locals({
 	},
 
 	// qTip packages helper
-	qtip: function(filename, version, useCdn) {
+	qtip: function(filename, version) {
 		// Assume stable if not given
 		if(!version) { version = Registry.build.stable.version; }
 
-		// Check for a CDNJS Version
-		var cdnVersion = Registry.cdn[ version ];
-
 		// Return CDNJS url if valid, otherwise use the qTip2 archive links
-		return useCdn !== false && cdnVersion ? 
-			paths.cdnUrl+'/'+version+'/'+filename :
-			'//qtip2.com/v/'+version+'/'+filename;
+		return '//qtip2.com/v/'+version+'/'+filename;
 	},
 
 	// Code highlighter
