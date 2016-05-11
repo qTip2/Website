@@ -3,7 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "node app",
+    "install": "npm run setup",
+    "setup": "npm run setup:modules; npm run setup:logs",
+    "setup:modules": "git submodule init; git submodule update;",
+    "setup:logs": "touch log/archive.log log/build.log log/http.log"
   },
   "dependencies": {
     "extend": "~1.2.1",
