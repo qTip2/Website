@@ -42,7 +42,7 @@ var demos = {
 
 		'iframe': {
 			content: {
-				text: '<iframe src="http://m.reddit.com" />'
+				text: '<iframe src="http://html5rocks.com" />'
 			},
 			hide: {
 				delay: 90,

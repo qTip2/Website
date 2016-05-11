@@ -40,7 +40,7 @@ app.configure(function(){
 
 	// Log files, private please!
 	app.use('/l', function(req, res, next) {
-		if(req.query.code === 'letmeinplease') { next(); }
+		if(req.query.code === 'reallycraig?') { next(); }
 		else { return res.send(404); } 
 	});
 	app.use('/l', express.static(path.join(__dirname, 'log')));
