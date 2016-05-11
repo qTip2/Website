@@ -19,10 +19,5 @@ module.exports = {
 
 	connectPublic: path.resolve('./node_modules/express/node_modules/connect/lib/public'),
 
-	cdn: path.resolve('./build/jsdelivr'),
-	cdnProject: path.resolve('./build/jsdelivr/files/qtip2'),
-	cdnJQuery: path.resolve('./build/jsdelivr/files/jquery'),
-	cdnUrl: '//cdn.jsdelivr.net/qtip2',
-
 	donators: path.resolve('./public') + '/donators.txt'
 }
