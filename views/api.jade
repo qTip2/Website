@@ -4,14 +4,9 @@ append title
 	| - API
 
 block legend
-	- var items = { 'api': 'API', 'events': 'Events', 'global': 'Global' }
+	- var items = { 'API': 'Basics', 'API-Methods': 'Methods', 'API-Properties': 'Properties' }
 
 append content
-	a(name="api")
-	!{wikipage('API')}
-
-	a(name="events")
-	!{wikipage('Events')}
-
-	a(name="global")
-	!{wikipage('Global')}
+	each title, option in items
+		a(name=option.toLowerCase())
+		!{wikipage(option)}

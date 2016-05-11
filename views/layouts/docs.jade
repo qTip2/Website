@@ -1,4 +1,4 @@
-extends default
+extends api
 
 block stylesheets
 	link(rel="stylesheet", type='text/css', href=url('/static/stylesheets/docs.css'))
@@ -8,9 +8,3 @@ block javascript
 	script(type="text/javascript", src=url('/static/javascripts/jquery.ba-hashchange.min.js'))
 	script(type="text/javascript", src=url('/static/javascripts/docs.js'))
 
-block content
-	// Print the legend
-	ul#legend
-		block legend
-		each name, link in items
-			li: a(href='#'+link)=name

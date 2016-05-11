@@ -5,10 +5,8 @@ block stylesheets
 	link(rel="stylesheet", type='text/css', href="#{url('/static/stylesheets/hightlight2.css')}")
 
 block content
-
+	// Print the legend
 	ul#legend
-		li Sections
-
 		block legend
 		each name, link in items
-			li: a(href='#'+link)=name
+			li: a(href='#'+link.toLowerCase())=name
