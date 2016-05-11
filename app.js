@@ -56,7 +56,7 @@ app.configure(function(){
 		}
 
 		// Redirect to CDNJS files
-		res.redirect(301, paths.cdnUrl+'/'+version+'/'+matches[2]);
+		res.redirect(301, '//cdn.jsdelivr.net/qtip2/'+version+'/'+matches[2]);
 	});
 
 	// Package archive
