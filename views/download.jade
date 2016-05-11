@@ -54,18 +54,18 @@ block content
 					h4 All features &amp; styles 
 
 					p.cdnlinks
-						a(href="#{qtip("jquery.qtip.min.js")}", target="_blank")
+						a(href="//cdn.jsdelivr.net/qtip2/#{Registry.build.stable.version}/jquery.qtip.min.js", target="_blank")
 							| jquery.qtip.min.js
 						|  (also 
-						a(href="#{qtip("jquery.qtip.js")}", target="_blank")
+						a(href="//cdn.jsdelivr.net/qtip2/#{Registry.build.stable.version}/jquery.qtip.js", target="_blank")
 							| non-minified
 						| )
 
 						br
-						a(href="#{qtip("jquery.qtip.min.css")}", target="_blank")
+						a(href="//cdn.jsdelivr.net/qtip2/#{Registry.build.stable.version}/jquery.qtip.min.css")}", target="_blank")
 							| jquery.qtip.min.css
 						|  (also 
-						a(href="#{qtip("jquery.qtip.css")}", target="_blank")
+						a(href="//cdn.jsdelivr.net/qtip2/#{Registry.build.stable.version}/jquery.qtip.css")}", target="_blank")
 							| non-minified
 						| )
 
@@ -78,18 +78,18 @@ block content
 							| )
 
 					p.cdnlinks
-						a(href="#{qtip("basic/jquery.qtip.min.js")}", target="_blank")
+						a(href="//cdn.jsdelivr.net/qtip2/#{Registry.build.stable.version}/basic/jquery.qtip.min.js", target="_blank")
 							| basic/jquery.qtip.min.js
 						|  (also 
-						a(href="#{qtip("basic/jquery.qtip.js")}", target="_blank")
+						a(href="//cdn.jsdelivr.net/qtip2/#{Registry.build.stable.version}/basic/jquery.qtip.js", target="_blank")
 							| non-minified
 						| )
 
 						br
-						a(href="#{qtip("basic/jquery.qtip.min.css")}", target="_blank")
+						a(href="//cdn.jsdelivr.net/qtip2/#{Registry.build.stable.version}/basic/jquery.qtip.min.css")}", target="_blank")
 							| basic/jquery.qtip.min.css
 						|  (also 
-						a(href="#{qtip("basic/jquery.qtip.css")}", target="_blank")
+						a(href="//cdn.jsdelivr.net/qtip2/#{Registry.build.stable.version}/basic/jquery.qtip.css")}", target="_blank")
 							| non-minified
 						| )
 
@@ -237,16 +237,6 @@ block content
 							label(for="download-jquery-no") 
 								span No libraries
 									i Already using jQuery on a CDN? No problem!
-						li
-							input(id="download-jquery-1", name="extras[jquery]", value="1.10.2", type="radio")
-							label(for="download-jquery-1") 
-								span jQuery 1.10.2
-									i Best version of general use (IE6&gt;)!
-						li
-							input(id="download-jquery-2", name="extras[jquery]", value="2.0.3", type="radio")
-							label(for="download-jquery-2") 
-								span jQuery 2.0.3
-									i: b For IE&gt;8 projects only!
 
 					button Build &amp; Download
 					span#filesize

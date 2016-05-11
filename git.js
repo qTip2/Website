@@ -160,49 +160,6 @@ function wiki() {
 
 
 /*
- * CDN Update method. Parses various versions 
- */
-function cdn() {
-	console.log('======================================= Updating CDN Repo ======================================='.bold);
-
-	// Update the wiki repo first
-	return exec('git', ['pull', 'origin', 'master'], paths.cdn, 'Updating CDN files')()
-
-	// Update CDNJS references in Registry
-	.then(function() {
-		var versions = [], stableVersion;
-		glob.glob( paths.cdnProject+'/*' ).forEach(function(file) {
-			var name = path.basename(file, '.json').replace(path.sep, '');
-			if(/[0-9]/.test(name)) {
-				Registry.cdn[name] = name;
-				versions.push(name);
-				stableVersion = name;
-			}
-		});
-
-		// Add "stable" folder mapping
-		Registry.cdn['stable'] = stableVersion;
-		versions.push('Stable ('+stableVersion+')');
-
-		// Log out
-		console.log('[build/cdn]\t'.magenta, 'Versions detected: ' + versions.join(', ').grey);
-
-		return versions;
-	})
-
-	// Generate archive files
-	.then( exec('find '+paths.cdnProject+'/* -maxdepth 0 -type d -exec ln -fs {} \\;', null, paths.archive, "Generating archive links") )
-
-	// New line
-	.then( function() { console.log("\n") })
-
-	// Fail handler
-	.fail(function(reason) {
-		console.log('[build/cdn]\t'.magenta, 'Unable to update... ' + reason.red, "\n");
-	})
-}
-
-/*
  * Repository update
  * 
  * Updates the git repositories and generates new file size
@@ -247,22 +204,13 @@ function repos() {
 				basic = path.join(dir, 'basic'),
 				q = Q();
 
-			// If stable...
+			// Generate  files
+			q = q.then(exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, 'Generating '+version+' archive'))
+				.then(exec('grunt', ['dev', '--force', '--dist='+path.join(dir, 'basic'),'--'+version], cwd, 'Generating basic '+version+' archive'));
+
+			// Symlink stable directory top latest stable version directory
 			if(version === 'stable') {
-				// If CDNJS doesn't have latest stable... generate it instead
-				if(Registry.cdn.stable !== stableVersion) {
-					console.log(('[build/'+version+']\t').magenta, (stableVersion + ' (latest stable) not available in CDNJS! Generating manually...').bold);
-					q = q.then(exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, '\tGenerating '+version+' archive'))
-						.then(exec('grunt', ['dev', '--force', '--dist='+path.join(dir, 'basic'),'--'+version], cwd, '\tGenerating basic '+version+' archive'))
-				}
-
-				// Symlink stable directory top latest stable version directory
 				q = q.then(exec('ln', ['-fs', dir, path.join(paths.archive, 'stable')], paths.archive, 'Sym-linking stable dir'));
-			}
-
-			// Always create nightly files
-			else {
-				q = q.then(exec('grunt', ['dev', '--force', '--dist='+dir,'--'+version], cwd, 'Generate '+version+' archive'));
 			}
 
 			return q;
@@ -314,12 +262,10 @@ module.exports = {
 	website: website,
 	repos: repos,
 	wiki: wiki,
-	cdn: cdn,
 	routes: function(app) {
 		app.post('/git/update/website', hookAuth, website);
 		app.post('/git/update/wiki', hookAuth, wiki);
 		app.post('/git/update/repos', hookAuth, repos);
-		app.post('/git/update/cdn', hookAuth, cdn);
 
 		// Ensure download page isn't accessible until repos have been initialised
 		app.use('/download', function(req, res, next) {
