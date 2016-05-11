@@ -225,7 +225,7 @@ function repos() {
 		// Clean up dist/ and pull newest commits
 		result = result.then(exec('grunt', ['clean'], cwd, 'Cleaning up dist/ dir'))
 			.then(exec('git', ['pull','origin', 'master'], cwd, 'Pulling remote commits'))
-			.then(exec('git', ['pull','--tags'], cwd, 'Pulling remote tags'));
+			.then(exec('git', ['fetch','--tags'], cwd, 'Pulling remote tags'));
 
 		// If stable... check out latest tag
 		if(version === 'stable') {
