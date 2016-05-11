@@ -166,15 +166,7 @@ block content
 								span
 									| #{build.stable.version}
 									i Stable
-						
-						li.nightly.version(title="Not suitable for production environments", title=build.nightly.commitmsg)
-							input(id="download-nightly", name="version", type="radio", value="nightly")
-							label(for="download-nightly")
-								span
-									| Nightly 
-									small (#{moment(build.nightly.commitdate).fromNow()})
-									i "#{build.nightly.commitmsg.substr(0, 50)+'...'}"
-						
+					
 					a(name="builder-styles")
 					h4 Choose included <i>styles</i>
 					ul.blocks
