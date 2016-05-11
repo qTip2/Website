@@ -160,9 +160,9 @@ app.locals({
 		var cdnVersion = Registry.cdn[ version ];
 
 		// Return CDNJS url if valid, otherwise use the qTip2 archive links
-		return cdnVersion ? 
-			paths.cdnUrl+'/'+cdnVersion+'/'+filename :
-			'//qtip2.com/v/'+version+'/'+filename;
+		//return cdnVersion ? 
+		return	paths.cdnUrl+'/'+version+'/'+filename
+		//	'//qtip2.com/v/'+version+'/'+filename;
 	},
 
 	// Code highlighter
