@@ -47,6 +47,7 @@ app.configure(function(){
 
 	// CDNJs Redirects
 	app.use(function(req, res, next) {
+		return next();
 		var matches = /^\/v\/([0-9\.]+|stable)\/(.+\.(?:css|js))$/.exec(req.url),
 			version = matches && matches[1];
 
